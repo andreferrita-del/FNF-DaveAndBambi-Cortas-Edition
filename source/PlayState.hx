@@ -442,15 +442,13 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		iconP1 = new FlxSprite();
-iconP1.loadGraphic('assets/images/characters/icons/' + SONG.player1 + '.png');
-iconP1.y = healthBar.y - (iconP1.height / 2);
-add(iconP1);
+		iconP1 = new HealthIcon(SONG.player1, true);
+        iconP1.y = healthBar.y - (iconP1.height / 2);
+        add(iconP1);
 
-iconP2 = new FlxSprite();
-iconP2.loadGraphic('assets/images/characters/icons/' + SONG.player2 + '.png');
-iconP2.y = healthBar.y - (iconP2.height / 2);
-add(iconP2);
+        iconP2 = new HealthIcon(SONG.player2, false);
+        iconP2.y = healthBar.y - (iconP2.height / 2);
+        add(iconP2);
 
 		if (isStoryMode)
 		{
