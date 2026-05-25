@@ -45,6 +45,7 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 
 	var halloweenLevel:Bool = false;
+	var shader:WiggleEffect3D-Wold;
 
 	private var vocals:FlxSound;
 
@@ -247,7 +248,24 @@ class PlayState extends MusicBeatState
 			fastCar = new FlxSprite(-300, 160).loadGraphic(AssetPaths.fastCarLol__png);
 			// add(limo);
 		}
-		else
+		else if (SONG.song.toLowerCase() == 'delirium')
+		{
+		curStage = deliriuned;
+		shader = new WiggleEffect3D-Wold();
+		var s = 2.0;
+		var a = 0.1;
+		var f = 5.0;
+		shader.uWaveAmplitude.value = [a];
+		shader.uFrequency.value = [f];
+		shader.uSpeed.value = [s];
+		shader.uTime.value = [0.0];
+			
+		var bgs:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
+		bgs.scrollFactor.set(0.9, 0.9);
+		bgs.screenCenter();
+		bgs.shader = shader;
+		add(bgs);
+		}else{
 		{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
@@ -334,7 +352,18 @@ class PlayState extends MusicBeatState
 					resetFastCar();
 					add(fastCar);
 				}
-		}
+			case 'deliriuned':
+	            {
+	    boyfriend.x += 900;
+		boyfriend.y += 600;
+
+		gf.x += 0;
+		gf.y += 130;
+
+		dad.x += -300;
+		dad.y += -600;
+	            }
+	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;
@@ -763,7 +792,8 @@ class PlayState extends MusicBeatState
 						trainFrameTiming = 0;
 					}
 				}
-
+			case 'deliriuned':
+				shader.uTime.value[0] += elapsed;
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
 
