@@ -354,7 +354,7 @@ class PlayState extends MusicBeatState
 				
 				
 		case 'deliriuned':
-	            
+	    camGame.zoom = 0.6;
 	    boyfriend.x += 900;
 		boyfriend.y += 600;
 
@@ -553,99 +553,103 @@ class PlayState extends MusicBeatState
 	var debugNum:Int = 0;
 
 	private function generateSong(dataPath:String):Void
+{
+	var songData = SONG;
+
+	Conductor.changeBPM(songData.bpm);
+
+	curSong = songData.song;
+
+	if (SONG.needsVoices)
+		vocals = new FlxSound().loadEmbedded(
+			"assets/music/" + curSong + "_Voices" + TitleState.soundExt
+		);
+	else
+		vocals = new FlxSound();
+
+	FlxG.sound.list.add(vocals);
+
+	notes = new FlxTypedGroup<Note>();
+	add(notes);
+
+	var noteData:Array<SwagSection> = songData.notes;
+
+	// Optimization
+	unspawnNotes = [];
+
+	for (section in noteData)
 	{
-		// FlxG.log.add(ChartParser.parse());
+		var gottaHitNote:Bool = section.mustHitSection;
 
-		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
-
-		curSong = songData.song;
-
-		if (SONG.needsVoices)
-			vocals = new FlxSound().loadEmbedded("assets/music/" + curSong + "_Voices" + TitleState.soundExt);
-		else
-			vocals = new FlxSound();
-
-		FlxG.sound.list.add(vocals);
-
-		notes = new FlxTypedGroup<Note>();
-		add(notes);
-
-		var noteData:Array<SwagSection>;
-
-		// NEW SHIT
-		noteData = songData.notes;
-
-		var playerCounter:Int = 0;
-
-		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
-		for (section in noteData)
+		for (songNotes in section.sectionNotes)
 		{
-			var coolSection:Int = Std.int(section.lengthInSteps / 4);
+			var daStrumTime:Float = songNotes[0];
+			var daNoteData:Int = Std.int(songNotes[1] % 4);
 
-			for (songNotes in section.sectionNotes)
+			gottaHitNote = section.mustHitSection;
+
+			if (songNotes[1] > 3)
+				gottaHitNote = !section.mustHitSection;
+
+			var oldNote:Note = null;
+
+			if (unspawnNotes.length > 0)
+				oldNote = unspawnNotes[unspawnNotes.length - 1];
+
+			// Main note
+			var swagNote:Note = new Note(
+				daStrumTime,
+				daNoteData,
+				oldNote
+			);
+
+			swagNote.mustPress = gottaHitNote;
+			swagNote.sustainLength = songNotes[2];
+			swagNote.scrollFactor.set(0, 0);
+
+			if (swagNote.mustPress)
+				swagNote.x += FlxG.width / 2;
+
+			unspawnNotes.push(swagNote);
+
+			// Sustain notes
+			var susLength:Int = Math.floor(
+				swagNote.sustainLength / Conductor.stepCrochet
+			);
+
+			if (susLength > 0)
 			{
-				var daStrumTime:Float = songNotes[0];
-				var daNoteData:Int = Std.int(songNotes[1] % 4);
-
-				var gottaHitNote:Bool = section.mustHitSection;
-
-				if (songNotes[1] > 3)
+				for (susNote in 0...susLength)
 				{
-					gottaHitNote = !section.mustHitSection;
-				}
+					oldNote = unspawnNotes[unspawnNotes.length - 1];
 
-				var oldNote:Note;
-				if (unspawnNotes.length > 0)
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-				else
-					oldNote = null;
-
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
-				swagNote.sustainLength = songNotes[2];
-				swagNote.scrollFactor.set(0, 0);
-
-				var susLength:Float = swagNote.sustainLength;
-
-				susLength = susLength / Conductor.stepCrochet;
-				unspawnNotes.push(swagNote);
-
-				for (susNote in 0...Math.floor(susLength))
-				{
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
-
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
-					sustainNote.scrollFactor.set();
-					unspawnNotes.push(sustainNote);
+					var sustainNote:Note = new Note(
+						daStrumTime + (Conductor.stepCrochet * (susNote + 1)),
+						daNoteData,
+						oldNote,
+						true
+					);
 
 					sustainNote.mustPress = gottaHitNote;
 
+					// Less expensive than set()
+					sustainNote.scrollFactor.x = 0;
+					sustainNote.scrollFactor.y = 0;
+
 					if (sustainNote.mustPress)
-					{
-						sustainNote.x += FlxG.width / 2; // general offset
-					}
-				}
+						sustainNote.x += FlxG.width / 2;
 
-				swagNote.mustPress = gottaHitNote;
-
-				if (swagNote.mustPress)
-				{
-					swagNote.x += FlxG.width / 2; // general offset
-				}
-				else
-				{
+					unspawnNotes.push(sustainNote);
 				}
 			}
-			daBeats += 1;
 		}
-
-		// trace(unspawnNotes.length);
-		// playerCounter += 1;
-
-		unspawnNotes.sort(sortByShit);
-
-		generatedMusic = true;
 	}
+
+	// Sort only once
+	unspawnNotes.sort(sortByShit);
+
+	generatedMusic = true;
+}
 
 	function sortByShit(Obj1:Note, Obj2:Note):Int
 	{
@@ -795,6 +799,7 @@ class PlayState extends MusicBeatState
 				}
 			case 'deliriuned':
 				shader.uTime.value[0] += elapsed;
+				dad.y += Math.sin(elapsed * 2) * 0.5;
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
 
