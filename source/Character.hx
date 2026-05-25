@@ -212,7 +212,13 @@ class Character extends FlxSprite
 		addOffset('deathLoop', 37, 5);
 		addOffset('deathConfirm', 37, 69);
 
-		//case combi:
+		case conbi:
+			animation.addByPrefix('idle', 'Conbi idle', 24);
+			animation.addByPrefix('singUP', 'Conbi up note', 24, false);
+			animation.addByPrefix('singDOWN', 'Conbi down', 24, false);
+			animation.addByPrefix('singLEFT', 'Conbi left note', 24, false);
+			animation.addByPrefix('singRIGHT', 'Conbi Right note', 24, false);
+			playAnim('idle');
 		}
 	}
 
