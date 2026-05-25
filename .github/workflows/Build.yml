@@ -1,0 +1,82 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  Android:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: build
+        run: |
+          echo no
+
+  Windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.2.5
+
+      - name: Setup MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Setup Haxelib
+        shell: powershell
+        run: |
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\haxelib"
+          haxelib setup "$env:USERPROFILE\haxelib"
+
+      - name: Cache Windows Build
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\Users\runneradmin\haxelib
+            C:\Users\runneradmin\.lime
+            export
+          key: windows-${{ runner.os }}-haxe4.2.5-${{ hashFiles('**/Project.xml', '**/*.hxml', '**/haxelib.json') }}
+          restore-keys: |
+            windows-${{ runner.os }}-haxe4.2.5-
+            windows-${{ runner.os }}-
+
+      - name: Install Libraries
+        shell: powershell
+        run: |
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flixel-tools --quiet
+          haxelib install hxcpp --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install newgrounds --quiet
+          haxelib install hscript --quiet
+
+      - name: Run Lime Setup
+        shell: powershell
+        run: |
+          haxelib run lime setup
+
+      - name: Build Windows
+        shell: powershell
+        run: |
+          haxelib run lime build windows
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WindowsBuild
+          path: export/release/windows/bin/
+          if-no-files-found: error
+          retention-days: 1
