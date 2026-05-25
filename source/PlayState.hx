@@ -267,7 +267,6 @@ class PlayState extends MusicBeatState
 		bgs.shader = shader;
 		add(bgs);
 		}else{
-		{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
 			// bg.setGraphicSize(Std.int(bg.width * 2.5));
@@ -346,15 +345,16 @@ class PlayState extends MusicBeatState
 		switch (curStage)
 		{
 			case 'limo':
-				{
-					boyfriend.y -= 220;
-					boyfriend.x += 260;
+				
+			boyfriend.y -= 220;
+			boyfriend.x += 260;
 
-					resetFastCar();
-					add(fastCar);
-				}
-			case 'deliriuned':
-	            {
+			resetFastCar();
+			add(fastCar);
+				
+				
+		case 'deliriuned':
+	            
 	    boyfriend.x += 900;
 		boyfriend.y += 600;
 
@@ -363,7 +363,7 @@ class PlayState extends MusicBeatState
 
 		dad.x += -300;
 		dad.y += -600;
-	            }
+	
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
