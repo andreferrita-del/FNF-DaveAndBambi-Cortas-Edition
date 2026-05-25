@@ -38,18 +38,6 @@ jobs:
           New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\haxelib"
           haxelib setup "$env:USERPROFILE\haxelib"
 
-      - name: Cache Windows Build
-        uses: actions/cache@v4
-        with:
-          path: |
-            C:\Users\runneradmin\haxelib
-            C:\Users\runneradmin\.lime
-            export
-          key: windows-${{ runner.os }}-haxe4.2.5-${{ hashFiles('**/Project.xml', '**/*.hxml', '**/haxelib.json') }}
-          restore-keys: |
-            windows-${{ runner.os }}-haxe4.2.5-
-            windows-${{ runner.os }}-
-
       - name: Install Libraries
         shell: powershell
         run: |
@@ -68,10 +56,10 @@ jobs:
         run: |
           haxelib run lime setup
 
-      - name: Clean HXCPP
-        run: |
-         haxelib run lime clean
-         haxelib run lime rebuild hxcpp windows
+     # - name: Clean HXCPP
+      #  run: |
+        # haxelib run lime clean
+        # haxelib run lime rebuild hxcpp windows
 
       - name: Build Windows
         shell: powershell
