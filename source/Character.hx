@@ -212,7 +212,14 @@ class Character extends FlxSprite
 		addOffset('deathLoop', 37, 5);
 		addOffset('deathConfirm', 37, 69);
 
-		case conbi:
+		case "conbi":
+				var tex = FlxAtlasFrames.fromSparrow(
+			basePath + "Conbi.png",
+			basePath + "Conbi.xml"
+		);
+
+		frames = tex;
+				
 			animation.addByPrefix('idle', 'Conbi idle', 24);
 			animation.addByPrefix('singUP', 'Conbi up note', 24, false);
 			animation.addByPrefix('singDOWN', 'Conbi down', 24, false);
