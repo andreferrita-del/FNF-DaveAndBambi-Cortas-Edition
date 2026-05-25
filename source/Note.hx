@@ -2,7 +2,6 @@ package;
 
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.util.FlxColor;
 
 class Note extends FlxSprite
 {
@@ -21,30 +20,76 @@ class Note extends FlxSprite
 	public var noteScore:Float = 1;
 
 	public static var swagWidth:Float = 160 * 0.7;
-	public static var PURP_NOTE:Int = 0;
-	public static var GREEN_NOTE:Int = 2;
-	public static var BLUE_NOTE:Int = 1;
-	public static var RED_NOTE:Int = 3;
+
+	public static inline var PURP_NOTE:Int = 0;
+	public static inline var BLUE_NOTE:Int = 1;
+	public static inline var GREEN_NOTE:Int = 2;
+	public static inline var RED_NOTE:Int = 3;
+
+	// Texture cache
+	public static var NOTE_TEX:FlxAtlasFrames;
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
 
+		if (NOTE_TEX == null)
+		{
+			NOTE_TEX = FlxAtlasFrames.fromSparrow(
+				AssetPaths.NOTE_assets__png,
+				AssetPaths.NOTE_assets__xml
+			);
+		}
+
+		frames = NOTE_TEX;
+
 		if (prevNote == null)
 			prevNote = this;
 
 		this.prevNote = prevNote;
-		isSustainNote = sustainNote;
-
-		x += 50;
-		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
+		this.isSustainNote = sustainNote;
 		this.strumTime = strumTime;
-
 		this.noteData = noteData;
 
-		var tex = FlxAtlasFrames.fromSparrow(AssetPaths.NOTE_assets__png, AssetPaths.NOTE_assets__xml);
-		frames = tex;
+		x += 50;
+		y = -2000;
+
+		setupAnimations();
+
+		setGraphicSize(Std.int(width * 0.7));
+		updateHitbox();
+
+		// Better performance on mobile/low-end devices
+		antialiasing = false;
+
+		switch (noteData)
+		{
+			case PURP_NOTE:
+				x += swagWidth * 0;
+				animation.play('purpleScroll');
+
+			case BLUE_NOTE:
+				x += swagWidth * 1;
+				animation.play('blueScroll');
+
+			case GREEN_NOTE:
+				x += swagWidth * 2;
+				animation.play('greenScroll');
+
+			case RED_NOTE:
+				x += swagWidth * 3;
+				animation.play('redScroll');
+		}
+
+		if (isSustainNote)
+			setupSustain();
+	}
+
+	function setupAnimations()
+	{
+		if (animation.getByName('greenScroll') != null)
+			return;
+
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
 		animation.addByPrefix('blueScroll', 'blue0');
@@ -59,105 +104,93 @@ class Note extends FlxSprite
 		animation.addByPrefix('greenhold', 'green hold piece');
 		animation.addByPrefix('redhold', 'red hold piece');
 		animation.addByPrefix('bluehold', 'blue hold piece');
+	}
 
-		setGraphicSize(Std.int(width * 0.7));
-		updateHitbox();
-		antialiasing = true;
+	function setupSustain()
+	{
+		noteScore *= 0.2;
+		alpha = 0.6;
+
+		x += width / 2;
 
 		switch (noteData)
 		{
-			case 0:
-				x += swagWidth * 0;
-				animation.play('purpleScroll');
-			case 1:
-				x += swagWidth * 1;
-				animation.play('blueScroll');
-			case 2:
-				x += swagWidth * 2;
-				animation.play('greenScroll');
-			case 3:
-				x += swagWidth * 3;
-				animation.play('redScroll');
+			case GREEN_NOTE:
+				animation.play('greenholdend');
+
+			case RED_NOTE:
+				animation.play('redholdend');
+
+			case BLUE_NOTE:
+				animation.play('blueholdend');
+
+			case PURP_NOTE:
+				animation.play('purpleholdend');
 		}
 
-		// trace(prevNote);
+		updateHitbox();
 
-		if (isSustainNote && prevNote != null)
+		x -= width / 2;
+
+		if (prevNote != null && prevNote.isSustainNote)
 		{
-			noteScore * 0.2;
-			alpha = 0.6;
-
-			x += width / 2;
-
-			switch (noteData)
+			switch (prevNote.noteData)
 			{
-				case 2:
-					animation.play('greenholdend');
-				case 3:
-					animation.play('redholdend');
-				case 1:
-					animation.play('blueholdend');
-				case 0:
-					animation.play('purpleholdend');
+				case GREEN_NOTE:
+					prevNote.animation.play('greenhold');
+
+				case RED_NOTE:
+					prevNote.animation.play('redhold');
+
+				case BLUE_NOTE:
+					prevNote.animation.play('bluehold');
+
+				case PURP_NOTE:
+					prevNote.animation.play('purplehold');
 			}
 
-			updateHitbox();
+			prevNote.offset.y = -19;
 
-			x -= width / 2;
-
-			if (prevNote.isSustainNote)
-			{
-				switch (prevNote.noteData)
-				{
-					case 2:
-						prevNote.animation.play('greenhold');
-					case 3:
-						prevNote.animation.play('redhold');
-					case 1:
-						prevNote.animation.play('bluehold');
-					case 0:
-						prevNote.animation.play('purplehold');
-				}
-
-				prevNote.offset.y = -19;
-				prevNote.scale.y *= (2.25 * PlayState.SONG.speed);
-				// prevNote.setGraphicSize();
-			}
+			// Reduced scaling for better performance
+			prevNote.scale.y *= 1.8 * PlayState.SONG.speed;
 		}
 	}
 
 	override function update(elapsed:Float)
 	{
+		// Skip dead notes
+		if (!alive)
+			return;
+
 		super.update(elapsed);
+
+		var songPos = Conductor.songPosition;
+		var safeZone = Conductor.safeZoneOffset;
 
 		if (mustPress)
 		{
-			// The * 0.5 us so that its easier to hit them too late, instead of too early
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
-			{
-				canBeHit = true;
-			}
-			else
-				canBeHit = false;
+			canBeHit = (
+				strumTime > songPos - safeZone &&
+				strumTime < songPos + (safeZone * 0.5)
+			);
 
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset)
-				tooLate = true;
+			tooLate = strumTime < songPos - safeZone;
+
+			if (tooLate)
+				alpha = 0.3;
 		}
 		else
 		{
 			canBeHit = false;
 
-			if (strumTime <= Conductor.songPosition)
-			{
+			if (strumTime <= songPos)
 				wasGoodHit = true;
-			}
 		}
 
-		if (tooLate)
-		{
-			if (alpha > 0.3)
-				alpha = 0.3;
-		}
+		// Render optimization
+		visible = y > -200 && y < 900;
+
+		// Disable updates when offscreen
+		active = visible;
 	}
 }
