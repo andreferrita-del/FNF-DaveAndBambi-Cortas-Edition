@@ -251,7 +251,7 @@ class PlayState extends MusicBeatState
 		}
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
-		curStage = deliriuned;
+		curStage = 'deliriuned';
 		shader = new WiggleEffect();
 		var s = 2.0;
 		var a = 0.1;
