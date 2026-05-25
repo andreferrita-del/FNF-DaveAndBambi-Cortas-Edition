@@ -28,6 +28,9 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+	var originalX:Float = 0;
+    var originalY:Float = 0;
+	
 
 	override function create()
 	{
@@ -161,7 +164,8 @@ class MainMenuState extends MusicBeatState
 								switch (daChoice)
 								{
 									case 'story mode':
-										FlxG.switchState(new StoryMenuState());
+										FlxG.sound.play("assets/sounds/no-granted");
+										shakeMenu();
 										trace("Story Menu Selected");
 									case 'freeplay':
 										FlxG.switchState(new FreeplayState());
@@ -208,4 +212,30 @@ class MainMenuState extends MusicBeatState
 			spr.updateHitbox();
 		});
 	}
+
+	function shakeMenu(intensity:Float = 15, duration:Float = 0.3)
+{
+	originalX = camGame.x;
+	originalY = camGame.y;
+
+	for (i in 0...10)
+	{
+		FlxTween.tween(camGame,
+		{
+			x: originalX + FlxG.random.float(-intensity, intensity),
+			y: originalY + FlxG.random.float(-intensity, intensity)
+		},
+		duration / 10);
+	}
+
+	FlxTween.tween(camGame,
+	{
+		x: originalX,
+		y: originalY
+	},
+	0.2,
+	{
+		ease: FlxEase.quadOut
+	});
+}
 }
