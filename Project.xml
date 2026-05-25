@@ -1,36 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<!-- XML -->
+
 	<!-- _________________________ Application Settings _________________________ -->
 
 	<app title="Cortas Edition" file="CE" packageName="com.hortas.cloned.funkin" main="Main" version="0.2.5" company="CortasTeam" />
 
-	<!--Switch Export with Unique ApplicationID and Icon-->
+	<!-- Switch Export with Unique ApplicationID and Icon -->
 	<set name="APP_ID" value="0x0100f6c013bbc000" />
 
-	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
-		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
-	<!-- <app preloader="Preloader" resizable="true" /> -->
+	<!-- Flixel Preloader -->
 	<app preloader="flixel.system.FlxPreloader" />
 
-	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
+	<!-- Minimum without FLX_NO_GAMEPAD: 11.8 -->
 	<set name="SWF_VERSION" value="11.8" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
-	<!--These window settings apply to all targets-->
+	<!-- Default -->
 	<window width="1280" height="720" fps="60" background="#000000" hardware="true" vsync="false" />
 
-	<!--HTML5-specific-->
+	<!-- HTML5 -->
 	<window if="html5" resizable="true" />
 
-	<!--Desktop-specific-->
+	<!-- Desktop -->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
 
-	<!--Mobile-specific-->
+	<!-- Mobile -->
 	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
 
-	<!--Switch-specific-->
+	<!-- Switch -->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
@@ -41,70 +39,53 @@
 
 	<classpath name="source" />
 
+	<!-- Assets -->
 	<assets path="assets/images" />
 	<assets path="assets/data" />
-	<assets path="example_mods" rename="mods" embed="false"/>
-	
-	<!-- <library name="noPreload" preload='false'/> -->
-	<!-- <library name="noPreload"/> -->
-	<assets path="assets/music" include="*.mp3" if="web"/>
-	<assets path="assets/music" include="*.ogg" unless="web"/>
+
+	<assets path="example_mods" rename="mods" embed="false" />
+
+	<!-- Music -->
+	<assets path="assets/music" include="*.mp3" if="web" />
+	<assets path="assets/music" include="*.ogg" unless="web" />
+
+	<!-- Sounds -->
 	<assets path="assets/sounds" include="*.mp3" if="web" />
 	<assets path="assets/sounds" include="*.ogg" unless="web" />
 
-
+	<!-- Fonts -->
 	<assets path="assets/fonts/vcr.ttf" embed="true" />
+
+	<!-- Icon -->
+	<icon path="art/icon.png" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
+	<haxelib name="lime" />
+	<haxelib name="openfl" />
 	<haxelib name="flixel" />
-	<haxedev set='webgl' />
-
-	<!--In case you want to use the addons package-->
 	<haxelib name="flixel-addons" />
-	<haxelib name="hscript" />
-
-	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
-	<haxelib name="newgrounds"/>
-	<haxelib name="faxe" if='switch'/>
-
-	<!-- <haxelib name="markdown" /> -->
-	<!-- <haxelib name="HtmlParser" /> -->
-
-	<!--In case you want to use nape with flixel-->
-	<!--<haxelib name="nape-haxe4" />-->
+	<haxelib name="hscript" />
+	<haxelib name="newgrounds" />
+	<haxelib name="faxe" if="switch" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
-	<!--Enable the Flixel core recording system-->
-	<!--<haxedef name="FLX_RECORD" />-->
+	<!-- Enable WebGL -->
+	<haxedef name="webgl" />
 
-	<!--Disable the right and middle mouse buttons-->
-	<!-- <haxedef name="FLX_NO_MOUSE_ADVANCED" /> -->
-
-	<!--Disable the native cursor API on Flash-->
-	<!--<haxedef name="FLX_NO_NATIVE_CURSOR" />-->
-
-	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
+	<!-- Mobile Optimizations -->
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
 	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
+
+	<!-- Desktop Optimizations -->
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
-	<!--<haxedef name="FLX_NO_GAMEPAD" />-->
 
-	<!--Disable the Flixel core sound tray-->
-	<!--<haxedef name="FLX_NO_SOUND_TRAY" />-->
-
-	<!--Disable the Flixel sound management code-->
-	<!--<haxedef name="FLX_NO_SOUND_SYSTEM" />-->
-
-	<!--Disable the Flixel core focus lost screen-->
-	<!--<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />-->
-
-	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+	<!-- Disable Debugger on Release -->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
-	<!--Enable this for Nape release builds for a serious peformance improvement-->
+	<!-- Nape Optimization -->
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
-	<icon path="art/icon.png" />
+
 </project>
