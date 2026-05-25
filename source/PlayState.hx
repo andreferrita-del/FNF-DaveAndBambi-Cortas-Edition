@@ -45,7 +45,7 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Int = 1;
 
 	var halloweenLevel:Bool = false;
-	var shader:WiggleEffect3D-Wold;
+	var shader:WiggleEffect;
 
 	private var vocals:FlxSound;
 
@@ -251,7 +251,7 @@ class PlayState extends MusicBeatState
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
 		curStage = deliriuned;
-		shader = new WiggleEffect3D-Wold();
+		shader = new WiggleEffect();
 		var s = 2.0;
 		var a = 0.1;
 		var f = 5.0;
