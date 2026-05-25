@@ -262,7 +262,7 @@ class PlayState extends MusicBeatState
 		shader.uTime.value = [0.0];
 			
 		var bgs:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
-		bgs.scrollFactor.set(0.9, 0.9);
+		bgs.scrollFactor.set(0, 0);
 		bgs.screenCenter();
 		bgs.shader = shader;
 		add(bgs);
