@@ -268,9 +268,9 @@ class PlayState extends MusicBeatState
 		add(bgs);
 		}else if (SONG.song.toLowerCase() == 'photosynthesis')
 		{
-		curStage = 'photoyay';
+		curStage = 'purpleyay';
 		shader = new WiggleEffect();
-		var s = 2.0;
+		var s = 4.2;
 		var a = 0.1;
 		var f = 5.0;
 		shader.uWaveAmplitude.value = [a];
@@ -278,7 +278,7 @@ class PlayState extends MusicBeatState
 		shader.uSpeed.value = [s];
 		shader.uTime.value = [0.0];
 			
-		var photo:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
+		var photo:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.purpling__png);
 		photo.scrollFactor.set(0, 0);
 		photo.screenCenter();
 		photo.shader = shader;
@@ -817,6 +817,8 @@ class PlayState extends MusicBeatState
 			case 'deliriuned':
 				shader.uTime.value[0] += elapsed;
 				dad.y += Math.sin(elapsed * 2) * 0.5;
+		   case 'purpleyay':
+				shader.uTime.value[0] += elapsed;
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
 
