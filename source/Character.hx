@@ -29,6 +29,24 @@ class Character extends FlxSprite
 
 		switch (curCharacter)
 		{
+			case "hortas":
+				frames = FlxAtlasFrames.fromSparrow(
+					basePath + "hortasNew.png",
+					basePath + "hortasNew.xml"
+				);
+				animation.addByPrefix('idle', 'hortasNew idle', 24);
+				animation.addByPrefix('singUP', 'hortasNew up', 24);
+				animation.addByPrefix('singRIGHT', 'hortasNew right', 24);
+				animation.addByPrefix('singDOWN', 'hortasNew down', 24);
+				animation.addByPrefix('singLEFT', 'hortasNew left', 24);
+				addOffset("singUP", 70, 90);
+				addOffset("idle", -10, 0);
+				addOffset("singRIGHT", -200, 7);
+				addOffset("singLEFT", 371, 100);
+				addOffset("singDOWN", 50, 0);
+				
+				playAnim('idle');
+				
 			case "gf":
 				frames = FlxAtlasFrames.fromSparrow(
 					basePath + "GF_assets.png",
