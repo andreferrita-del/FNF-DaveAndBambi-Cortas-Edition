@@ -60,6 +60,9 @@ class PlayState extends MusicBeatState
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
 
+	//botplay lol
+	public var botPlay:Bool = false;
+
 	private var camFollow:FlxObject;
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
@@ -793,6 +796,11 @@ class PlayState extends MusicBeatState
 		perfectMode = false;
 		#end
 
+		if (FlxG.keys.justPressed.SIX)
+       {
+	    botPlay = !botPlay;
+       }
+
 		if (FlxG.keys.justPressed.NINE)
 		{
 			if (iconP1.animation.curAnim.name == 'bf-old')
@@ -1069,6 +1077,13 @@ while (
 
 			if (SONG.needsVoices)
 				vocals.volume = 1;
+			if(botPlay)
+	      {
+		if(daNote.mustPress && daNote.canBeHit)
+		{
+			daNote.kill();
+		}
+	}
 
 			daNote.kill();
 			continue;
