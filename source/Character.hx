@@ -211,6 +211,8 @@ class Character extends FlxSprite
 		addOffset('firstDeath', 37, 11);
 		addOffset('deathLoop', 37, 5);
 		addOffset('deathConfirm', 37, 69);
+
+		//case combi:
 		}
 	}
 
