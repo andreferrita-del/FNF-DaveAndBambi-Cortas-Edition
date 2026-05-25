@@ -1,8 +1,10 @@
+package;
+
 import flixel.FlxCamera;
 import openfl.filters.ShaderFilter;
 import flixel.system.FlxAssets.FlxShader;
 
-class WiggleEffect extends FlxShader
+class WiggleEffect3D-Wold extends FlxShader
 {
     @:glFragmentSource('
     #pragma header
