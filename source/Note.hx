@@ -4,6 +4,8 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
+using StringTools;
+
 class Note extends FlxSprite
 {
 	public var strumTime:Float = 0;
@@ -18,8 +20,6 @@ class Note extends FlxSprite
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 
-	public var noteScore:Float = 1;
-
 	public static var swagWidth:Float = 160 * 0.7;
 
 	public static inline var PURP_NOTE:Int = 0;
@@ -27,43 +27,43 @@ class Note extends FlxSprite
 	public static inline var GREEN_NOTE:Int = 2;
 	public static inline var RED_NOTE:Int = 3;
 
-	// Texture cache
-	public static var NOTE_TEX:FlxAtlasFrames;
+	private var earlyHitMult:Float = 0.5;
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
 	{
 		super();
 
-		if (NOTE_TEX == null)
-		{
-			NOTE_TEX = FlxAtlasFrames.fromSparrow(
-				AssetPaths.NOTE_assets__png,
-				AssetPaths.NOTE_assets__xml
-			);
-		}
+		moves = false;
+		pixelPerfectRender = false;
 
-		frames = NOTE_TEX;
-
-		if (prevNote == null)
+		if(prevNote == null)
 			prevNote = this;
 
 		this.prevNote = prevNote;
 		this.isSustainNote = sustainNote;
-		this.strumTime = strumTime;
-		this.noteData = noteData;
 
 		x += 50;
 		y = -2000;
 
-		setupAnimations();
+		this.strumTime = strumTime;
+		this.noteData = noteData;
+
+		var tex = FlxAtlasFrames.fromSparrow(
+			AssetPaths.NOTE_assets__png,
+			AssetPaths.NOTE_assets__xml
+		);
+
+		frames = tex;
+
+		loadNoteAnims();
 
 		setGraphicSize(Std.int(width * 0.7));
 		updateHitbox();
 
-		// Better performance on mobile/low-end devices
-		antialiasing = false;
+		// Better performance
+		antialiasing = !isSustainNote;
 
-		switch (noteData)
+		switch(noteData)
 		{
 			case PURP_NOTE:
 				x += swagWidth * 0;
@@ -82,124 +82,130 @@ class Note extends FlxSprite
 				animation.play('redScroll');
 		}
 
-		if (isSustainNote)
-			setupSustain();
+		if(isSustainNote && prevNote != null)
+		{
+			alpha = 0.6;
+
+			offset.x += width / 2;
+
+			switch(noteData)
+			{
+				case PURP_NOTE:
+					animation.play('purpleholdend');
+
+				case BLUE_NOTE:
+					animation.play('blueholdend');
+
+				case GREEN_NOTE:
+					animation.play('greenholdend');
+
+				case RED_NOTE:
+					animation.play('redholdend');
+			}
+
+			updateHitbox();
+
+			offset.x -= width / 2;
+
+			if(prevNote.isSustainNote)
+			{
+				switch(prevNote.noteData)
+				{
+					case PURP_NOTE:
+						prevNote.animation.play('purplehold');
+
+					case BLUE_NOTE:
+						prevNote.animation.play('bluehold');
+
+					case GREEN_NOTE:
+						prevNote.animation.play('greenhold');
+
+					case RED_NOTE:
+						prevNote.animation.play('redhold');
+				}
+
+				prevNote.scale.y *= 1.8 * PlayState.SONG.speed;
+			}
+		}
+		else
+		{
+			earlyHitMult = 1;
+		}
 	}
 
-	function setupAnimations()
+	function loadNoteAnims()
 	{
-		if (animation.getByName('greenScroll') != null)
-			return;
-
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
 		animation.addByPrefix('blueScroll', 'blue0');
 		animation.addByPrefix('purpleScroll', 'purple0');
 
-		animation.addByPrefix('purpleholdend', 'pruple end hold');
-		animation.addByPrefix('greenholdend', 'green hold end');
-		animation.addByPrefix('redholdend', 'red hold end');
-		animation.addByPrefix('blueholdend', 'blue hold end');
-
-		animation.addByPrefix('purplehold', 'purple hold piece');
-		animation.addByPrefix('greenhold', 'green hold piece');
-		animation.addByPrefix('redhold', 'red hold piece');
-		animation.addByPrefix('bluehold', 'blue hold piece');
-	}
-
-	function setupSustain()
-	{
-		noteScore *= 0.2;
-		alpha = 0.6;
-
-		x += width / 2;
-
-		switch (noteData)
+		if(isSustainNote)
 		{
-			case GREEN_NOTE:
-				animation.play('greenholdend');
+			animation.addByPrefix('purpleholdend', 'pruple end hold');
+			animation.addByPrefix('greenholdend', 'green hold end');
+			animation.addByPrefix('redholdend', 'red hold end');
+			animation.addByPrefix('blueholdend', 'blue hold end');
 
-			case RED_NOTE:
-				animation.play('redholdend');
-
-			case BLUE_NOTE:
-				animation.play('blueholdend');
-
-			case PURP_NOTE:
-				animation.play('purpleholdend');
-		}
-
-		updateHitbox();
-
-		x -= width / 2;
-
-		if (prevNote != null && prevNote.isSustainNote)
-		{
-			switch (prevNote.noteData)
-			{
-				case GREEN_NOTE:
-					prevNote.animation.play('greenhold');
-
-				case RED_NOTE:
-					prevNote.animation.play('redhold');
-
-				case BLUE_NOTE:
-					prevNote.animation.play('bluehold');
-
-				case PURP_NOTE:
-					prevNote.animation.play('purplehold');
-			}
-
-			prevNote.offset.y = -19;
-
-			// Reduced scaling for better performance
-			prevNote.scale.y *= 1.8 * PlayState.SONG.speed;
+			animation.addByPrefix('purplehold', 'purple hold piece');
+			animation.addByPrefix('greenhold', 'green hold piece');
+			animation.addByPrefix('redhold', 'red hold piece');
+			animation.addByPrefix('bluehold', 'blue hold piece');
 		}
 	}
 
 	override function update(elapsed:Float)
-{
-	if (!alive)
-		return;
-
-	super.update(elapsed);
-
-	var songPos = Conductor.songPosition;
-	var safeZone = Conductor.safeZoneOffset;
-
-	if (mustPress)
 	{
-		canBeHit = (
-			strumTime > songPos - safeZone &&
-			strumTime < songPos + safeZone
-		);
+		if(!alive)
+			return;
 
-		tooLate = strumTime < songPos - safeZone;
+		super.update(elapsed);
 
-		if (tooLate)
-			alpha = 0.3;
-	}
-	else
-	{
-		canBeHit = false;
+		var songPos:Float = Conductor.songPosition;
+		var safeZone:Float = Conductor.safeZoneOffset;
 
-		if (strumTime <= songPos + 50)
+		if(mustPress)
 		{
-			wasGoodHit = true;
+			canBeHit = (
+				strumTime > songPos - safeZone &&
+				strumTime < songPos + (safeZone * earlyHitMult)
+			);
 
-			// Remove opponent notes instantly
-			visible = false;
+			if(strumTime < songPos - safeZone && !wasGoodHit)
+				tooLate = true;
+		}
+		else
+		{
+			canBeHit = false;
+
+			if(strumTime < songPos + (safeZone * earlyHitMult))
+			{
+				if((isSustainNote && prevNote.wasGoodHit) || strumTime <= songPos)
+				{
+					wasGoodHit = true;
+
+					// Opponent note optimization
+					visible = false;
+					active = false;
+				}
+			}
+		}
+
+		if(tooLate)
+		{
+			if(alpha > 0.3)
+				alpha = 0.3;
+		}
+
+		// Render optimization
+		visible = y > -400 && y < FlxG.height + 400;
+
+		// Remove notes far below screen
+		if(y > FlxG.height + 600)
+		{
 			kill();
+			active = false;
+			visible = false;
 		}
 	}
-
-	// Render optimization
-	visible = y > -200 && y < FlxG.height + 200;
-
-	// Remove notes far below screen
-	if (y > FlxG.height + 400)
-	{
-		kill();
-	}
-}
 }
