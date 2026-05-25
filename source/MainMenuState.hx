@@ -165,7 +165,7 @@ class MainMenuState extends MusicBeatState
 								{
 									case 'story mode':
 										FlxG.sound.play("assets/sounds/no-granted");
-										shakeMenu();
+									//)shakeMenu();ll
 										trace("Story Menu Selected");
 									case 'freeplay':
 										FlxG.switchState(new FreeplayState());
@@ -213,7 +213,7 @@ class MainMenuState extends MusicBeatState
 		});
 	}
 
-	function shakeMenu(intensity:Float = 15, duration:Float = 0.3)
+	/*function shakeMenu(intensity:Float = 15, duration:Float = 0.3)
 {
 	originalX = camGame.x;
 	originalY = camGame.y;
@@ -238,4 +238,4 @@ class MainMenuState extends MusicBeatState
 		ease: FlxEase.quadOut
 	});
 }
-}
+}*/
