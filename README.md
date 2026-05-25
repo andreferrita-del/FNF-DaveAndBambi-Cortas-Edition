@@ -63,5 +63,3 @@ To run it for your desktop (Windows, Mac, Linux) it's a bit more complicated. I 
 ### Additional guides
 
 - [Command line basics](https://ninjamuffin99.newgrounds.com/news/post/1090480)
-# FNF-DaveAndBambi-Rortas-Edition
-# FNF-DaveAndBambi-Rortas-Edition
