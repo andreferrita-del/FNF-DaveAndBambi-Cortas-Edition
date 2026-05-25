@@ -157,40 +157,48 @@ class Note extends FlxSprite
 	}
 
 	override function update(elapsed:Float)
+{
+	if (!alive)
+		return;
+
+	super.update(elapsed);
+
+	var songPos = Conductor.songPosition;
+	var safeZone = Conductor.safeZoneOffset;
+
+	if (mustPress)
 	{
-		// Skip dead notes
-		if (!alive)
-			return;
+		canBeHit = (
+			strumTime > songPos - safeZone &&
+			strumTime < songPos + safeZone
+		);
 
-		super.update(elapsed);
+		tooLate = strumTime < songPos - safeZone;
 
-		var songPos = Conductor.songPosition;
-		var safeZone = Conductor.safeZoneOffset;
-
-		if (mustPress)
-		{
-			canBeHit = (
-				strumTime > songPos - safeZone &&
-				strumTime < songPos + (safeZone * 0.5)
-			);
-
-			tooLate = strumTime < songPos - safeZone;
-
-			if (tooLate)
-				alpha = 0.3;
-		}
-		else
-		{
-			canBeHit = false;
-
-			if (strumTime <= songPos)
-				wasGoodHit = true;
-		}
-
-		// Render optimization
-		visible = y > -200 && y < 900;
-
-		// Disable updates when offscreen
-		active = visible;
+		if (tooLate)
+			alpha = 0.3;
 	}
+	else
+	{
+		canBeHit = false;
+
+		if (strumTime <= songPos + 50)
+		{
+			wasGoodHit = true;
+
+			// Remove opponent notes instantly
+			visible = false;
+			kill();
+		}
+	}
+
+	// Render optimization
+	visible = y > -200 && y < FlxG.height + 200;
+
+	// Remove notes far below screen
+	if (y > FlxG.height + 400)
+	{
+		kill();
+	}
+}
 }
