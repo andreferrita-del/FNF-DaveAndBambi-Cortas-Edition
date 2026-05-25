@@ -266,6 +266,23 @@ class PlayState extends MusicBeatState
 		bgs.screenCenter();
 		bgs.shader = shader;
 		add(bgs);
+		}else if (SONG.song.toLowerCase() == 'photosynthesis')
+		{
+		curStage = 'photoyay';
+		shader = new WiggleEffect();
+		var s = 2.0;
+		var a = 0.1;
+		var f = 5.0;
+		shader.uWaveAmplitude.value = [a];
+		shader.uFrequency.value = [f];
+		shader.uSpeed.value = [s];
+		shader.uTime.value = [0.0];
+			
+		var photo:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
+		photo.scrollFactor.set(0, 0);
+		photo.screenCenter();
+		photo.shader = shader;
+		add(photo);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
