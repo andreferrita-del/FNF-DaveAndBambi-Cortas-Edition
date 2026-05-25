@@ -68,6 +68,11 @@ jobs:
         run: |
           haxelib run lime setup
 
+      - name: Clean HXCPP
+        run: |
+         haxelib run lime clean
+         haxelib run lime rebuild hxcpp windows
+
       - name: Build Windows
         shell: powershell
         run: |
