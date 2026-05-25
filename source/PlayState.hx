@@ -60,8 +60,8 @@ class PlayState extends MusicBeatState
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
 
-	//botplay lol
-	public var botPlay:Bool = false;
+	//botplay not work in this engine sorry
+	//public var botPlay:Bool = false;
 
 	private var camFollow:FlxObject;
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
@@ -442,11 +442,11 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		iconP1 = new HealthIcon(SONG.player1, true);
+		iconP1 = new FlxSprite().loadGraphic('assets/images/icons/' + SONG.player1 + '.png');
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
 
-		iconP2 = new HealthIcon(SONG.player2, false);
+		iconP2 = new FlxSprite().loadGraphic('assets/images/icons/' + SONG.player2 + '.png');
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
@@ -796,19 +796,6 @@ class PlayState extends MusicBeatState
 		perfectMode = false;
 		#end
 
-		if (FlxG.keys.justPressed.SIX)
-       {
-	    botPlay = !botPlay;
-       }
-
-		if (FlxG.keys.justPressed.NINE)
-		{
-			if (iconP1.animation.curAnim.name == 'bf-old')
-				iconP1.animation.play(SONG.player1);
-			else
-				iconP1.animation.play('bf-old');
-		}
-
 		switch (curStage)
 		{
 			case 'philly':
@@ -1077,13 +1064,6 @@ while (
 
 			if (SONG.needsVoices)
 				vocals.volume = 1;
-			if(botPlay)
-	      {
-		if(daNote.mustPress && daNote.canBeHit)
-		{
-			daNote.kill();
-		}
-	}
 
 			daNote.kill();
 			continue;
