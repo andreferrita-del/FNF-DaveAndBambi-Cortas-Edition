@@ -179,7 +179,9 @@ class TitleState extends MusicBeatState
 
 		FlxTween.tween(credTextShit, {y: credTextShit.y + 20}, 2.9, {ease: FlxEase.quadInOut, type: PINGPONG});
 
+		#if !mobile
 		FlxG.mouse.visible = false;
+		#end
 
 		if (initialized)
 			skipIntro();
@@ -211,12 +213,7 @@ class TitleState extends MusicBeatState
 		Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
-		if (FlxG.keys.justPressed.F)
-		{
-			FlxG.fullscreen = !FlxG.fullscreen;
-		}
-
-		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER;
+		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER || FlxG.touches.justStarted().length > 0;
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 
