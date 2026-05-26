@@ -138,10 +138,6 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-
-		#if mobile
-		createhitbox();
-		#end
 	
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
@@ -494,6 +490,10 @@ var rightHitbox:FlxSprite;
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+
+	#if mobile
+		createhitbox();
+		#end
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
