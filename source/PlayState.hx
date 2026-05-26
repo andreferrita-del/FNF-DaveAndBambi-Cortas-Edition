@@ -829,7 +829,8 @@ if (touch != null)
 			}
 		}
 	}
-} #end
+} 
+		#end
 
 	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
 	
@@ -859,6 +860,8 @@ if (touch != null)
 
 		scoreTxt.text = "Score:" + songScore;
 
+		#if !mobile
+
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
@@ -872,6 +875,7 @@ if (touch != null)
 		{
 			FlxG.switchState(new ChartingState());
 		}
+				#end
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
@@ -898,10 +902,12 @@ if (touch != null)
 		/* if (FlxG.keys.justPressed.NINE)
 			FlxG.switchState(new Charting()); */
 
+		#if !mobile
 		#if debug
 		if (FlxG.keys.justPressed.EIGHT)
 			FlxG.switchState(new AnimationDebug(SONG.player2));
 		#end
+	#end
 
 		if (startingSong)
 		{
