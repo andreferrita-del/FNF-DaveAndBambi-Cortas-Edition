@@ -124,36 +124,7 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-		#if mobile
-
-var hitboxWidth:Int = Std.int(FlxG.width / 4);
-
-// LEFT
-leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
-leftHitbox.scrollFactor.set();
-leftHitbox.cameras = [camHUD];
-add(leftHitbox);
-
-// DOWN
-downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
-downHitbox.scrollFactor.set();
-downHitbox.cameras = [camHUD];
-add(downHitbox);
-
-// UP
-upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
-upHitbox.scrollFactor.set();
-upHitbox.cameras = [camHUD];
-add(upHitbox);
-
-// RIGHT
-rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
-rightHitbox.scrollFactor.set();
-rightHitbox.cameras = [camHUD];
-add(rightHitbox);
-
-#end
-
+		
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
@@ -505,6 +476,36 @@ add(rightHitbox);
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+		#if mobile
+
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
+
+// LEFT
+leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
+leftHitbox.scrollFactor.set();
+leftHitbox.cameras = [camHUD];
+add(leftHitbox);
+
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
+downHitbox.scrollFactor.set();
+downHitbox.cameras = [camHUD];
+add(downHitbox);
+
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
+upHitbox.scrollFactor.set();
+upHitbox.cameras = [camHUD];
+add(upHitbox);
+
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
+rightHitbox.scrollFactor.set();
+rightHitbox.cameras = [camHUD];
+add(rightHitbox);
+
+#end
+	
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -843,24 +844,27 @@ var rightPressed:Bool = false;
 
 for (touch in FlxG.touches.list)
 {
-	if (touch.overlaps(leftHitbox))
-		leftPressed = true;
+	if (touch.pressed)
+	{
+		if (touch.overlaps(leftHitbox))
+			leftPressed = true;
 
-	if (touch.overlaps(downHitbox))
-		downPressed = true;
+		if (touch.overlaps(downHitbox))
+			downPressed = true;
 
-	if (touch.overlaps(upHitbox))
-		upPressed = true;
+		if (touch.overlaps(upHitbox))
+			upPressed = true;
 
-	if (touch.overlaps(rightHitbox))
-		rightPressed = true;
+		if (touch.overlaps(rightHitbox))
+			rightPressed = true;
+	}
 }
 
-// SIMULA INPUT MOBILE
-controls.LEFT = leftPressed;
-controls.DOWN = downPressed;
-controls.UP = upPressed;
-controls.RIGHT = rightPressed;
+// INPUT MOBILE
+controls.NOTE_LEFT = leftPressed;
+controls.NOTE_DOWN = downPressed;
+controls.NOTE_UP = upPressed;
+controls.NOTE_RIGHT = rightPressed;
 
 #end
 
@@ -1364,19 +1368,68 @@ keyShit();
 	{
 		// HOLDING
 		var up = controls.UP;
-		var right = controls.RIGHT;
-		var down = controls.DOWN;
-		var left = controls.LEFT;
+var right = controls.RIGHT;
+var down = controls.DOWN;
+var left = controls.LEFT;
 
-		var upP = controls.UP_P;
-		var rightP = controls.RIGHT_P;
-		var downP = controls.DOWN_P;
-		var leftP = controls.LEFT_P;
+var upP = controls.UP_P;
+var rightP = controls.RIGHT_P;
+var downP = controls.DOWN_P;
+var leftP = controls.LEFT_P;
 
-		var upR = controls.UP_R;
-		var rightR = controls.RIGHT_R;
-		var downR = controls.DOWN_R;
-		var leftR = controls.LEFT_R;
+var upR = controls.UP_R;
+var rightR = controls.RIGHT_R;
+var downR = controls.DOWN_R;
+var leftR = controls.LEFT_R;
+
+		#if mobile
+for (touch in FlxG.touches.list)
+{
+	if (touch.overlaps(leftHitbox))
+	{
+		left = true;
+
+		if (touch.justPressed)
+			leftP = true;
+
+		if (touch.justReleased)
+			leftR = true;
+	}
+
+	if (touch.overlaps(downHitbox))
+	{
+		down = true;
+
+		if (touch.justPressed)
+			downP = true;
+
+		if (touch.justReleased)
+			downR = true;
+	}
+
+	if (touch.overlaps(upHitbox))
+	{
+		up = true;
+
+		if (touch.justPressed)
+			upP = true;
+
+		if (touch.justReleased)
+			upR = true;
+	}
+
+	if (touch.overlaps(rightHitbox))
+	{
+		right = true;
+
+		if (touch.justPressed)
+			rightP = true;
+
+		if (touch.justReleased)
+			rightR = true;
+	}
+}
+		#end
 
 		// FlxG.watch.addQuick('asdfa', upP);
 		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
