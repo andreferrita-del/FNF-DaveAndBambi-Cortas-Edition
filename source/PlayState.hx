@@ -1268,7 +1268,7 @@ var left = controls.LEFT;
 var upP = controls.UP_P;
 var rightP = controls.RIGHT_P;
 var downP = controls.DOWN_P;
-var leftP = controls.LEFT_P || ;
+var leftP = controls.LEFT_P;
 
 var upR = controls.UP_R;
 var rightR = controls.RIGHT_R;
