@@ -840,45 +840,44 @@ add(rightHitbox);
 		#if !debug
 		perfectMode = false;
 		#end
-			
-#if mobile
+
+	#if mobile
 
 leftPressed = false;
 downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-
-var cam = FlxG.camera;
-
 for (touch in FlxG.touches.list)
 {
-	
-	var mx = touch.screenX;
-	var my = touch.screenY;
+	var pos = new FlxPoint(touch.screenX, touch.screenY);
 
-
-	var point = new FlxPoint(mx, my);
-
-	if (touch.pressed)
+	if (touch.justPressed && leftHitbox.overlapsPoint(pos))
 	{
-		if (leftHitbox.overlapsPoint(point))
-			leftPressed = true;
+		leftPressed = true;
+		trace("You touched LEFT!");
+	}
 
-		if (downHitbox.overlapsPoint(point))
-			downPressed = true;
+	if (touch.justPressed && downHitbox.overlapsPoint(pos))
+	{
+		downPressed = true;
+		trace("You touched DOWN!");
+	}
 
-		if (upHitbox.overlapsPoint(point))
-			upPressed = true;
+	if (touch.justPressed && upHitbox.overlapsPoint(pos))
+	{
+		upPressed = true;
+		trace("You touched UP!");
+	}
 
-		if (rightHitbox.overlapsPoint(point))
-			rightPressed = true;
+	if (touch.justPressed && rightHitbox.overlapsPoint(pos))
+	{
+		rightPressed = true;
+		trace("You touched RIGHT!");
 	}
 }
 
 #end
-
-	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
 	
 
 		switch (curStage)
