@@ -52,10 +52,16 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
+	#if mobile
 	var leftHitbox:FlxSprite;
 var downHitbox:FlxSprite;
 var upHitbox:FlxSprite;
 var rightHitbox:FlxSprite;
+	var leftPressed:Bool = false;
+var downPressed:Bool = false;
+var upPressed:Bool = false;
+var rightPressed:Bool = false;
+	#end
 
 	private var vocals:FlxSound;
 
@@ -836,11 +842,6 @@ add(rightHitbox);
 		#end
 			
 #if mobile
-
-var leftPressed:Bool = false;
-var downPressed:Bool = false;
-var upPressed:Bool = false;
-var rightPressed:Bool = false;
 
 for (touch in FlxG.touches.list)
 {
