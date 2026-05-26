@@ -139,44 +139,8 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-	#if mobile
-
-var hitboxWidth:Int = Std.int(FlxG.width / 4);
-
-// LEFT
-leftHitbox = new FlxSprite(0, 0);
-leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66C24B99);
-leftHitbox.scrollFactor.set();
-leftHitbox.cameras = [camHUD];
-leftHitbox.alpha = 0.35;
-add(leftHitbox);
-
-// DOWN
-downHitbox = new FlxSprite(hitboxWidth, 0);
-downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FFFF);
-downHitbox.scrollFactor.set();
-downHitbox.cameras = [camHUD];
-downHitbox.alpha = 0.35;
-add(downHitbox);
-
-// UP
-upHitbox = new FlxSprite(hitboxWidth * 2, 0);
-upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FF00);
-upHitbox.scrollFactor.set();
-upHitbox.cameras = [camHUD];
-upHitbox.alpha = 0.35;
-add(upHitbox);
-
-// RIGHT
-rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
-rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66FF0000);
-rightHitbox.scrollFactor.set();
-rightHitbox.cameras = [camHUD];
-rightHitbox.alpha = 0.35;
-add(rightHitbox);
-
-#end
-
+		createHitbox();
+	
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
