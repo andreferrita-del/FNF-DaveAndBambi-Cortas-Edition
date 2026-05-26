@@ -175,10 +175,6 @@ class FreeplayState extends MusicBeatState
 			PlayState.storyDifficulty = curDifficulty;
 
 			FlxG.switchState(new PlayState());
-
-			if (FlxG.sound.music != null)
-				FlxG.sound.music.stop();
-		}
 	}
 
 	function changeDiff(change:Int = 0)
@@ -233,11 +229,6 @@ class FreeplayState extends MusicBeatState
 		);
 		#end
 
-		FlxG.sound.playMusic(
-			'assets/music/' + songs[curSelected] + "_Inst" + TitleState.soundExt,
-			0
-		);
-
 		var bullShit:Int = 0;
 
 		for (item in grpSongs.members)
@@ -254,3 +245,4 @@ class FreeplayState extends MusicBeatState
 		}
 	}
 		}
+	}
