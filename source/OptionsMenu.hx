@@ -2,10 +2,13 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxColor;
 
 class OptionsMenu extends MusicBeatState
 {
+	var fullscreenText:FlxText;
+
 	override function create()
 	{
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
@@ -16,6 +19,12 @@ class OptionsMenu extends MusicBeatState
 		menuBG.antialiasing = true;
 		add(menuBG);
 
+		fullscreenText = new FlxText(0, 300, FlxG.width, "(this not save!)FULLSCREEN: OFF", 32);
+		fullscreenText.setFormat(null, 32, FlxColor.WHITE, CENTER);
+		add(fullscreenText);
+
+		updateText();
+
 		super.create();
 	}
 
@@ -24,6 +33,17 @@ class OptionsMenu extends MusicBeatState
 		if (controls.BACK)
 			FlxG.switchState(new MainMenuState());
 
+		if (controls.ACCEPT)
+		{
+			FlxG.fullscreen = !FlxG.fullscreen;
+			updateText();
+		}
+
 		super.update(elapsed);
+	}
+
+	function updateText()
+	{
+		fullscreenText.text = "(this not save!)FULLSCREEN: " + (FlxG.fullscreen ? "ON" : "OFF");
 	}
 }
