@@ -850,36 +850,26 @@ rightPressed = false;
 
 for (touch in FlxG.touches.list)
 {
-	var pos = new FlxPoint(touch.screenX, touch.screenY);
+	// remake by me
+	var point = touch.getPosition(FlxG.camera);
 
-	if (touch.justPressed && leftHitbox.overlapsPoint(pos))
+	if (touch.justPressed)
 	{
-		leftPressed = true;
-		trace("You touched LEFT!");
-	}
+		if (leftHitbox.overlapsPoint(point))
+			leftPressed = true;
 
-	if (touch.justPressed && downHitbox.overlapsPoint(pos))
-	{
-		downPressed = true;
-		trace("You touched DOWN!");
-	}
+		if (downHitbox.overlapsPoint(point))
+			downPressed = true;
 
-	if (touch.justPressed && upHitbox.overlapsPoint(pos))
-	{
-		upPressed = true;
-		trace("You touched UP!");
-	}
+		if (upHitbox.overlapsPoint(point))
+			upPressed = true;
 
-	if (touch.justPressed && rightHitbox.overlapsPoint(pos))
-	{
-		rightPressed = true;
-		trace("You touched RIGHT!");
+		if (rightHitbox.overlapsPoint(point))
+			rightPressed = true;
 	}
 }
 
 #end
-	
-
 		switch (curStage)
 		{
 			case 'philly':
