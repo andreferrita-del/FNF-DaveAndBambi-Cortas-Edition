@@ -33,6 +33,11 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.filters.ShaderFilter;
 
+#if mobile
+import flixel.input.touch.FlxTouch;
+import flixel.math.FlxRect;
+#end
+
 using StringTools;
 
 class PlayState extends MusicBeatState
@@ -47,6 +52,12 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
+	var touchStartX:Float = 0;
+	
+var touchStartY:Float = 0;
+var isTouching:Bool = false;
+
+var swipeThreshold:Float = 50;
 
 	private var vocals:FlxSound;
 
@@ -794,6 +805,59 @@ class PlayState extends MusicBeatState
 	{
 		#if !debug
 		perfectMode = false;
+		#end
+			
+		#if mobile
+		var touch = FlxG.touches.list[0];
+
+if (touch != null)
+{
+	// START TOUCH
+	if (touch.justPressed)
+	{
+		isTouching = true;
+		touchStartX = touch.x;
+		touchStartY = touch.y;
+
+		// HITBOX EXEMPLO (BOTÕES UI OU NOTES)
+		for (note in notes.members)
+		{
+			if (note != null && touch.overlaps(note))
+			{
+				// simula pressionar nota
+				goodNoteHit(note);
+			}
+		}
+	}
+
+	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
+	if (isTouching)
+	{
+		var deltaX = touch.x - touchStartX;
+		var deltaY = touch.y - touchStartY;
+
+		// swipe vertical
+		if (deltaY > swipeThreshold)
+		{
+			// exemplo: pausar
+			openPauseMenu();
+			touchStartY = touch.y;
+		}
+
+		// swipe horizontal
+		if (deltaX > swipeThreshold)
+		{
+			// exemplo: skip
+			endSong();
+		}
+	}
+
+	// RELEASE
+	if (touch.justReleased)
+	{
+		isTouching = false;
+	}
+}
 		#end
 
 		switch (curStage)
