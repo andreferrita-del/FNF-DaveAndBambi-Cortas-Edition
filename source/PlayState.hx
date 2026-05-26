@@ -139,7 +139,7 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-		createHitbox();
+		createhitbox();
 	
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
