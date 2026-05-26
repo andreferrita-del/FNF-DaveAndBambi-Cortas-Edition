@@ -33,9 +33,9 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.filters.ShaderFilter;
 
-#if android
+/*#if android
 import android.FlxHitbox;
-#end
+#end*/
 
 using StringTools;
 
@@ -51,9 +51,32 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
+	//hitboxes
+	#if mobile
+	var leftHitbox:FlxSprite;
+var downHitbox:FlxSprite;
+var upHitbox:FlxSprite;
+var rightHitbox:FlxSprite;
+
+var mobileLeft:Bool = false;
+var mobileDown:Bool = false;
+var mobileUp:Bool = false;
+var mobileRight:Bool = false;
+
+var mobileLeftP:Bool = false;
+var mobileDownP:Bool = false;
+var mobileUpP:Bool = false;
+var mobileRightP:Bool = false;
+
+var mobileLeftR:Bool = false;
+var mobileDownR:Bool = false;
+var mobileUpR:Bool = false;
+var mobileRightR:Bool = false;
+	#end
+	/*
 	#if android
 	var hitbox:FlxHitbox;
-	#end
+	#end*/
 
 	private var vocals:FlxSound;
 
@@ -483,12 +506,37 @@ var rightHitbox:FlxSprite;
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+				#if mobile
 
-	#if android
+var sectionWidth:Int = Std.int(FlxG.width / 4);
 
-hitbox = new FlxHitbox();
-hitbox.cameras = [camHUD];
-add(hitbox);
+// LEFT
+leftHitbox = new FlxSprite(0, 0)
+	.makeGraphic(sectionWidth, FlxG.height, 0x66C24B99);
+leftHitbox.alpha = 0.15;
+leftHitbox.cameras = [camHUD];
+add(leftHitbox);
+
+// DOWN
+downHitbox = new FlxSprite(sectionWidth, 0)
+	.makeGraphic(sectionWidth, FlxG.height, 0x6600FFFF);
+downHitbox.alpha = 0.15;
+downHitbox.cameras = [camHUD];
+add(downHitbox);
+
+// UP
+upHitbox = new FlxSprite(sectionWidth * 2, 0)
+	.makeGraphic(sectionWidth, FlxG.height, 0x6600FF00);
+upHitbox.alpha = 0.15;
+upHitbox.cameras = [camHUD];
+add(upHitbox);
+
+// RIGHT
+rightHitbox = new FlxSprite(sectionWidth * 3, 0)
+	.makeGraphic(sectionWidth, FlxG.height, 0x66FF0000);
+rightHitbox.alpha = 0.15;
+rightHitbox.cameras = [camHUD];
+add(rightHitbox);
 
 #end
 
@@ -816,6 +864,82 @@ add(hitbox);
 
 	override public function update(elapsed:Float)
 	{
+		#if mobile
+
+// =======================
+// MOBILE INPUT
+// =======================
+
+var lastLeft = mobileLeft;
+var lastDown = mobileDown;
+var lastUp = mobileUp;
+var lastRight = mobileRight;
+
+// RESET
+mobileLeft = false;
+mobileDown = false;
+mobileUp = false;
+mobileRight = false;
+
+// RESET ALPHA
+leftHitbox.alpha = 0.15;
+downHitbox.alpha = 0.15;
+upHitbox.alpha = 0.15;
+rightHitbox.alpha = 0.15;
+
+var sectionWidth:Float = FlxG.width / 4;
+
+// TOUCH CHECK
+for (touch in FlxG.touches.list)
+{
+	// LEFT
+	if (touch.x < sectionWidth)
+	{
+		mobileLeft = true;
+		leftHitbox.alpha = 0.35;
+	}
+
+	// DOWN
+	else if (touch.x < sectionWidth * 2)
+	{
+		mobileDown = true;
+		downHitbox.alpha = 0.35;
+	}
+
+	// UP
+	else if (touch.x < sectionWidth * 3)
+	{
+		mobileUp = true;
+		upHitbox.alpha = 0.35;
+	}
+
+	// RIGHT
+	else
+	{
+		mobileRight = true;
+		rightHitbox.alpha = 0.35;
+	}
+}
+
+// =======================
+// PRESSED
+// =======================
+
+mobileLeftP = mobileLeft && !lastLeft;
+mobileDownP = mobileDown && !lastDown;
+mobileUpP = mobileUp && !lastUp;
+mobileRightP = mobileRight && !lastRight;
+
+// =======================
+// RELEASED
+// =======================
+
+mobileLeftR = !mobileLeft && lastLeft;
+mobileDownR = !mobileDown && lastDown;
+mobileUpR = !mobileUp && lastUp;
+mobileRightR = !mobileRight && lastRight;
+
+#end
 		#if !debug
 		perfectMode = false;
 		#end
@@ -1271,21 +1395,20 @@ keyShit();
 	private function keyShit():Void
 	{
 		// HOLDING
-	var up = controls.UP || hitbox.buttonUp.pressed;
-var right = controls.RIGHT || hitbox.buttonRight.pressed;
-var down = controls.DOWN || hitbox.buttonDown.pressed;
-var left = controls.LEFT || hitbox.buttonLeft.pressed;
+	var up = controls.UP || mobileUp;
+var right = controls.RIGHT || mobileRight;
+var down = controls.DOWN || mobileDown;
+var left = controls.LEFT || mobileLeft;
 
-var upP = controls.UP_P || hitbox.buttonUp.justPressed;
-var rightP = controls.RIGHT_P || hitbox.buttonRight.justPressed;
-var downP = controls.DOWN_P || hitbox.buttonDown.justPressed;
-var leftP = controls.LEFT_P || hitbox.buttonLeft.justPressed;
+var upP = controls.UP_P || mobileUpP;
+var rightP = controls.RIGHT_P || mobileRightP;
+var downP = controls.DOWN_P || mobileDownP;
+var leftP = controls.LEFT_P || mobileLeftP;
 
-var upR = controls.UP_R || hitbox.buttonUp.justReleased;
-var rightR = controls.RIGHT_R || hitbox.buttonRight.justReleased;
-var downR = controls.DOWN_R || hitbox.buttonDown.justReleased;
-var leftR = controls.LEFT_R || hitbox.buttonLeft.justReleased;
-
+var upR = controls.UP_R || mobileUpR;
+var rightR = controls.RIGHT_R || mobileRightR;
+var downR = controls.DOWN_R || mobileDownR;
+var leftR = controls.LEFT_R || mobileLeftR;
 		// FlxG.watch.addQuick('asdfa', upP);
 		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
 		{
