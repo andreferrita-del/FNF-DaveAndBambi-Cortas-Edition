@@ -17,7 +17,6 @@ using StringTools;
 class MainMenuState extends MusicBeatState
 {
 	var curSelected:Int = 0;
-
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
@@ -28,9 +27,13 @@ class MainMenuState extends MusicBeatState
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
-	var originalX:Float = 0;
-    var originalY:Float = 0;
-	
+
+	var selectedSomethin:Bool = false;
+
+	// TOUCH / SWIPE
+	var touchStartY:Float = 0;
+	var isTouching:Bool = false;
+	var swipeThreshold:Float = 40;
 
 	override function create()
 	{
@@ -39,11 +42,11 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.playMusic('assets/music/freakyMenu' + TitleState.soundExt);
 		}
 
-		persistentUpdate = persistentDraw = true;
+		persistentUpdate = true;
+		persistentDraw = true;
 
 		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(AssetPaths.menuBG__png);
-		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.18;
+		bg.scrollFactor.set(0, 0.18);
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
@@ -54,61 +57,52 @@ class MainMenuState extends MusicBeatState
 		add(camFollow);
 
 		magenta = new FlxSprite(-80).loadGraphic(AssetPaths.menuDesat__png);
-		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.18;
+		magenta.scrollFactor.set(0, 0.18);
 		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
 		magenta.updateHitbox();
 		magenta.screenCenter();
 		magenta.visible = false;
-		magenta.antialiasing = true;
 		magenta.color = 0xFFfd719b;
 		add(magenta);
-		// magenta.scrollFactor.set();
 
 		menuItems = new FlxTypedGroup<FlxSprite>();
 		add(menuItems);
 
-		var tex = FlxAtlasFrames.fromSparrow(AssetPaths.FNF_main_menu_assets__png, AssetPaths.FNF_main_menu_assets__xml);
+		var tex = FlxAtlasFrames.fromSparrow(
+			AssetPaths.FNF_main_menu_assets__png,
+			AssetPaths.FNF_main_menu_assets__xml
+		);
 
 		for (i in 0...optionShit.length)
 		{
-			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
-			menuItem.frames = tex;
-			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
-			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
-			menuItem.animation.play('idle');
-			menuItem.ID = i;
-			menuItem.screenCenter(X);
-			menuItems.add(menuItem);
-			menuItem.scrollFactor.set();
-			menuItem.antialiasing = true;
+			var item = new FlxSprite(0, 60 + (i * 160));
+			item.frames = tex;
+			item.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
+			item.animation.addByPrefix('selected', optionShit[i] + " white", 24);
+			item.animation.play('idle');
+			item.ID = i;
+			item.screenCenter(X);
+			item.antialiasing = true;
+			menuItems.add(item);
 		}
 
 		FlxG.camera.follow(camFollow, null, 0.06);
-
-		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "v" + Application.current.meta.get('version'), 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
-
-		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
 
 		super.create();
 	}
 
-	var selectedSomethin:Bool = false;
-
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music.volume < 0.8)
-		{
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
 
 		if (!selectedSomethin)
 		{
+			// =========================
+			// KEYBOARD (PC)
+			// =========================
 			if (controls.UP_P)
 			{
 				FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt);
@@ -122,62 +116,60 @@ class MainMenuState extends MusicBeatState
 			}
 
 			if (controls.BACK)
-			{
 				FlxG.switchState(new TitleState());
-			}
 
 			if (controls.ACCEPT)
+				triggerSelection();
+
+			// =========================
+			// TOUCH (MOBILE)
+			// =========================
+			var touch = FlxG.touches.list[0];
+
+			if (touch != null)
 			{
-				if (optionShit[curSelected] == 'donate')
+				// START TOUCH
+				if (touch.justPressed)
 				{
-					#if linux
-					Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
-					#else
-					FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
-					#end
-				}
-				else
-				{
-					selectedSomethin = true;
-					FlxG.sound.play('assets/sounds/confirmMenu' + TitleState.soundExt);
+					isTouching = true;
+					touchStartY = touch.y;
 
-					FlxFlicker.flicker(magenta, 1.1, 0.15, false);
-
-					menuItems.forEach(function(spr:FlxSprite)
+					// CLICK DETECT
+					menuItems.forEach(function(item:FlxSprite)
 					{
-						if (curSelected != spr.ID)
+						if (touch.overlaps(item))
 						{
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween)
-								{
-									spr.kill();
-								}
-							});
-						}
-						else
-						{
-							FlxFlicker.flicker(spr, 1, 0.06, false, false, function(flick:FlxFlicker)
-							{
-								var daChoice:String = optionShit[curSelected];
-
-								switch (daChoice)
-								{
-									case 'options':
-										FlxG.switchState(new OptionsMenu());
-									//)shakeMenu();ll
-										trace("Story Menu Selected");
-									case 'freeplay':
-										FlxG.switchState(new FreeplayState());
-
-										trace("Freeplay Menu Selected");
-
-									case 'options':
-										FlxG.switchState(new OptionsMenu());
-								}
-							});
+							curSelected = item.ID;
+							changeItem(0);
+							FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt);
 						}
 					});
+				}
+
+				// SWIPE MOVE
+				if (isTouching)
+				{
+					var deltaY = touch.y - touchStartY;
+
+					if (deltaY > swipeThreshold)
+					{
+						changeItem(1);
+						FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt);
+						touchStartY = touch.y;
+					}
+					else if (deltaY < -swipeThreshold)
+					{
+						changeItem(-1);
+						FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt);
+						touchStartY = touch.y;
+					}
+				}
+
+				// RELEASE = SELECT
+				if (touch.justReleased)
+				{
+					isTouching = false;
+					triggerSelection();
 				}
 			}
 		}
@@ -188,6 +180,55 @@ class MainMenuState extends MusicBeatState
 		{
 			spr.screenCenter(X);
 		});
+	}
+
+	function triggerSelection()
+	{
+		if (optionShit[curSelected] == 'donate')
+		{
+			#if linux
+			Sys.command('/usr/bin/xdg-open',
+				["https://ninja-muffin24.itch.io/funkin", "&"]);
+			#else
+			FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
+			#end
+		}
+		else
+		{
+			selectedSomethin = true;
+
+			FlxG.sound.play('assets/sounds/confirmMenu' + TitleState.soundExt);
+			FlxFlicker.flicker(magenta, 1.1, 0.15, false);
+
+			menuItems.forEach(function(spr:FlxSprite)
+			{
+				if (curSelected != spr.ID)
+				{
+					FlxTween.tween(spr, {alpha: 0}, 0.4, {
+						ease: FlxEase.quadOut,
+						onComplete: function(twn:FlxTween)
+						{
+							spr.kill();
+						}
+					});
+				}
+				else
+				{
+					FlxFlicker.flicker(spr, 1, 0.06, false, false,
+						function(flick:FlxFlicker)
+						{
+							switch (optionShit[curSelected])
+							{
+								case 'options':
+									FlxG.switchState(new OptionsMenu());
+
+								case 'freeplay':
+									FlxG.switchState(new FreeplayState());
+							}
+						});
+				}
+			});
+		}
 	}
 
 	function changeItem(huh:Int = 0)
@@ -206,37 +247,13 @@ class MainMenuState extends MusicBeatState
 			if (spr.ID == curSelected)
 			{
 				spr.animation.play('selected');
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
+				camFollow.setPosition(
+					spr.getGraphicMidpoint().x,
+					spr.getGraphicMidpoint().y
+				);
 			}
 
 			spr.updateHitbox();
 		});
 	}
-
-	/*function shakeMenu(intensity:Float = 15, duration:Float = 0.3)
-{
-	originalX = camGame.x;
-	originalY = camGame.y;
-
-	for (i in 0...10)
-	{
-		FlxTween.tween(camGame,
-		{
-			x: originalX + FlxG.random.float(-intensity, intensity),
-			y: originalY + FlxG.random.float(-intensity, intensity)
-		},
-		duration / 10);
-	}
-
-	FlxTween.tween(camGame,
-	{
-		x: originalX,
-		y: originalY
-	},
-	0.2,
-	{
-		ease: FlxEase.quadOut
-	});
 }
-}*/
-							}
