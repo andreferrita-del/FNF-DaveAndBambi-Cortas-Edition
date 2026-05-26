@@ -870,81 +870,41 @@ downHitbox.alpha = 0.15;
 upHitbox.alpha = 0.15;
 rightHitbox.alpha = 0.15;
 
+var sectionWidth:Float = FlxG.width / 4;
+
 for (touch in FlxG.touches.list)
 {
 	// LEFT
-	if (touch.overlaps(leftHitbox))
+	if (touch.x < sectionWidth)
 	{
 		mobileLeft = true;
 		leftHitbox.alpha = 0.35;
 	}
 
 	// DOWN
-	if (touch.overlaps(downHitbox))
+	else if (touch.x < sectionWidth * 2)
 	{
 		mobileDown = true;
 		downHitbox.alpha = 0.35;
 	}
 
 	// UP
-	if (touch.overlaps(upHitbox))
+	else if (touch.x < sectionWidth * 3)
 	{
 		mobileUp = true;
 		upHitbox.alpha = 0.35;
 	}
 
 	// RIGHT
-	if (touch.overlaps(rightHitbox))
+	else
 	{
 		mobileRight = true;
 		rightHitbox.alpha = 0.35;
 	}
 }
 
-#end
-		switch (curStage)
-		{
-			case 'philly':
-				if (trainMoving)
-				{
-					trainFrameTiming += elapsed;
-
-					if (trainFrameTiming >= 1 / 24)
-					{
-						updateTrainPos();
-						trainFrameTiming = 0;
-					}
-				}
-			case 'deliriuned':
-				shader.uTime.value[0] += elapsed;
-				dad.y += Math.sin(elapsed * 2) * 0.5;
-		   case 'purpleyay':
-				shader.uTime.value[0] += elapsed;
-				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
-		}
-
-		super.update(elapsed);
-
-		scoreTxt.text = "Score:" + songScore;
-
-		#if !mobile
-
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
-		{
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-		}
-
-		if (FlxG.keys.justPressed.SEVEN)
-		{
-			FlxG.switchState(new ChartingState());
-		}
-				#end
-
-		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
+#end		
+	// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
