@@ -834,22 +834,33 @@ add(rightHitbox);
 		perfectMode = false;
 		#end
 			
-		#if mobile
+#if mobile
+
+var leftPressed:Bool = false;
+var downPressed:Bool = false;
+var upPressed:Bool = false;
+var rightPressed:Bool = false;
 
 for (touch in FlxG.touches.list)
 {
 	if (touch.overlaps(leftHitbox))
-		keyShit(0);
+		leftPressed = true;
 
 	if (touch.overlaps(downHitbox))
-		keyShit(1);
+		downPressed = true;
 
 	if (touch.overlaps(upHitbox))
-		keyShit(2);
+		upPressed = true;
 
 	if (touch.overlaps(rightHitbox))
-		keyShit(3);
+		rightPressed = true;
 }
+
+// SIMULA INPUT MOBILE
+controls.LEFT = leftPressed;
+controls.DOWN = downPressed;
+controls.UP = upPressed;
+controls.RIGHT = rightPressed;
 
 #end
 
