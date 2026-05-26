@@ -124,32 +124,40 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-		#if mobile
+	#if mobile
 
 var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
 // LEFT
-leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
+leftHitbox = new FlxSprite(0, 0);
+leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66C24B99);
 leftHitbox.scrollFactor.set();
 leftHitbox.cameras = [camHUD];
+leftHitbox.alpha = 0.35;
 add(leftHitbox);
 
 // DOWN
-downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
+downHitbox = new FlxSprite(hitboxWidth, 0);
+downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FFFF);
 downHitbox.scrollFactor.set();
 downHitbox.cameras = [camHUD];
+downHitbox.alpha = 0.35;
 add(downHitbox);
 
 // UP
-upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
+upHitbox = new FlxSprite(hitboxWidth * 2, 0);
+upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FF00);
 upHitbox.scrollFactor.set();
 upHitbox.cameras = [camHUD];
+upHitbox.alpha = 0.35;
 add(upHitbox);
 
 // RIGHT
-rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
+rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66FF0000);
 rightHitbox.scrollFactor.set();
 rightHitbox.cameras = [camHUD];
+rightHitbox.alpha = 0.35;
 add(rightHitbox);
 
 #end
@@ -836,37 +844,49 @@ add(rightHitbox);
 			
 #if mobile
 
-var leftPressed:Bool = false;
-var downPressed:Bool = false;
-var upPressed:Bool = false;
-var rightPressed:Bool = false;
+mobileLeft = false;
+mobileDown = false;
+mobileUp = false;
+mobileRight = false;
+
+// RESET ALPHA
+leftHitbox.alpha = 0.15;
+downHitbox.alpha = 0.15;
+upHitbox.alpha = 0.15;
+rightHitbox.alpha = 0.15;
 
 for (touch in FlxG.touches.list)
 {
+	// LEFT
 	if (touch.overlaps(leftHitbox))
-		leftPressed = true;
+	{
+		mobileLeft = true;
+		leftHitbox.alpha = 0.35;
+	}
 
+	// DOWN
 	if (touch.overlaps(downHitbox))
-		downPressed = true;
+	{
+		mobileDown = true;
+		downHitbox.alpha = 0.35;
+	}
 
+	// UP
 	if (touch.overlaps(upHitbox))
-		upPressed = true;
+	{
+		mobileUp = true;
+		upHitbox.alpha = 0.35;
+	}
 
+	// RIGHT
 	if (touch.overlaps(rightHitbox))
-		rightPressed = true;
+	{
+		mobileRight = true;
+		rightHitbox.alpha = 0.35;
+	}
 }
 
-// SIMULA INPUT MOBILE
-controls.LEFT = leftPressed;
-controls.DOWN = downPressed;
-controls.UP = upPressed;
-controls.RIGHT = rightPressed;
-
 #end
-
-	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
-	
-
 		switch (curStage)
 		{
 			case 'philly':
@@ -1363,10 +1383,10 @@ keyShit();
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.UP;
-		var right = controls.RIGHT;
-		var down = controls.DOWN;
-		var left = controls.LEFT;
+	var up = controls.UP || mobileUp;
+var down = controls.DOWN || mobileDown;
+var left = controls.LEFT || mobileLeft;
+var right = controls.RIGHT || mobileRight;
 
 		var upP = controls.UP_P;
 		var rightP = controls.RIGHT_P;
