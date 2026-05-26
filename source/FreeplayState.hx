@@ -80,7 +80,7 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
-	ooverride function update(elapsed:Float)
+	override function update(elapsed:Float)
 {
 	super.update(elapsed);
 
@@ -104,42 +104,51 @@ class FreeplayState extends MusicBeatState
 	var accepted = controls.ACCEPT;
 
 	#if mobile
+
 	for (touch in FlxG.touches.list)
 	{
+		// COMEÇOU TOQUE
 		if (touch.justPressed)
 		{
 			touchStartY = touch.y;
+		}
 
-			// LEFT SIDE = BACK
+		// MOVIMENTO
+		if (touch.pressed)
+		{
+			var swipeDistance:Float = touch.y - touchStartY;
+
+			// MENOS SENSÍVEL
+			if (swipeDistance < -120)
+			{
+				upP = true;
+				touchStartY = touch.y;
+			}
+
+			if (swipeDistance > 120)
+			{
+				downP = true;
+				touchStartY = touch.y;
+			}
+		}
+
+		// SOLTOU = SELECIONA
+		if (touch.justReleased)
+		{
+			// ESQUERDA = VOLTAR
 			if (touch.x < FlxG.width * 0.25)
 			{
 				FlxG.switchState(new MainMenuState());
 			}
 
-			// RIGHT SIDE = ACCEPT
+			// DIREITA = ACEITAR
 			if (touch.x > FlxG.width * 0.75)
 			{
 				accepted = true;
 			}
 		}
-
-		if (touch.justReleased)
-		{
-			var swipeDistance:Float = touch.y - touchStartY;
-
-			// SWIPE UP
-			if (swipeDistance < -swipeThreshold)
-			{
-				upP = true;
-			}
-
-			// SWIPE DOWN
-			if (swipeDistance > swipeThreshold)
-			{
-				downP = true;
-			}
-		}
 	}
+
 	#end
 
 	if (upP)
@@ -163,8 +172,6 @@ class FreeplayState extends MusicBeatState
 			songs[curSelected].toLowerCase(),
 			curDifficulty
 		);
-
-		trace(poop);
 
 		PlayState.SONG = Song.loadFromJson(
 			poop,
