@@ -841,7 +841,7 @@ add(rightHitbox);
 		perfectMode = false;
 		#end
 
-	#if mobile
+			#if mobile
 
 leftPressed = false;
 downPressed = false;
@@ -850,11 +850,10 @@ rightPressed = false;
 
 for (touch in FlxG.touches.list)
 {
-	// remake by me
-	var point = touch.getPosition(FlxG.camera);
-
 	if (touch.justPressed)
 	{
+		var point = touch.getPosition(); // sem camera
+
 		if (leftHitbox.overlapsPoint(point))
 			leftPressed = true;
 
@@ -870,6 +869,8 @@ for (touch in FlxG.touches.list)
 }
 
 #end
+
+	
 		switch (curStage)
 		{
 			case 'philly':
