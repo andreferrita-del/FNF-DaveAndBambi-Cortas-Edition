@@ -846,26 +846,12 @@ for (touch in FlxG.touches.list)
 {
 	if (touch.pressed)
 	{
-		if (touch.overlaps(leftHitbox))
-			leftPressed = true;
-
-		if (touch.overlaps(downHitbox))
-			downPressed = true;
-
-		if (touch.overlaps(upHitbox))
-			upPressed = true;
-
-		if (touch.overlaps(rightHitbox))
-			rightPressed = true;
+		if (touch.overlaps(leftHitbox)) leftPressed = true;
+		if (touch.overlaps(downHitbox)) downPressed = true;
+		if (touch.overlaps(upHitbox)) upPressed = true;
+		if (touch.overlaps(rightHitbox)) rightPressed = true;
 	}
 }
-
-// INPUT MOBILE
-controls.LEFT = leftPressed;
-controls.DOWN = downPressed;
-controls.UP = upPressed;
-controls.RIGHT = rightPressed;
-
 #end
 
 	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
@@ -1367,69 +1353,20 @@ keyShit();
 	private function keyShit():Void
 	{
 		// HOLDING
-		var up = controls.UP;
-var right = controls.RIGHT;
-var down = controls.DOWN;
-var left = controls.LEFT;
+		var left  = controls.LEFT  || leftPressed;
+var down  = controls.DOWN  || downPressed;
+var up    = controls.UP    || upPressed;
+var right = controls.RIGHT || rightPressed;
 
-var upP = controls.UP_P;
-var rightP = controls.RIGHT_P;
-var downP = controls.DOWN_P;
-var leftP = controls.LEFT_P;
+var leftP  = controls.LEFT_P  || (leftPressed && !controls.LEFT);
+var downP  = controls.DOWN_P  || (downPressed && !controls.DOWN);
+var upP    = controls.UP_P    || (upPressed && !controls.UP);
+var rightP = controls.RIGHT_P || (rightPressed && !controls.RIGHT);
 
-var upR = controls.UP_R;
-var rightR = controls.RIGHT_R;
-var downR = controls.DOWN_R;
-var leftR = controls.LEFT_R;
-
-		#if mobile
-for (touch in FlxG.touches.list)
-{
-	if (touch.overlaps(leftHitbox))
-	{
-		left = true;
-
-		if (touch.justPressed)
-			leftP = true;
-
-		if (touch.justReleased)
-			leftR = true;
-	}
-
-	if (touch.overlaps(downHitbox))
-	{
-		down = true;
-
-		if (touch.justPressed)
-			downP = true;
-
-		if (touch.justReleased)
-			downR = true;
-	}
-
-	if (touch.overlaps(upHitbox))
-	{
-		up = true;
-
-		if (touch.justPressed)
-			upP = true;
-
-		if (touch.justReleased)
-			upR = true;
-	}
-
-	if (touch.overlaps(rightHitbox))
-	{
-		right = true;
-
-		if (touch.justPressed)
-			rightP = true;
-
-		if (touch.justReleased)
-			rightR = true;
-	}
-}
-		#end
+var leftR  = controls.LEFT_R  || (!leftPressed && controls.LEFT);
+var downR  = controls.DOWN_R  || (!downPressed && controls.DOWN);
+var upR    = controls.UP_R    || (!upPressed && controls.UP);
+var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 
 		// FlxG.watch.addQuick('asdfa', upP);
 		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
