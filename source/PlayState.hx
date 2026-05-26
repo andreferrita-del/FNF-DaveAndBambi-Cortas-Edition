@@ -33,7 +33,7 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.filters.ShaderFilter;
 
-#if mobile
+#if android
 import android.FlxHitbox;
 #end
 
@@ -51,15 +51,8 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
-	#if mobile
-	var leftHitbox:FlxSprite;
-var downHitbox:FlxSprite;
-var upHitbox:FlxSprite;
-var rightHitbox:FlxSprite;
-	var mobileLeft:Bool = false;
-var mobileDown:Bool = false;
-var mobileUp:Bool = false;
-var mobileRight:Bool = false;
+	#if android
+	var hitbox:FlxHitbox;
 	#end
 
 	private var vocals:FlxSound;
