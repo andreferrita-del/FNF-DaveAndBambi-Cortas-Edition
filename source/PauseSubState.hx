@@ -86,6 +86,7 @@ class PauseSubState extends MusicBeatSubstate
 		// =========================
 		// TOUCH (MOBILE)
 		// =========================
+		#if mobile
 		var touch = FlxG.touches.list[0];
 
 		if (touch != null)
@@ -121,6 +122,7 @@ class PauseSubState extends MusicBeatSubstate
 				selectOption();
 			}
 		}
+		#end
 	}
 
 	function selectOption()
