@@ -829,36 +829,10 @@ if (touch != null)
 			}
 		}
 	}
+} #end
 
 	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
-	if (isTouching)
-	{
-		var deltaX = touch.x - touchStartX;
-		var deltaY = touch.y - touchStartY;
-
-		// swipe vertical
-		if (deltaY > swipeThreshold)
-		{
-			// exemplo: pausar
-			openPauseMenu();
-			touchStartY = touch.y;
-		}
-
-		// swipe horizontal
-		if (deltaX > swipeThreshold)
-		{
-			// exemplo: skip
-			endSong();
-		}
-	}
-
-	// RELEASE
-	if (touch.justReleased)
-	{
-		isTouching = false;
-	}
-}
-		#end
+	
 
 		switch (curStage)
 		{
