@@ -52,12 +52,10 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
-	var touchStartX:Float = 0;
-	
-var touchStartY:Float = 0;
-var isTouching:Bool = false;
-
-var swipeThreshold:Float = 50;
+	var leftHitbox:FlxSprite;
+var downHitbox:FlxSprite;
+var upHitbox:FlxSprite;
+var rightHitbox:FlxSprite;
 
 	private var vocals:FlxSound;
 
@@ -126,6 +124,35 @@ var swipeThreshold:Float = 50;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
+		#if mobile
+
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
+
+// LEFT
+leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
+leftHitbox.scrollFactor.set();
+leftHitbox.cameras = [camHUD];
+add(leftHitbox);
+
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
+downHitbox.scrollFactor.set();
+downHitbox.cameras = [camHUD];
+add(downHitbox);
+
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
+upHitbox.scrollFactor.set();
+upHitbox.cameras = [camHUD];
+add(upHitbox);
+
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
+rightHitbox.scrollFactor.set();
+rightHitbox.cameras = [camHUD];
+add(rightHitbox);
+
+#end
 
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
@@ -808,29 +835,23 @@ var swipeThreshold:Float = 50;
 		#end
 			
 		#if mobile
-		var touch = FlxG.touches.list[0];
 
-if (touch != null)
+for (touch in FlxG.touches.list)
 {
-	// START TOUCH
-	if (touch.justPressed)
-	{
-		isTouching = true;
-		touchStartX = touch.x;
-		touchStartY = touch.y;
+	if (touch.overlaps(leftHitbox))
+		keyShit(0);
 
-		// HITBOX EXEMPLO (BOTÕES UI OU NOTES)
-		for (note in notes.members)
-		{
-			if (note != null && touch.overlaps(note))
-			{
-				// simula pressionar nota
-				goodNoteHit(note);
-			}
-		}
-	}
-} 
-		#end
+	if (touch.overlaps(downHitbox))
+		keyShit(1);
+
+	if (touch.overlaps(upHitbox))
+		keyShit(2);
+
+	if (touch.overlaps(rightHitbox))
+		keyShit(3);
+}
+
+#end
 
 	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
 	
