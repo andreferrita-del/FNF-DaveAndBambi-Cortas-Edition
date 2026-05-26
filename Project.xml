@@ -44,6 +44,7 @@
 	<assets path="assets/data" />
 
 	<assets path="example_mods" rename="mods" embed="false" />
+	<assets path="mods/IntroMod" embed="false" />
 
 	<!-- Music -->
 	<assets path="assets/music" include="*.mp3" if="web" />
