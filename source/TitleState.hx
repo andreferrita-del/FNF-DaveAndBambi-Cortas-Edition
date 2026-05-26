@@ -213,7 +213,7 @@ class TitleState extends MusicBeatState
 		Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
-		var pressedEnter:Bool = FlxG.keys.justPressed.ENTER #if mobile || FlxG.touches.justStarted().length > 0 #end;
+		var pressedEnter:Bool =  #if mobile FlxG.touches.justStarted().length > 0 #else FlxG.keys.justPressed.ENTER #end;
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 
