@@ -7,7 +7,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import android.flixel.FlxButton;
+import flixel.ui.FlxButton;
 
 class FlxHitbox extends FlxSpriteGroup
 {
