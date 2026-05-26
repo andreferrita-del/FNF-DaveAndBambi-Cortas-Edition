@@ -26,25 +26,17 @@ class FreeplayState extends MusicBeatState
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
 
+	// MOBILE TOUCH
+	var touchStartY:Float = 0;
+	var swipeThreshold:Float = 60;
+
 	override function create()
 	{
-		/* 
-			if (FlxG.sound.music != null)
-			{
-				if (!FlxG.sound.music.playing)
-					FlxG.sound.playMusic('assets/music/freakyMenu' + TitleState.soundExt);
-			}
-		 */
-
 		var isDebug:Bool = false;
 
 		#if debug
 		isDebug = true;
 		#end
-
-		// LOAD MUSIC
-
-		// LOAD CHARACTERS
 
 		var bg:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuBGBlue__png);
 		add(bg);
@@ -58,55 +50,32 @@ class FreeplayState extends MusicBeatState
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpSongs.add(songText);
-			// songText.x += 40;
-			// DONT PUT X IN THE FIRST PARAMETER OF new ALPHABET() !!
-			// songText.screenCenter(X);
 		}
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
-		// scoreText.autoSize = false;
 		scoreText.setFormat("assets/fonts/vcr.ttf", 32, FlxColor.WHITE, RIGHT);
-		// scoreText.alignment = RIGHT;
 
-		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0)
+			.makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
+
 		scoreBG.alpha = 0.6;
+
 		add(scoreBG);
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
-		add(diffText);
 
+		add(diffText);
 		add(scoreText);
 
 		changeSelection();
 		changeDiff();
 
-		// FlxG.sound.playMusic('assets/music/title' + TitleState.soundExt, 0);
-		// FlxG.sound.music.fadeIn(2, 0, 0.8);
 		selector = new FlxText();
-
 		selector.size = 40;
 		selector.text = ">";
-		// add(selector);
 
 		var swag:Alphabet = new Alphabet(1, 0, "swag");
-
-		// JUST DOIN THIS SHIT FOR TESTING!!!
-		/* 
-			var md:String = Markdown.markdownToHtml(Assets.getText('CHANGELOG.md'));
-
-			var texFel:TextField = new TextField();
-			texFel.width = FlxG.width;
-			texFel.height = FlxG.height;
-			// texFel.
-			texFel.htmlText = md;
-
-			FlxG.stage.addChild(texFel);
-
-			// scoreText.textField.htmlText = md;
-
-			trace(md);
-		 */
 
 		super.create();
 	}
@@ -115,9 +84,12 @@ class FreeplayState extends MusicBeatState
 	{
 		super.update(elapsed);
 
-		if (FlxG.sound.music.volume < 0.7)
+		if (FlxG.sound.music != null)
 		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			if (FlxG.sound.music.volume < 0.7)
+			{
+				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			}
 		}
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
@@ -131,10 +103,50 @@ class FreeplayState extends MusicBeatState
 		var downP = controls.DOWN_P;
 		var accepted = controls.ACCEPT;
 
+		#if mobile
+		for (touch in FlxG.touches.list)
+		{
+			if (touch.justPressed)
+			{
+				touchStartY = touch.y;
+
+				// LEFT SIDE = BACK
+				if (touch.x < FlxG.width * 0.25)
+				{
+					FlxG.switchState(new MainMenuState());
+				}
+
+				// RIGHT SIDE = ACCEPT
+				if (touch.x > FlxG.width * 0.75)
+				{
+					accepted = true;
+				}
+			}
+
+			if (touch.justReleased)
+			{
+				var swipeDistance:Float = touch.y - touchStartY;
+
+				// SWIPE UP
+				if (swipeDistance < -swipeThreshold)
+				{
+					upP = true;
+				}
+
+				// SWIPE DOWN
+				if (swipeDistance > swipeThreshold)
+				{
+					downP = true;
+				}
+			}
+		}
+		#end
+
 		if (upP)
 		{
 			changeSelection(-1);
 		}
+
 		if (downP)
 		{
 			changeSelection(1);
@@ -147,14 +159,23 @@ class FreeplayState extends MusicBeatState
 
 		if (accepted)
 		{
-			var poop:String = Highscore.formatSong(songs[curSelected].toLowerCase(), curDifficulty);
+			var poop:String = Highscore.formatSong(
+				songs[curSelected].toLowerCase(),
+				curDifficulty
+			);
 
 			trace(poop);
 
-			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].toLowerCase());
+			PlayState.SONG = Song.loadFromJson(
+				poop,
+				songs[curSelected].toLowerCase()
+			);
+
 			PlayState.isStoryMode = false;
 			PlayState.storyDifficulty = curDifficulty;
+
 			FlxG.switchState(new PlayState());
+
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.stop();
 		}
@@ -166,19 +187,25 @@ class FreeplayState extends MusicBeatState
 
 		if (curDifficulty < 0)
 			curDifficulty = 2;
+
 		if (curDifficulty > 2)
 			curDifficulty = 0;
 
 		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected], curDifficulty);
+		intendedScore = Highscore.getScore(
+			songs[curSelected],
+			curDifficulty
+		);
 		#end
 
 		switch (curDifficulty)
 		{
 			case 0:
 				diffText.text = "EASY";
+
 			case 1:
-				diffText.text = 'NORMAL';
+				diffText.text = "NORMAL";
+
 			case 2:
 				diffText.text = "HARD";
 		}
@@ -186,25 +213,30 @@ class FreeplayState extends MusicBeatState
 
 	function changeSelection(change:Int = 0)
 	{
-
-		// NGio.logEvent('Fresh');
-		FlxG.sound.play('assets/sounds/scrollMenu' + TitleState.soundExt, 0.4);
+		FlxG.sound.play(
+			'assets/sounds/scrollMenu' + TitleState.soundExt,
+			0.4
+		);
 
 		curSelected += change;
 
 		if (curSelected < 0)
 			curSelected = songs.length - 1;
+
 		if (curSelected >= songs.length)
 			curSelected = 0;
 
-		// selector.y = (70 * curSelected) + 30;
-
 		#if !switch
-		intendedScore = Highscore.getScore(songs[curSelected], curDifficulty);
-		// lerpScore = 0;
+		intendedScore = Highscore.getScore(
+			songs[curSelected],
+			curDifficulty
+		);
 		#end
 
-		FlxG.sound.playMusic('assets/music/' + songs[curSelected] + "_Inst" + TitleState.soundExt, 0);
+		FlxG.sound.playMusic(
+			'assets/music/' + songs[curSelected] + "_Inst" + TitleState.soundExt,
+			0
+		);
 
 		var bullShit:Int = 0;
 
@@ -214,13 +246,11 @@ class FreeplayState extends MusicBeatState
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
 	}
-}
+		}
