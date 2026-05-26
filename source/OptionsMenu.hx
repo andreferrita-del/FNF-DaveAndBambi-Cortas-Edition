@@ -11,6 +11,10 @@ class OptionsMenu extends MusicBeatState
 
 	override function create()
 	{
+		#if mobile
+		FlxG.switchState(new MainMenuState());
+		#end
+			
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
