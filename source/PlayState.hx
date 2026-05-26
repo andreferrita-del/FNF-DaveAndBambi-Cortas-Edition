@@ -52,6 +52,10 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
+	var leftHitbox:FlxSprite;
+var downHitbox:FlxSprite;
+var upHitbox:FlxSprite;
+var rightHitbox:FlxSprite;
 
 	private var vocals:FlxSound;
 
@@ -111,15 +115,6 @@ class PlayState extends MusicBeatState
 
 	var defaultCamZoom:Float = 1.05;
 
-/*
-	#if mobile
-		var leftHitbox:FlxSprite;
-var downHitbox:FlxSprite;
-var upHitbox:FlxSprite;
-var rightHitbox:FlxSprite;
-	#end
-*/
-
 	override public function create()
 	{
 		// var gameCam:FlxCamera = FlxG.camera;
@@ -129,7 +124,37 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-			//FlxG.cameras.setDefaultDrawTarget(camGame, true);
+		#if mobile
+
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
+
+// LEFT
+leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
+leftHitbox.scrollFactor.set();
+leftHitbox.cameras = [camHUD];
+add(leftHitbox);
+
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
+downHitbox.scrollFactor.set();
+downHitbox.cameras = [camHUD];
+add(downHitbox);
+
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
+upHitbox.scrollFactor.set();
+upHitbox.cameras = [camHUD];
+add(upHitbox);
+
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
+rightHitbox.scrollFactor.set();
+rightHitbox.cameras = [camHUD];
+add(rightHitbox);
+
+#end
+
+		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -477,6 +502,9 @@ var rightHitbox:FlxSprite;
 		healthBar.cameras = [camHUD];
 		healthBarBG.cameras = [camHUD];
 		iconP1.cameras = [camHUD];
+		iconP2.cameras = [camHUD];
+		scoreTxt.cameras = [camHUD];
+		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -806,7 +834,82 @@ var rightHitbox:FlxSprite;
 		perfectMode = false;
 		#end
 			
-	// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
+#if mobile
+
+var leftPressed:Bool = false;
+var downPressed:Bool = false;
+var upPressed:Bool = false;
+var rightPressed:Bool = false;
+
+for (touch in FlxG.touches.list)
+{
+	if (touch.overlaps(leftHitbox))
+		leftPressed = true;
+
+	if (touch.overlaps(downHitbox))
+		downPressed = true;
+
+	if (touch.overlaps(upHitbox))
+		upPressed = true;
+
+	if (touch.overlaps(rightHitbox))
+		rightPressed = true;
+}
+
+// SIMULA INPUT MOBILE
+controls.LEFT = leftPressed;
+controls.DOWN = downPressed;
+controls.UP = upPressed;
+controls.RIGHT = rightPressed;
+
+#end
+
+	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
+	
+
+		switch (curStage)
+		{
+			case 'philly':
+				if (trainMoving)
+				{
+					trainFrameTiming += elapsed;
+
+					if (trainFrameTiming >= 1 / 24)
+					{
+						updateTrainPos();
+						trainFrameTiming = 0;
+					}
+				}
+			case 'deliriuned':
+				shader.uTime.value[0] += elapsed;
+				dad.y += Math.sin(elapsed * 2) * 0.5;
+		   case 'purpleyay':
+				shader.uTime.value[0] += elapsed;
+				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
+		}
+
+		super.update(elapsed);
+
+		scoreTxt.text = "Score:" + songScore;
+
+		#if !mobile
+
+		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		{
+			persistentUpdate = false;
+			persistentDraw = true;
+			paused = true;
+
+			openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+		}
+
+		if (FlxG.keys.justPressed.SEVEN)
+		{
+			FlxG.switchState(new ChartingState());
+		}
+				#end
+
+		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
@@ -1260,20 +1363,21 @@ keyShit();
 	private function keyShit():Void
 	{
 		// HOLDING
-	var up = controls.UP;
-var right = controls.RIGHT;
-var down = controls.DOWN;
-var left = controls.LEFT;
+		var up = controls.UP;
+		var right = controls.RIGHT;
+		var down = controls.DOWN;
+		var left = controls.LEFT;
 
-var upP = controls.UP_P;
-var rightP = controls.RIGHT_P;
-var downP = controls.DOWN_P;
-var leftP = controls.LEFT_P;
+		var upP = controls.UP_P;
+		var rightP = controls.RIGHT_P;
+		var downP = controls.DOWN_P;
+		var leftP = controls.LEFT_P;
 
-var upR = controls.UP_R;
-var rightR = controls.RIGHT_R;
-var downR = controls.DOWN_R;
-var leftR = controls.LEFT_R;
+		var upR = controls.UP_R;
+		var rightR = controls.RIGHT_R;
+		var downR = controls.DOWN_R;
+		var leftR = controls.LEFT_R;
+
 		// FlxG.watch.addQuick('asdfa', upP);
 		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
 		{
