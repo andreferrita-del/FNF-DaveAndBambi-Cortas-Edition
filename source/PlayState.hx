@@ -34,8 +34,7 @@ import openfl.display.BlendMode;
 import openfl.filters.ShaderFilter;
 
 #if mobile
-import flixel.input.touch.FlxTouch;
-import flixel.math.FlxRect;
+import android.FlxHitbox;
 #end
 
 using StringTools;
@@ -139,7 +138,10 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
+
+		#if mobile
 		createhitbox();
+		#end
 	
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
