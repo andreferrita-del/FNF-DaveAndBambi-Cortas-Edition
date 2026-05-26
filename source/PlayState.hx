@@ -33,9 +33,10 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.filters.ShaderFilter;
 
-/*#if android
-import android.FlxHitbox;
-#end*/
+#if mobile
+import flixel.input.touch.FlxTouch;
+import flixel.math.FlxRect;
+#end
 
 using StringTools;
 
@@ -51,32 +52,16 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
-	//hitboxes
 	#if mobile
 	var leftHitbox:FlxSprite;
 var downHitbox:FlxSprite;
 var upHitbox:FlxSprite;
 var rightHitbox:FlxSprite;
-
-var mobileLeft:Bool = false;
+	var mobileLeft:Bool = false;
 var mobileDown:Bool = false;
 var mobileUp:Bool = false;
 var mobileRight:Bool = false;
-
-var mobileLeftP:Bool = false;
-var mobileDownP:Bool = false;
-var mobileUpP:Bool = false;
-var mobileRightP:Bool = false;
-
-var mobileLeftR:Bool = false;
-var mobileDownR:Bool = false;
-var mobileUpR:Bool = false;
-var mobileRightR:Bool = false;
 	#end
-	/*
-	#if android
-	var hitbox:FlxHitbox;
-	#end*/
 
 	private var vocals:FlxSound;
 
@@ -154,7 +139,44 @@ var rightHitbox:FlxSprite;
 
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
-	
+	#if mobile
+
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
+
+// LEFT
+leftHitbox = new FlxSprite(0, 0);
+leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66C24B99);
+leftHitbox.scrollFactor.set();
+leftHitbox.cameras = [camHUD];
+leftHitbox.alpha = 0.35;
+add(leftHitbox);
+
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, 0);
+downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FFFF);
+downHitbox.scrollFactor.set();
+downHitbox.cameras = [camHUD];
+downHitbox.alpha = 0.35;
+add(downHitbox);
+
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, 0);
+upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x6600FF00);
+upHitbox.scrollFactor.set();
+upHitbox.cameras = [camHUD];
+upHitbox.alpha = 0.35;
+add(upHitbox);
+
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
+rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x66FF0000);
+rightHitbox.scrollFactor.set();
+rightHitbox.cameras = [camHUD];
+rightHitbox.alpha = 0.35;
+add(rightHitbox);
+
+#end
+
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
@@ -506,39 +528,6 @@ var rightHitbox:FlxSprite;
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-				#if mobile
-
-var sectionWidth:Int = Std.int(FlxG.width / 4);
-
-// LEFT
-leftHitbox = new FlxSprite(0, 0)
-	.makeGraphic(sectionWidth, FlxG.height, 0x66C24B99);
-leftHitbox.alpha = 0.15;
-leftHitbox.cameras = [camHUD];
-add(leftHitbox);
-
-// DOWN
-downHitbox = new FlxSprite(sectionWidth, 0)
-	.makeGraphic(sectionWidth, FlxG.height, 0x6600FFFF);
-downHitbox.alpha = 0.15;
-downHitbox.cameras = [camHUD];
-add(downHitbox);
-
-// UP
-upHitbox = new FlxSprite(sectionWidth * 2, 0)
-	.makeGraphic(sectionWidth, FlxG.height, 0x6600FF00);
-upHitbox.alpha = 0.15;
-upHitbox.cameras = [camHUD];
-add(upHitbox);
-
-// RIGHT
-rightHitbox = new FlxSprite(sectionWidth * 3, 0)
-	.makeGraphic(sectionWidth, FlxG.height, 0x66FF0000);
-rightHitbox.alpha = 0.15;
-rightHitbox.cameras = [camHUD];
-add(rightHitbox);
-
-#end
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -864,18 +853,12 @@ add(rightHitbox);
 
 	override public function update(elapsed:Float)
 	{
-		#if mobile
+		#if !debug
+		perfectMode = false;
+		#end
+			
+#if mobile
 
-// =======================
-// MOBILE INPUT
-// =======================
-
-var lastLeft = mobileLeft;
-var lastDown = mobileDown;
-var lastUp = mobileUp;
-var lastRight = mobileRight;
-
-// RESET
 mobileLeft = false;
 mobileDown = false;
 mobileUp = false;
@@ -889,7 +872,6 @@ rightHitbox.alpha = 0.15;
 
 var sectionWidth:Float = FlxG.width / 4;
 
-// TOUCH CHECK
 for (touch in FlxG.touches.list)
 {
 	// LEFT
@@ -921,29 +903,10 @@ for (touch in FlxG.touches.list)
 	}
 }
 
-// =======================
-// PRESSED
-// =======================
+#end		
+	// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
+		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
-mobileLeftP = mobileLeft && !lastLeft;
-mobileDownP = mobileDown && !lastDown;
-mobileUpP = mobileUp && !lastUp;
-mobileRightP = mobileRight && !lastRight;
-
-// =======================
-// RELEASED
-// =======================
-
-mobileLeftR = !mobileLeft && lastLeft;
-mobileDownR = !mobileDown && lastDown;
-mobileUpR = !mobileUp && lastUp;
-mobileRightR = !mobileRight && lastRight;
-
-#end
-		#if !debug
-		perfectMode = false;
-		#end
-		
 		iconP1.setGraphicSize(Std.int(FlxMath.lerp(150, iconP1.width, 0.50)));
 		iconP2.setGraphicSize(Std.int(FlxMath.lerp(150, iconP2.width, 0.50)));
 
@@ -1396,19 +1359,20 @@ keyShit();
 	{
 		// HOLDING
 	var up = controls.UP || mobileUp;
-var right = controls.RIGHT || mobileRight;
 var down = controls.DOWN || mobileDown;
 var left = controls.LEFT || mobileLeft;
+var right = controls.RIGHT || mobileRight;
 
-var upP = controls.UP_P || mobileUpP;
-var rightP = controls.RIGHT_P || mobileRightP;
-var downP = controls.DOWN_P || mobileDownP;
-var leftP = controls.LEFT_P || mobileLeftP;
+		var upP = controls.UP_P;
+		var rightP = controls.RIGHT_P;
+		var downP = controls.DOWN_P;
+		var leftP = controls.LEFT_P;
 
-var upR = controls.UP_R || mobileUpR;
-var rightR = controls.RIGHT_R || mobileRightR;
-var downR = controls.DOWN_R || mobileDownR;
-var leftR = controls.LEFT_R || mobileLeftR;
+		var upR = controls.UP_R;
+		var rightR = controls.RIGHT_R;
+		var downR = controls.DOWN_R;
+		var leftR = controls.LEFT_R;
+
 		// FlxG.watch.addQuick('asdfa', upP);
 		if ((upP || rightP || downP || leftP) && !boyfriend.stunned && generatedMusic)
 		{
