@@ -861,10 +861,10 @@ for (touch in FlxG.touches.list)
 }
 
 // INPUT MOBILE
-controls.NOTE_LEFT = leftPressed;
-controls.NOTE_DOWN = downPressed;
-controls.NOTE_UP = upPressed;
-controls.NOTE_RIGHT = rightPressed;
+controls.LEFT = leftPressed;
+controls.DOWN = downPressed;
+controls.UP = upPressed;
+controls.RIGHT = rightPressed;
 
 #end
 
