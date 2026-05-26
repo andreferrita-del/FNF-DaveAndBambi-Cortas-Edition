@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-
+<!-- XML -->
 	<!-- _________________________ Application Settings _________________________ -->
 
 	<app title="Cortas Edition" file="CE" packageName="com.hortas.cloned.funkin" main="Main" version="0.2.5" company="CortasTeam" />
