@@ -60,7 +60,12 @@ var rightHitbox:FlxSprite;
 	var leftPressed:Bool = false;
 var downPressed:Bool = false;
 var upPressed:Bool = false;
+	var sectionWidth:Float = FlxG.width / 4;
 var rightPressed:Bool = false;
+	var leftJustPressed:Bool = false;
+var downJustPressed:Bool = false;
+var upJustPressed:Bool = false;
+var rightJustPressed:Bool = false;
 	#end
 
 	private var vocals:FlxSound;
@@ -848,26 +853,43 @@ downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-for (touch in FlxG.touches.list)
+var touch = FlxG.touches.getFirst();
+
+if (touch != null)
 {
-	if (touch.justPressed)
-	{
-		var point = touch.getPosition(); // sem camera
+	var x = touch.screenX;
 
-		if (leftHitbox.overlapsPoint(point))
-			leftPressed = true;
+	if (x < sectionWidth)
+		leftPressed = true;
 
-		if (downHitbox.overlapsPoint(point))
-			downPressed = true;
+	else if (x < sectionWidth * 2)
+		downPressed = true;
 
-		if (upHitbox.overlapsPoint(point))
-			upPressed = true;
+	else if (x < sectionWidth * 3)
+		upPressed = true;
 
-		if (rightHitbox.overlapsPoint(point))
-			rightPressed = true;
-	}
+	else
+		rightPressed = true;
+}
+		if (leftJustPressed)
+{
+	strumLineNotes.members[0].animation.play("confirm", true);
 }
 
+if (downJustPressed)
+{
+	strumLineNotes.members[1].animation.play("confirm", true);
+}
+
+if (upJustPressed)
+{
+	strumLineNotes.members[2].animation.play("confirm", true);
+}
+
+if (rightJustPressed)
+{
+	strumLineNotes.members[3].animation.play("confirm", true);
+}
 #end
 
 	
