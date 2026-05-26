@@ -80,102 +80,103 @@ class FreeplayState extends MusicBeatState
 		super.create();
 	}
 
-	override function update(elapsed:Float)
+	ooverride function update(elapsed:Float)
+{
+	super.update(elapsed);
+
+	if (FlxG.sound.music != null)
 	{
-		super.update(elapsed);
-
-		if (FlxG.sound.music != null)
+		if (FlxG.sound.music.volume < 0.7)
 		{
-			if (FlxG.sound.music.volume < 0.7)
-			{
-				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-			}
+			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
-
-		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
-
-		if (Math.abs(lerpScore - intendedScore) <= 10)
-			lerpScore = intendedScore;
-
-		scoreText.text = "PERSONAL BEST:" + lerpScore;
-
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
-
-		#if mobile
-		for (touch in FlxG.touches.list)
-		{
-			if (touch.justPressed)
-			{
-				touchStartY = touch.y;
-
-				// LEFT SIDE = BACK
-				if (touch.x < FlxG.width * 0.25)
-				{
-					FlxG.switchState(new MainMenuState());
-				}
-
-				// RIGHT SIDE = ACCEPT
-				if (touch.x > FlxG.width * 0.75)
-				{
-					accepted = true;
-				}
-			}
-
-			if (touch.justReleased)
-			{
-				var swipeDistance:Float = touch.y - touchStartY;
-
-				// SWIPE UP
-				if (swipeDistance < -swipeThreshold)
-				{
-					upP = true;
-				}
-
-				// SWIPE DOWN
-				if (swipeDistance > swipeThreshold)
-				{
-					downP = true;
-				}
-			}
-		}
-		#end
-
-		if (upP)
-		{
-			changeSelection(-1);
-		}
-
-		if (downP)
-		{
-			changeSelection(1);
-		}
-
-		if (controls.BACK)
-		{
-			FlxG.switchState(new MainMenuState());
-		}
-
-		if (accepted)
-		{
-			var poop:String = Highscore.formatSong(
-				songs[curSelected].toLowerCase(),
-				curDifficulty
-			);
-
-			trace(poop);
-
-			PlayState.SONG = Song.loadFromJson(
-				poop,
-				songs[curSelected].toLowerCase()
-			);
-
-			PlayState.isStoryMode = false;
-			PlayState.storyDifficulty = curDifficulty;
-
-			FlxG.switchState(new PlayState());
 	}
+
+	lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
+
+	if (Math.abs(lerpScore - intendedScore) <= 10)
+		lerpScore = intendedScore;
+
+	scoreText.text = "PERSONAL BEST:" + lerpScore;
+
+	var upP = controls.UP_P;
+	var downP = controls.DOWN_P;
+	var accepted = controls.ACCEPT;
+
+	#if mobile
+	for (touch in FlxG.touches.list)
+	{
+		if (touch.justPressed)
+		{
+			touchStartY = touch.y;
+
+			// LEFT SIDE = BACK
+			if (touch.x < FlxG.width * 0.25)
+			{
+				FlxG.switchState(new MainMenuState());
+			}
+
+			// RIGHT SIDE = ACCEPT
+			if (touch.x > FlxG.width * 0.75)
+			{
+				accepted = true;
+			}
+		}
+
+		if (touch.justReleased)
+		{
+			var swipeDistance:Float = touch.y - touchStartY;
+
+			// SWIPE UP
+			if (swipeDistance < -swipeThreshold)
+			{
+				upP = true;
+			}
+
+			// SWIPE DOWN
+			if (swipeDistance > swipeThreshold)
+			{
+				downP = true;
+			}
+		}
+	}
+	#end
+
+	if (upP)
+	{
+		changeSelection(-1);
+	}
+
+	if (downP)
+	{
+		changeSelection(1);
+	}
+
+	if (controls.BACK)
+	{
+		FlxG.switchState(new MainMenuState());
+	}
+
+	if (accepted)
+	{
+		var poop:String = Highscore.formatSong(
+			songs[curSelected].toLowerCase(),
+			curDifficulty
+		);
+
+		trace(poop);
+
+		PlayState.SONG = Song.loadFromJson(
+			poop,
+			songs[curSelected].toLowerCase()
+		);
+
+		PlayState.isStoryMode = false;
+		PlayState.storyDifficulty = curDifficulty;
+
+		FlxG.switchState(new PlayState());
+	}
+}
 
 	function changeDiff(change:Int = 0)
 	{
