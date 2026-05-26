@@ -58,6 +58,7 @@
 
 	<!-- Icon -->
 	<icon path="art/icon.png" />
+	<assets path="assets/android/" if="android" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
