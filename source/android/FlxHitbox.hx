@@ -61,7 +61,7 @@ class FlxHitbox extends FlxSpriteGroup {
 	}
 
 	public function getFrames():FlxAtlasFrames {
-		return Paths.getSparrowAtlas('androidcontrols/hitbox');
+		return Paths.getSparrowAtlas('android/hitbox');
 	}
 
 	override public function destroy():Void {
