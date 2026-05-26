@@ -5,7 +5,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
 import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.input.keyboard.FlxKey;
+import flixel.input.touch.FlxTouch;
 import flixel.sound.FlxSound;
 import flixel.util.FlxColor;
 
@@ -18,17 +18,28 @@ class PauseSubState extends MusicBeatSubstate
 
 	var pauseMusic:FlxSound;
 
+	// TOUCH
+	var touchStartY:Float = 0;
+	var isTouching:Bool = false;
+	var swipeThreshold:Float = 40;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
 
-		pauseMusic = new FlxSound().loadEmbedded('assets/music/breakfast' + TitleState.soundExt, true, true);
+		pauseMusic = new FlxSound().loadEmbedded(
+			'assets/music/breakfast' + TitleState.soundExt,
+			true,
+			true
+		);
+
 		pauseMusic.volume = 0;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
-
 		FlxG.sound.list.add(pauseMusic);
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		var bg:FlxSprite = new FlxSprite()
+			.makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+
 		bg.alpha = 0.6;
 		bg.scrollFactor.set();
 		add(bg);
@@ -56,45 +67,82 @@ class PauseSubState extends MusicBeatSubstate
 
 		super.update(elapsed);
 
+		// =========================
+		// KEYBOARD (PC)
+		// =========================
 		var upP = controls.UP_P;
 		var downP = controls.DOWN_P;
 		var accepted = controls.ACCEPT;
 
 		if (upP)
-		{
 			changeSelection(-1);
-		}
+
 		if (downP)
-		{
 			changeSelection(1);
-		}
 
 		if (accepted)
-		{
-			var daSelected:String = menuItems[curSelected];
+			selectOption();
 
-			switch (daSelected)
+		// =========================
+		// TOUCH (MOBILE)
+		// =========================
+		var touch = FlxG.touches.list[0];
+
+		if (touch != null)
+		{
+			// START TOUCH
+			if (touch.justPressed)
 			{
-				case "Resume":
-					close();
-				case "Restart Song":
-					FlxG.resetState();
-				case "Exit to menu":
-					FlxG.switchState(new MainMenuState());
+				isTouching = true;
+				touchStartY = touch.y;
+			}
+
+			// SWIPE MOVE
+			if (isTouching)
+			{
+				var deltaY = touch.y - touchStartY;
+
+				if (deltaY > swipeThreshold)
+				{
+					changeSelection(1);
+					touchStartY = touch.y;
+				}
+				else if (deltaY < -swipeThreshold)
+				{
+					changeSelection(-1);
+					touchStartY = touch.y;
+				}
+			}
+
+			// RELEASE = SELECT
+			if (touch.justReleased)
+			{
+				isTouching = false;
+				selectOption();
 			}
 		}
+	}
 
-		if (FlxG.keys.justPressed.J)
+	function selectOption()
+	{
+		var daSelected:String = menuItems[curSelected];
+
+		switch (daSelected)
 		{
-			// for reference later!
-			// PlayerSettings.player1.controls.replaceBinding(Control.LEFT, Keys, FlxKey.J, null);
+			case "Resume":
+				close();
+
+			case "Restart Song":
+				FlxG.resetState();
+
+			case "Exit to menu":
+				FlxG.switchState(new MainMenuState());
 		}
 	}
 
 	override function destroy()
 	{
 		pauseMusic.destroy();
-
 		super.destroy();
 	}
 
@@ -104,6 +152,7 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
+
 		if (curSelected >= menuItems.length)
 			curSelected = 0;
 
@@ -115,13 +164,9 @@ class PauseSubState extends MusicBeatSubstate
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
-			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
-			}
 		}
 	}
-}
+		}
