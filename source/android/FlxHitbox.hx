@@ -1,70 +1,108 @@
 package android;
 
-import flixel.graphics.frames.FlxAtlasFrames;
-import flixel.graphics.FlxGraphic;
-import flixel.group.FlxSpriteGroup;
-import flixel.tweens.FlxTween;
-import flixel.tweens.FlxEase;
-import android.flixel.FlxButton;
+import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.graphics.FlxGraphic;
+import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.group.FlxSpriteGroup;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import android.flixel.FlxButton;
 
-class FlxHitbox extends FlxSpriteGroup {
+class FlxHitbox extends FlxSpriteGroup
+{
 	public var hitbox:FlxSpriteGroup;
 
 	public var buttonLeft:FlxButton;
 	public var buttonDown:FlxButton;
 	public var buttonUp:FlxButton;
 	public var buttonRight:FlxButton;
-	
-	public function new() {
+
+	public function new()
+	{
 		super();
 
-		buttonLeft = new FlxButton(0, 0);
-		buttonDown = new FlxButton(0, 0);
-		buttonUp = new FlxButton(0, 0);
-		buttonRight = new FlxButton(0, 0);
-
 		hitbox = new FlxSpriteGroup();
-		hitbox.add(add(buttonLeft = createhitbox(0, 0, "left")));
-		hitbox.add(add(buttonDown = createhitbox(320, 0, "down")));
-		hitbox.add(add(buttonUp = createhitbox(640, 0, "up")));
-		hitbox.add(add(buttonRight = createhitbox(960, 0, "right")));
+		add(hitbox);
 
-		var hints:FlxSprite = new FlxSprite(0, 0);
-		hints.loadGraphic('assets/android/hitbox_hint');
-		hints.antialiasing = ClientPrefs.globalAntialiasing;
+		var sectionWidth:Float = FlxG.width / 4;
+
+		buttonLeft = createhitbox(0, 0, sectionWidth, "left");
+		buttonDown = createhitbox(sectionWidth, 0, sectionWidth, "down");
+		buttonUp = createhitbox(sectionWidth * 2, 0, sectionWidth, "up");
+		buttonRight = createhitbox(sectionWidth * 3, 0, sectionWidth, "right");
+
+		hitbox.add(buttonLeft);
+		hitbox.add(buttonDown);
+		hitbox.add(buttonUp);
+		hitbox.add(buttonRight);
+
+		var hints:FlxSprite = new FlxSprite();
+		hints.loadGraphic("assets/android/hitbox_hint.png");
+		hints.scrollFactor.set();
+		hints.antialiasing = true;
 		hints.alpha = 0.75;
 		add(hints);
 	}
 
-	public function createhitbox(x:Float = 0, y:Float = 0, frames:String):FlxButton {
-		var button = new FlxButton(x, y);
-		button.loadGraphic(FlxGraphic.fromFrame(getFrames().getByName(frames)));
-		button.antialiasing = ClientPrefs.globalAntialiasing;
-		button.alpha = 0;
-		button.onDown.callback = function(){
-			FlxTween.num(0, 0.75, 0.075, {ease:FlxEase.circInOut}, function(alpha:Float){ 
-				button.alpha = alpha;
+	public function createhitbox(x:Float, y:Float, width:Float, frame:String):FlxButton
+	{
+		var button:FlxButton = new FlxButton(x, y);
+
+		button.loadGraphic(
+			FlxGraphic.fromFrame(getFrames().getByName(frame))
+		);
+
+		button.setGraphicSize(Std.int(width), FlxG.height);
+		button.updateHitbox();
+
+		button.scrollFactor.set();
+		button.antialiasing = true;
+		button.alpha = 0.15;
+
+		button.onDown.callback = function()
+		{
+			FlxTween.cancelTweensOf(button);
+
+			FlxTween.tween(button, {alpha: 0.35}, 0.08,
+			{
+				ease: FlxEase.quadOut
 			});
 		};
-		button.onUp.callback = function(){
-			FlxTween.num(0.75, 0, 0.1, {ease:FlxEase.circInOut}, function(alpha:Float){
-				button.alpha = alpha;
+
+		button.onUp.callback = function()
+		{
+			FlxTween.cancelTweensOf(button);
+
+			FlxTween.tween(button, {alpha: 0.15}, 0.1,
+			{
+				ease: FlxEase.quadOut
 			});
-		}
-		button.onOut.callback = function(){
-			FlxTween.num(button.alpha, 0, 0.2, {ease:FlxEase.circInOut}, function(alpha:Float){ 
-				button.alpha = alpha;
+		};
+
+		button.onOut.callback = function()
+		{
+			FlxTween.cancelTweensOf(button);
+
+			FlxTween.tween(button, {alpha: 0.15}, 0.1,
+			{
+				ease: FlxEase.quadOut
 			});
-		}
+		};
+
 		return button;
 	}
 
-	public function getFrames():FlxAtlasFrames {
-		return Paths.getSparrowAtlas('assets/android/hitbox');
+	public function getFrames():FlxAtlasFrames
+	{
+		return FlxAtlasFrames.fromSparrow(
+	AssetPaths.hitbox__png,
+	AssetPaths.hitbox__xml
+);
 	}
 
-	override public function destroy():Void {
+	override public function destroy():Void
+	{
 		super.destroy();
 
 		buttonLeft = null;
