@@ -52,10 +52,16 @@ class PlayState extends MusicBeatState
 
 	var halloweenLevel:Bool = false;
 	var shader:WiggleEffect;
+	#if mobile
 	var leftHitbox:FlxSprite;
 var downHitbox:FlxSprite;
 var upHitbox:FlxSprite;
 var rightHitbox:FlxSprite;
+	var mobileLeft:Bool = false;
+var mobileDown:Bool = false;
+var mobileUp:Bool = false;
+var mobileRight:Bool = false;
+	#end
 
 	private var vocals:FlxSound;
 
@@ -114,12 +120,15 @@ var rightHitbox:FlxSprite;
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
+
+/*
 	#if mobile
 		var leftHitbox:FlxSprite;
 var downHitbox:FlxSprite;
 var upHitbox:FlxSprite;
 var rightHitbox:FlxSprite;
 	#end
+*/
 
 	override public function create()
 	{
