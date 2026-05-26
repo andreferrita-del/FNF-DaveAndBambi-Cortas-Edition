@@ -124,6 +124,7 @@ class MainMenuState extends MusicBeatState
 			// =========================
 			// TOUCH (MOBILE)
 			// =========================
+			#if mobile
 			var touch = FlxG.touches.list[0];
 
 			if (touch != null)
@@ -173,6 +174,7 @@ class MainMenuState extends MusicBeatState
 				}
 			}
 		}
+		#end
 
 		super.update(elapsed);
 
