@@ -57,6 +57,8 @@ class DialogueBox extends FlxSpriteGroup
 			startDialogue();
 			dialogueStarted = true;
 		}
+		
+		#if !mobile
 
 		if (FlxG.keys.justPressed.SPACE)
 		{
@@ -73,6 +75,7 @@ class DialogueBox extends FlxSpriteGroup
 				startDialogue();
 			}
 		}
+		#end
 
 		super.update(elapsed);
 	}
