@@ -843,16 +843,39 @@ add(rightHitbox);
 			
 #if mobile
 
+leftPressed = false;
+downPressed = false;
+upPressed = false;
+rightPressed = false;
+
+
+var cam = FlxG.camera;
+
 for (touch in FlxG.touches.list)
 {
+	
+	var mx = touch.screenX;
+	var my = touch.screenY;
+
+
+	var point = new FlxPoint(mx, my);
+
 	if (touch.pressed)
 	{
-		if (touch.overlaps(leftHitbox)) leftPressed = true;
-		if (touch.overlaps(downHitbox)) downPressed = true;
-		if (touch.overlaps(upHitbox)) upPressed = true;
-		if (touch.overlaps(rightHitbox)) rightPressed = true;
+		if (leftHitbox.overlapsPoint(point))
+			leftPressed = true;
+
+		if (downHitbox.overlapsPoint(point))
+			downPressed = true;
+
+		if (upHitbox.overlapsPoint(point))
+			upPressed = true;
+
+		if (rightHitbox.overlapsPoint(point))
+			rightPressed = true;
 	}
 }
+
 #end
 
 	// SWIPE DETECTION (PAUSE / VOLUME / SKIP ETC)
