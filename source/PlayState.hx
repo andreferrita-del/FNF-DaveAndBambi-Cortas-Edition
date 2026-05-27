@@ -1478,40 +1478,49 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 		}
 
 		playerStrums.forEach(function(spr:FlxSprite)
-		{
-			switch (spr.ID)
-			{
-				case 2:
-					if (upP && spr.animation.curAnim.name != 'confirm')
-						spr.animation.play('pressed');
-					if (upR)
-						spr.animation.play('static');
-				case 3:
-					if (rightP && spr.animation.curAnim.name != 'confirm')
-						spr.animation.play('pressed');
-					if (rightR)
-						spr.animation.play('static');
-				case 1:
-					if (downP && spr.animation.curAnim.name != 'confirm')
-						spr.animation.play('pressed');
-					if (downR)
-						spr.animation.play('static');
-				case 0:
-					if (leftP && spr.animation.curAnim.name != 'confirm')
-						spr.animation.play('pressed');
-					if (leftR)
-						spr.animation.play('static');
-			}
+{
+	switch (spr.ID)
+	{
+		case 0: // LEFT
+			if (leftP && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			spr.resetAnim = 0;
+			else if (!leftP && spr.animation.curAnim.name == 'pressed')
+				spr.animation.play('static');
 
-			if (spr.animation.curAnim.name == 'confirm')
-			{
-				spr.centerOffsets();
-				spr.offset.x -= 13;
-				spr.offset.y -= 13;
-			}
-			else
-				spr.centerOffsets();
-		});
+		case 1: // DOWN
+			if (downP && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			spr.resetAnim = 0;
+			else if (!downP && spr.animation.curAnim.name == 'pressed')
+				spr.animation.play('static');
+
+		case 2: // UP
+			if (upP && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			spr.resetAnim = 0;
+			else if (!upP && spr.animation.curAnim.name == 'pressed')
+				spr.animation.play('static');
+
+		case 3: // RIGHT
+			if (rightP && spr.animation.curAnim.name != 'confirm')
+				spr.animation.play('pressed');
+			spr.resetAnim = 0;
+			else if (!rightP && spr.animation.curAnim.name == 'pressed')
+				spr.animation.play('static');
+	}
+
+	if (spr.animation.curAnim.name == 'confirm')
+	{
+		spr.centerOffsets();
+		spr.offset.x -= 13;
+		spr.offset.y -= 13;
+	}
+	else
+	{
+		spr.centerOffsets();
+	}
+});
 	}
 
 	function noteMiss(direction:Int = 1):Void
