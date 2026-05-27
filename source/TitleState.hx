@@ -195,11 +195,8 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
-		#if !mobile
+	
 		var fullText:String = Assets.getText('mods/IntroMod/_append/data/IntroText.txt');
-		#else
-		var fullText:String = Assets.getText('assets/android/IntroText.txt');
-		#end
 		
 
 		var firstArray:Array<String> = fullText.split('\n');
