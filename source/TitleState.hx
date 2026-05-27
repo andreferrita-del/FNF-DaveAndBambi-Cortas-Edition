@@ -121,7 +121,7 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		bg.loadGraphic('assets/images/menuBG.png');
 		add(bg);
-		WiggleEffect.addWiggleEffect('bg', 2, 5);
+		WiggleEffect.addWiggleEffect(bg, 2, 5);
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = FlxAtlasFrames.fromSparrow(AssetPaths.logoBumpin__png, AssetPaths.logoBumpin__xml);
