@@ -253,5 +253,20 @@ class FreeplayState extends MusicBeatState
 				item.alpha = 1;
 			}
 		}
+		var targetColor:FlxColor = FlxColor.WHITE;
+
+switch (curSelected)
+{
+	case 0:
+		targetColor = FlxColor.RED;
+
+	case 1:
+		targetColor = FlxColor.PURPLE;
+
+	case 2:
+		targetColor = FlxColor.PURPLE;
+}
+
+FlxTween.color(bg, 0.4, bg.color, targetColor);
 	}
 } 
