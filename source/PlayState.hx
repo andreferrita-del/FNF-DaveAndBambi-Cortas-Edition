@@ -60,12 +60,6 @@ var rightHitbox:FlxSprite;
 	var leftPressed:Bool = false;
 var downPressed:Bool = false;
 var upPressed:Bool = false;
-	var sectionWidth:Float = FlxG.width / 4;
-var rightPressed:Bool = false;
-	var leftJustPressed:Bool = false;
-var downJustPressed:Bool = false;
-var upJustPressed:Bool = false;
-var rightJustPressed:Bool = false;
 	#end
 
 	private var vocals:FlxSound;
@@ -853,43 +847,18 @@ downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-var touch = FlxG.touches.getFirst();
+var sectionWidth = FlxG.stage.stageWidth / 4;
 
-if (touch != null)
-{
-	var x = touch.screenX;
+var x = touch.screenX - 150;
 
-	if (x < sectionWidth)
-		leftPressed = true;
-
-	else if (x < sectionWidth * 2)
-		downPressed = true;
-
-	else if (x < sectionWidth * 3)
-		upPressed = true;
-
-	else
-		rightPressed = true;
-}
-		if (leftJustPressed)
-{
-	strumLineNotes.members[0].animation.play("confirm", true);
-}
-
-if (downJustPressed)
-{
-	strumLineNotes.members[1].animation.play("confirm", true);
-}
-
-if (upJustPressed)
-{
-	strumLineNotes.members[2].animation.play("confirm", true);
-}
-
-if (rightJustPressed)
-{
-	strumLineNotes.members[3].animation.play("confirm", true);
-}
+if (x < sectionWidth)
+	leftPressed = true;
+else if (x < sectionWidth * 2)
+	downPressed = true;
+else if (x < sectionWidth * 3)
+	upPressed = true;
+else
+	rightPressed = true;
 #end
 
 	
