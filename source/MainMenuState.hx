@@ -250,7 +250,7 @@ class MainMenuState extends MusicBeatState
 			{
 				spr.animation.play('selected');
 				camFollow.setPosition(
-					spr.getGraphicMidpoint().x,
+					0,
 					spr.getGraphicMidpoint().y
 				);
 			}
