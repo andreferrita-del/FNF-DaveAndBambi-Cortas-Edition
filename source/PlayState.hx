@@ -1484,7 +1484,7 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 			if (leftP && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.animation.play('pressed');
-				spr.resetAnim = 0;
+			
 			}
 			else if (!leftP && spr.animation.curAnim.name == 'pressed')
 			{
@@ -1495,7 +1495,6 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 			if (downP && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.animation.play('pressed');
-				spr.resetAnim = 0;
 			}
 			else if (!downP && spr.animation.curAnim.name == 'pressed')
 			{
@@ -1506,7 +1505,7 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 			if (upP && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.animation.play('pressed');
-				spr.resetAnim = 0;
+			
 			}
 			else if (!upP && spr.animation.curAnim.name == 'pressed')
 			{
@@ -1517,7 +1516,7 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 			if (rightP && spr.animation.curAnim.name != 'confirm')
 			{
 				spr.animation.play('pressed');
-				spr.resetAnim = 0;
+			
 			}
 			else if (!rightP && spr.animation.curAnim.name == 'pressed')
 			{
