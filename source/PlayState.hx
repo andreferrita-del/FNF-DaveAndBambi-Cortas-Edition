@@ -276,7 +276,7 @@ var rightPressed:Bool = false;
 		bgs.screenCenter();
 		bgs.shader = shader;
 		add(bgs);
-		addWiggleEffect('bgs', 2, 5);
+		WiggleEffect.addWiggleEffect('bgs', 2, 5);
 		}else if (SONG.song.toLowerCase() == 'photosynthesis')
 		{
 		curStage = 'purpleyay';
@@ -284,7 +284,7 @@ var rightPressed:Bool = false;
 		photo.scrollFactor.set(0, 0);
 		photo.screenCenter();
 		add(photo);
-		addWiggleEffect('photo', 4.3, 5);
+		WiggleEffect.addWiggleEffect('photo', 4.3, 5);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
