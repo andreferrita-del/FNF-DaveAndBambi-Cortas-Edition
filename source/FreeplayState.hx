@@ -8,9 +8,10 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
-import WiggleEffect;
 import flixel.tweens.FlxTween;
 import lime.utils.Assets;
+
+import WiggleEffect;
 
 class FreeplayState extends MusicBeatState
 {
@@ -24,6 +25,8 @@ class FreeplayState extends MusicBeatState
 	var diffText:FlxText;
 	var lerpScore:Int = 0;
 	var intendedScore:Int = 0;
+
+	var bg:FlxSprite;
 
 	private var grpSongs:FlxTypedGroup<Alphabet>;
 	private var curPlaying:Bool = false;
@@ -40,9 +43,10 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
+		bg = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
 		add(bg);
-		addWiggleEffect('bg', 2, 5);
+
+		WiggleEffect.addWiggleEffect(0.1, bg, 2, 5);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
@@ -78,116 +82,113 @@ class FreeplayState extends MusicBeatState
 		selector.size = 40;
 		selector.text = ">";
 
-		var swag:Alphabet = new Alphabet(1, 0, "swag");
-
 		super.create();
 	}
 
 	override function update(elapsed:Float)
-{
-	super.update(elapsed);
-
-	if (FlxG.sound.music != null)
 	{
-		if (FlxG.sound.music.volume < 0.7)
+		super.update(elapsed);
+
+		if (FlxG.sound.music != null)
 		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
-		}
-	}
-
-	lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
-
-	if (Math.abs(lerpScore - intendedScore) <= 10)
-		lerpScore = intendedScore;
-
-	scoreText.text = "PERSONAL BEST:" + lerpScore;
-
-	var upP = controls.UP_P;
-	var downP = controls.DOWN_P;
-	var accepted = controls.ACCEPT;
-
-	#if mobile
-
-	for (touch in FlxG.touches.list)
-	{
-		// COMEÇOU TOQUE
-		if (touch.justPressed)
-		{
-			touchStartY = touch.y;
-		}
-
-		// MOVIMENTO
-		if (touch.pressed)
-		{
-			var swipeDistance:Float = touch.y - touchStartY;
-
-			// MENOS SENSÍVEL
-			if (swipeDistance < -120)
+			if (FlxG.sound.music.volume < 0.7)
 			{
-				upP = true;
+				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			}
+		}
+
+		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
+
+		if (Math.abs(lerpScore - intendedScore) <= 10)
+			lerpScore = intendedScore;
+
+		scoreText.text = "PERSONAL BEST:" + lerpScore;
+
+		var upP = controls.UP_P;
+		var downP = controls.DOWN_P;
+		var accepted = controls.ACCEPT;
+
+		#if mobile
+
+		for (touch in FlxG.touches.list)
+		{
+			// TOUCH START
+			if (touch.justPressed)
+			{
 				touchStartY = touch.y;
 			}
 
-			if (swipeDistance > 120)
+			// SWIPE
+			if (touch.pressed)
 			{
-				downP = true;
-				touchStartY = touch.y;
+				var swipeDistance:Float = touch.y - touchStartY;
+
+				if (swipeDistance < -120)
+				{
+					upP = true;
+					touchStartY = touch.y;
+				}
+
+				if (swipeDistance > 120)
+				{
+					downP = true;
+					touchStartY = touch.y;
+				}
+			}
+
+			// RELEASE
+			if (touch.justReleased)
+			{
+				// LEFT SIDE = BACK
+				if (touch.x < FlxG.width * 0.25)
+				{
+					FlxG.switchState(new MainMenuState());
+				}
+
+				// RIGHT SIDE = ACCEPT
+				if (touch.x > FlxG.width * 0.75)
+				{
+					accepted = true;
+				}
 			}
 		}
 
-		// SOLTOU = SELECIONA
-		if (touch.justReleased)
+		#end
+
+		if (upP)
 		{
-			// ESQUERDA = VOLTAR
-			if (touch.x < FlxG.width * 0.25)
-			{
-				FlxG.switchState(new MainMenuState());
-			}
+			changeSelection(-1);
+		}
 
-			// DIREITA = ACEITAR
-			if (touch.x > FlxG.width * 0.75)
-			{
-				accepted = true;
-			}
+		if (downP)
+		{
+			changeSelection(1);
+		}
+
+		if (controls.BACK)
+		{
+			FlxG.switchState(new MainMenuState());
+		}
+
+		if (accepted)
+		{
+			var poop:String = Highscore.formatSong(
+				songs[curSelected].toLowerCase(),
+				curDifficulty
+			);
+
+			PlayState.SONG = Song.loadFromJson(
+				poop,
+				songs[curSelected].toLowerCase()
+			);
+
+			PlayState.isStoryMode = false;
+			PlayState.storyDifficulty = curDifficulty;
+
+			FlxG.switchState(new PlayState());
+			FlxG.sound.music.stop();
 		}
 	}
-
-	#end
-
-	if (upP)
-	{
-		changeSelection(-1);
-	}
-
-	if (downP)
-	{
-		changeSelection(1);
-	}
-
-	if (controls.BACK)
-	{
-		FlxG.switchState(new MainMenuState());
-	}
-
-	if (accepted)
-	{
-		var poop:String = Highscore.formatSong(
-			songs[curSelected].toLowerCase(),
-			curDifficulty
-		);
-
-		PlayState.SONG = Song.loadFromJson(
-			poop,
-			songs[curSelected].toLowerCase()
-		);
-
-		PlayState.isStoryMode = false;
-		PlayState.storyDifficulty = curDifficulty;
-
-		FlxG.switchState(new PlayState());
-		FlxG.sound.music.stop();
-	}
-}
 
 	function changeDiff(change:Int = 0)
 	{
@@ -241,6 +242,22 @@ class FreeplayState extends MusicBeatState
 		);
 		#end
 
+		var targetColor:FlxColor = FlxColor.WHITE;
+
+		switch (curSelected)
+		{
+			case 0:
+				targetColor = FlxColor.RED;
+
+			case 1:
+				targetColor = FlxColor.PURPLE;
+
+			case 2:
+				targetColor = FlxColor.PURPLE;
+		}
+
+		FlxTween.color(bg, 0.4, bg.color, targetColor);
+
 		var bullShit:Int = 0;
 
 		for (item in grpSongs.members)
@@ -255,20 +272,5 @@ class FreeplayState extends MusicBeatState
 				item.alpha = 1;
 			}
 		}
-		var targetColor:FlxColor = FlxColor.WHITE;
-
-switch (curSelected)
-{
-	case 0:
-		targetColor = FlxColor.RED;
-
-	case 1:
-		targetColor = FlxColor.PURPLE;
-
-	case 2:
-		targetColor = FlxColor.PURPLE;
-}
-
-FlxTween.color(bg, 0.4, bg.color, targetColor);
 	}
-} 
+	}
