@@ -843,23 +843,25 @@ add(rightHitbox);
 
 			#if mobile
 var touch = FlxG.touches.getFirst();
-leftPressed = false;
-downPressed = false;
-upPressed = false;
-rightPressed = false;
 
-var sectionWidth = FlxG.stage.stageWidth / 4;
+leftPressed = downPressed = upPressed = rightPressed = false;
 
-var x = touch.screenX - 150;
+if (touch != null)
+{
+	var x = touch.screenX;
 
-if (x < sectionWidth)
-	leftPressed = true;
-else if (x < sectionWidth * 2)
-	downPressed = true;
-else if (x < sectionWidth * 3)
-	upPressed = true;
-else
-	rightPressed = true;
+	if (x >= leftHitbox.x && x < leftHitbox.x + leftHitbox.width)
+		leftPressed = true;
+
+	else if (x >= downHitbox.x && x < downHitbox.x + downHitbox.width)
+		downPressed = true;
+
+	else if (x >= upHitbox.x && x < upHitbox.x + upHitbox.width)
+		upPressed = true;
+
+	else if (x >= rightHitbox.x && x < rightHitbox.x + rightHitbox.width)
+		rightPressed = true;
+}
 #end
 
 	
