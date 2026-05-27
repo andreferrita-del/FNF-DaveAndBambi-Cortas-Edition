@@ -4,7 +4,7 @@ import Section.SwagSection;
 import Song.SwagSong;
 import flixel.FlxBasic;
 import flixel.FlxCamera;
-import WiggleEffect;
+import WiggleEffect.WiggleEffect;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxObject;
@@ -68,7 +68,6 @@ var rightPressed:Bool = false;
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
-	var dadFloatTime:Float = 0.0;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -271,20 +270,37 @@ var rightPressed:Bool = false;
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
 		curStage = 'deliriuned';
+		shader = new WiggleEffect();
+		var s = 2.0;
+		var a = 0.1;
+		var f = 5.0;
+		shader.uWaveAmplitude.value = [a];
+		shader.uFrequency.value = [f];
+		shader.uSpeed.value = [s];
+		shader.uTime.value = [0.0];
+			
 		var bgs:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
 		bgs.scrollFactor.set(0, 0);
 		bgs.screenCenter();
 		bgs.shader = shader;
 		add(bgs);
-		WiggleEffect.addWiggleEffect(bgs, 2, 5);
 		}else if (SONG.song.toLowerCase() == 'photosynthesis')
 		{
 		curStage = 'purpleyay';
+		shader = new WiggleEffect();
+		var s = 4.2;
+		var a = 0.1;
+		var f = 5.0;
+		shader.uWaveAmplitude.value = [a];
+		shader.uFrequency.value = [f];
+		shader.uSpeed.value = [s];
+		shader.uTime.value = [0.0];
+			
 		var photo:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.purpling__png);
 		photo.scrollFactor.set(0, 0);
 		photo.screenCenter();
+		photo.shader = shader;
 		add(photo);
-		WiggleEffect.addWiggleEffect(photo, 4.3, 5);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
@@ -370,9 +386,6 @@ var rightPressed:Bool = false;
 
 			resetFastCar();
 			add(fastCar);
-			case 'deliriuned':
-			dad.y += 250;
-			dad.x += 150;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -815,7 +828,6 @@ add(rightHitbox);
 
 	override public function update(elapsed:Float)
 	{
-		dadFloatTime += elapsed;
 		#if !debug
 		perfectMode = false;
 		#end
@@ -882,8 +894,11 @@ for (touch in FlxG.touches.list)
 					}
 				}
 			case 'deliriuned':
-				dad.y = 100 + Math.sin(dadFloatTime * 2) * 25;
-				
+				shader.uTime.value[0] += elapsed;
+				dad.y += Math.sin(elapsed * 2) * 0.5;
+		   case 'purpleyay':
+				shader.uTime.value[0] += elapsed;
+				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
 
 		super.update(elapsed);
