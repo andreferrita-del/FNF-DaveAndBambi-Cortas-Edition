@@ -68,6 +68,7 @@ var rightPressed:Bool = false;
 	private var dad:Character;
 	private var gf:Character;
 	private var boyfriend:Boyfriend;
+	var dadFloatTime:Float = 0.0;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -814,6 +815,7 @@ add(rightHitbox);
 
 	override public function update(elapsed:Float)
 	{
+		dadFloatTime += elapsed;
 		#if !debug
 		perfectMode = false;
 		#end
