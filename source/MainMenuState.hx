@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxObject;
+import WiggleEffect.WiggleEffect;
 import flixel.FlxSprite;
 import flixel.effects.FlxFlicker;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -52,6 +53,7 @@ class MainMenuState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = true;
 		add(bg);
+		addWiggleEffect('bg', 2, 5);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
