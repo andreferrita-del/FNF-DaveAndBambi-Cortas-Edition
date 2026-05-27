@@ -484,27 +484,27 @@ var rightPressed:Bool = false;
 		doof.cameras = [camHUD];
 		#if mobile
 
-var hitboxWidth:Int = Std.int(FlxG.width / 4);
+var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 4);
 
-// LEFT
+// ================= LEFT =================
 leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
 leftHitbox.scrollFactor.set();
 leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
-// DOWN
+// ================= DOWN =================
 downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
 downHitbox.scrollFactor.set();
 downHitbox.cameras = [camHUD];
 add(downHitbox);
 
-// UP
+// ================= UP =================
 upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
 upHitbox.scrollFactor.set();
 upHitbox.cameras = [camHUD];
 add(upHitbox);
 
-// RIGHT
+// ================= RIGHT =================
 rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
 rightHitbox.scrollFactor.set();
 rightHitbox.cameras = [camHUD];
@@ -841,29 +841,28 @@ add(rightHitbox);
 		perfectMode = false;
 		#end
 
-			#if mobile
-var touch = FlxG.touches.getFirst();
+		#if mobile
 
 leftPressed = downPressed = upPressed = rightPressed = false;
 
+var touch = FlxG.touches.getFirst();
+
 if (touch != null)
 {
-	var x = touch.screenX;
-
-	if (x >= leftHitbox.x && x < leftHitbox.x + leftHitbox.width)
+	if (touch.overlaps(leftHitbox))
 		leftPressed = true;
 
-	else if (x >= downHitbox.x && x < downHitbox.x + downHitbox.width)
+	else if (touch.overlaps(downHitbox))
 		downPressed = true;
 
-	else if (x >= upHitbox.x && x < upHitbox.x + upHitbox.width)
+	else if (touch.overlaps(upHitbox))
 		upPressed = true;
 
-	else if (x >= rightHitbox.x && x < rightHitbox.x + rightHitbox.width)
+	else if (touch.overlaps(rightHitbox))
 		rightPressed = true;
 }
-#end
 
+#end
 	
 		switch (curStage)
 		{
