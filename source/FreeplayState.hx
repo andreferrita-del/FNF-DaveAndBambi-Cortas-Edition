@@ -46,7 +46,7 @@ class FreeplayState extends MusicBeatState
 		bg = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
 		add(bg);
 
-		WiggleEffect.addWiggleEffect(0.1, bg, 2, 5);
+		WiggleEffect.addWiggleEffect('bg', 2, 5);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
