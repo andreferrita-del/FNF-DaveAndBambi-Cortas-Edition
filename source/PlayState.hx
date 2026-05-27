@@ -484,42 +484,34 @@ var rightPressed:Bool = false;
 		doof.cameras = [camHUD];
 	#if mobile
 
-// ================= HITBOX SIZE =================
-var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 8);
-var hitboxHeight:Int = Std.int(FlxG.height);
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
-var hitboxY:Int = 0;
-
-// ================= LEFT =================
-leftHitbox = new FlxSprite(0, hitboxY);
-leftHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x44FF0000);
-leftHitbox.scrollFactor.set();
-leftHitbox.cameras = [camHUD];
+// LEFT
+leftHitbox = new FlxSprite(0, 0);
+leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44C24B99);
 leftHitbox.alpha = 0.15;
+leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
-// ================= DOWN =================
-downHitbox = new FlxSprite(hitboxWidth, hitboxY);
-downHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x4400FF00);
-downHitbox.scrollFactor.set();
-downHitbox.cameras = [camHUD];
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, 0);
+downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4400FFFF);
 downHitbox.alpha = 0.15;
+downHitbox.cameras = [camHUD];
 add(downHitbox);
 
-// ================= UP =================
-upHitbox = new FlxSprite(hitboxWidth * 2, hitboxY);
-upHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x440000FF);
-upHitbox.scrollFactor.set();
-upHitbox.cameras = [camHUD];
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, 0);
+upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4412FA05);
 upHitbox.alpha = 0.15;
+upHitbox.cameras = [camHUD];
 add(upHitbox);
 
-// ================= RIGHT =================
-rightHitbox = new FlxSprite(hitboxWidth * 3, hitboxY);
-rightHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x44FFFF00);
-rightHitbox.scrollFactor.set();
-rightHitbox.cameras = [camHUD];
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
+rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44F9393F);
 rightHitbox.alpha = 0.15;
+rightHitbox.cameras = [camHUD];
 add(rightHitbox);
 
 #end
@@ -860,53 +852,39 @@ downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-// VISUAL
 leftHitbox.alpha = 0.15;
 downHitbox.alpha = 0.15;
 upHitbox.alpha = 0.15;
 rightHitbox.alpha = 0.15;
 
-// MULTITOUCH REAL
 for (touch in FlxG.touches.list)
 {
-	var tx:Float = touch.x;
-	var ty:Float = touch.y;
+	var tx = touch.x;
+	var ty = touch.y;
 
 	// LEFT
-	if (tx >= leftHitbox.x
-		&& tx <= leftHitbox.x + leftHitbox.width
-		&& ty >= leftHitbox.y
-		&& ty <= leftHitbox.y + leftHitbox.height)
+	if (tx >= leftHitbox.x && tx <= leftHitbox.x + leftHitbox.width)
 	{
 		leftPressed = true;
 		leftHitbox.alpha = 0.35;
 	}
 
 	// DOWN
-	if (tx >= downHitbox.x
-		&& tx <= downHitbox.x + downHitbox.width
-		&& ty >= downHitbox.y
-		&& ty <= downHitbox.y + downHitbox.height)
+	else if (tx >= downHitbox.x && tx <= downHitbox.x + downHitbox.width)
 	{
 		downPressed = true;
 		downHitbox.alpha = 0.35;
 	}
 
 	// UP
-	if (tx >= upHitbox.x
-		&& tx <= upHitbox.x + upHitbox.width
-		&& ty >= upHitbox.y
-		&& ty <= upHitbox.y + upHitbox.height)
+	else if (tx >= upHitbox.x && tx <= upHitbox.x + upHitbox.width)
 	{
 		upPressed = true;
 		upHitbox.alpha = 0.35;
 	}
 
 	// RIGHT
-	if (tx >= rightHitbox.x
-		&& tx <= rightHitbox.x + rightHitbox.width
-		&& ty >= rightHitbox.y
-		&& ty <= rightHitbox.y + rightHitbox.height)
+	else if (tx >= rightHitbox.x && tx <= rightHitbox.x + rightHitbox.width)
 	{
 		rightPressed = true;
 		rightHitbox.alpha = 0.35;
@@ -914,6 +892,7 @@ for (touch in FlxG.touches.list)
 }
 
 #end
+	
 		switch (curStage)
 		{
 			case 'philly':
