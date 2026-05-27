@@ -182,6 +182,7 @@ class FreeplayState extends MusicBeatState
 		PlayState.storyDifficulty = curDifficulty;
 
 		FlxG.switchState(new PlayState());
+		FlxG.sound.music.stop();
 	}
 }
 
