@@ -54,7 +54,7 @@ class MainMenuState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = true;
 		add(bg);
-		//WiggleEffect.addWiggleEffect(bg, 2, 5);
+		WiggleEffect.addWiggleEffect(bg, 2, 5);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
