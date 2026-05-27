@@ -38,8 +38,9 @@ class FreeplayState extends MusicBeatState
 		isDebug = true;
 		#end
 
-		var bg:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuBGBlue__png);
+		var bg:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.menuDesat__png);
 		add(bg);
+		addWiggleEffect('bg', 2, 5);
 
 		grpSongs = new FlxTypedGroup<Alphabet>();
 		add(grpSongs);
