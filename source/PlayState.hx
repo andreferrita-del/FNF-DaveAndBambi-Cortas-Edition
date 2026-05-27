@@ -860,41 +860,53 @@ downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-// RESET VISUAL
+// VISUAL
 leftHitbox.alpha = 0.15;
 downHitbox.alpha = 0.15;
 upHitbox.alpha = 0.15;
 rightHitbox.alpha = 0.15;
 
-// REAL MULTITOUCH
+// MULTITOUCH REAL
 for (touch in FlxG.touches.list)
 {
-	// POINT FOR MOBILE
-	var point = touch.getPosition();
+	var tx:Float = touch.x;
+	var ty:Float = touch.y;
 
 	// LEFT
-	if (leftHitbox.overlapsPoint(point))
+	if (tx >= leftHitbox.x
+		&& tx <= leftHitbox.x + leftHitbox.width
+		&& ty >= leftHitbox.y
+		&& ty <= leftHitbox.y + leftHitbox.height)
 	{
 		leftPressed = true;
 		leftHitbox.alpha = 0.35;
 	}
 
 	// DOWN
-	if (downHitbox.overlapsPoint(point))
+	if (tx >= downHitbox.x
+		&& tx <= downHitbox.x + downHitbox.width
+		&& ty >= downHitbox.y
+		&& ty <= downHitbox.y + downHitbox.height)
 	{
 		downPressed = true;
 		downHitbox.alpha = 0.35;
 	}
 
 	// UP
-	if (upHitbox.overlapsPoint(point))
+	if (tx >= upHitbox.x
+		&& tx <= upHitbox.x + upHitbox.width
+		&& ty >= upHitbox.y
+		&& ty <= upHitbox.y + upHitbox.height)
 	{
 		upPressed = true;
 		upHitbox.alpha = 0.35;
 	}
 
 	// RIGHT
-	if (rightHitbox.overlapsPoint(point))
+	if (tx >= rightHitbox.x
+		&& tx <= rightHitbox.x + rightHitbox.width
+		&& ty >= rightHitbox.y
+		&& ty <= rightHitbox.y + rightHitbox.height)
 	{
 		rightPressed = true;
 		rightHitbox.alpha = 0.35;
