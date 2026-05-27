@@ -1476,38 +1476,53 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 				boyfriend.playAnim('idle');
 			}
 		}
-
 		playerStrums.forEach(function(spr:FlxSprite)
 {
 	switch (spr.ID)
 	{
 		case 0: // LEFT
 			if (leftP && spr.animation.curAnim.name != 'confirm')
+			{
 				spr.animation.play('pressed');
-			spr.resetAnim = 0;
+				spr.resetAnim = 0;
+			}
 			else if (!leftP && spr.animation.curAnim.name == 'pressed')
+			{
 				spr.animation.play('static');
+			}
 
 		case 1: // DOWN
 			if (downP && spr.animation.curAnim.name != 'confirm')
+			{
 				spr.animation.play('pressed');
-			spr.resetAnim = 0;
+				spr.resetAnim = 0;
+			}
 			else if (!downP && spr.animation.curAnim.name == 'pressed')
+			{
 				spr.animation.play('static');
+			}
 
 		case 2: // UP
 			if (upP && spr.animation.curAnim.name != 'confirm')
+			{
 				spr.animation.play('pressed');
-			spr.resetAnim = 0;
+				spr.resetAnim = 0;
+			}
 			else if (!upP && spr.animation.curAnim.name == 'pressed')
+			{
 				spr.animation.play('static');
+			}
 
 		case 3: // RIGHT
 			if (rightP && spr.animation.curAnim.name != 'confirm')
+			{
 				spr.animation.play('pressed');
-			spr.resetAnim = 0;
+				spr.resetAnim = 0;
+			}
 			else if (!rightP && spr.animation.curAnim.name == 'pressed')
+			{
 				spr.animation.play('static');
+			}
 	}
 
 	if (spr.animation.curAnim.name == 'confirm')
@@ -1521,7 +1536,8 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 		spr.centerOffsets();
 	}
 });
-	}
+
+		}
 
 	function noteMiss(direction:Int = 1):Void
 	{
@@ -1564,45 +1580,6 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 
 	function badNoteCheck()
 	{
-		// just double pasting this shit cuz fuk u
-		// REDO THIS SYSTEM!
-		var upP = controls.UP_P;
-		var rightP = controls.RIGHT_P;
-		var downP = controls.DOWN_P;
-		var leftP = controls.LEFT_P;
-
-		var gamepad = FlxG.gamepads.lastActive;
-		if (gamepad != null)
-		{
-			if (gamepad.anyJustPressed(["DPAD_LEFT", "LEFT_STICK_DIGITAL_LEFT", X]))
-			{
-				leftP = true;
-			}
-
-			if (gamepad.anyJustPressed(["DPAD_RIGHT", "LEFT_STICK_DIGITAL_RIGHT", B]))
-			{
-				rightP = true;
-			}
-
-			if (gamepad.anyJustPressed(['DPAD_UP', "LEFT_STICK_DIGITAL_UP", Y]))
-			{
-				upP = true;
-			}
-
-			if (gamepad.anyJustPressed(["DPAD_DOWN", "LEFT_STICK_DIGITAL_DOWN", A]))
-			{
-				downP = true;
-			}
-		}
-
-		if (leftP)
-			noteMiss(0);
-		if (upP)
-			noteMiss(2);
-		if (rightP)
-			noteMiss(3);
-		if (downP)
-			noteMiss(1);
 	}
 
 	function noteCheck(keyP:Bool, note:Note):Void
