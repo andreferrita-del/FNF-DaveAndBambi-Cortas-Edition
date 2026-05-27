@@ -485,7 +485,8 @@ var rightPressed:Bool = false;
 	#if mobile
 
 var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 4);
-var hitboxHeight:Int = Std.int(FlxG.height * 0.35);
+var hitboxHeight:Int = Std.int(hitboxWidth * 1.2); // 👈 FIXED
+
 var hitboxY:Int = Std.int(FlxG.height - hitboxHeight);
 
 // LEFT
