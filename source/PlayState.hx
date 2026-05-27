@@ -482,30 +482,32 @@ var rightPressed:Bool = false;
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-		#if mobile
+	#if mobile
 
 var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 4);
+var hitboxHeight:Int = Std.int(FlxG.height * 0.35);
+var hitboxY:Int = Std.int(FlxG.height - hitboxHeight);
 
-// ================= LEFT =================
-leftHitbox = new FlxSprite(0, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FF0000);
+// LEFT
+leftHitbox = new FlxSprite(0, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x44FF0000);
 leftHitbox.scrollFactor.set();
 leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
-// ================= DOWN =================
-downHitbox = new FlxSprite(hitboxWidth, 0).makeGraphic(hitboxWidth, FlxG.height, 0x4400FF00);
+// DOWN
+downHitbox = new FlxSprite(hitboxWidth, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x4400FF00);
 downHitbox.scrollFactor.set();
 downHitbox.cameras = [camHUD];
 add(downHitbox);
 
-// ================= UP =================
-upHitbox = new FlxSprite(hitboxWidth * 2, 0).makeGraphic(hitboxWidth, FlxG.height, 0x440000FF);
+// UP
+upHitbox = new FlxSprite(hitboxWidth * 2, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x440000FF);
 upHitbox.scrollFactor.set();
 upHitbox.cameras = [camHUD];
 add(upHitbox);
 
-// ================= RIGHT =================
-rightHitbox = new FlxSprite(hitboxWidth * 3, 0).makeGraphic(hitboxWidth, FlxG.height, 0x44FFFF00);
+// RIGHT
+rightHitbox = new FlxSprite(hitboxWidth * 3, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x44FFFF00);
 rightHitbox.scrollFactor.set();
 rightHitbox.cameras = [camHUD];
 add(rightHitbox);
