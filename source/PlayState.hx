@@ -870,7 +870,7 @@ rightHitbox.alpha = 0.15;
 for (touch in FlxG.touches.list)
 {
 	// POINT FOR MOBILE
-	var point = touch.getPosition(camHUD);
+	var point = touch.getPosition();
 
 	// LEFT
 	if (leftHitbox.overlapsPoint(point))
