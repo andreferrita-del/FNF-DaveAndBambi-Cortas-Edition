@@ -386,19 +386,6 @@ var rightPressed:Bool = false;
 
 			resetFastCar();
 			add(fastCar);
-				
-				
-		case 'deliriuned':
-	    camGame.zoom = 0.6;
-	    boyfriend.x += 900;
-		boyfriend.y += 600;
-
-		gf.x += 0;
-		gf.y += 130;
-
-		dad.x += -300;
-		dad.y += -600;
-	
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
