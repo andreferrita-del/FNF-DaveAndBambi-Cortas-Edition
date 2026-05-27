@@ -60,6 +60,7 @@ var rightHitbox:FlxSprite;
 	var leftPressed:Bool = false;
 var downPressed:Bool = false;
 var upPressed:Bool = false;
+var rightPressed:Bool = false;
 	#end
 
 	private var vocals:FlxSound;
@@ -841,7 +842,7 @@ add(rightHitbox);
 		#end
 
 			#if mobile
-
+var touch = FlxG.touches.getFirst();
 leftPressed = false;
 downPressed = false;
 upPressed = false;
