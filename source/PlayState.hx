@@ -270,37 +270,20 @@ var rightPressed:Bool = false;
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
 		curStage = 'deliriuned';
-		shader = new WiggleEffect();
-		var s = 2.0;
-		var a = 0.1;
-		var f = 5.0;
-		shader.uWaveAmplitude.value = [a];
-		shader.uFrequency.value = [f];
-		shader.uSpeed.value = [s];
-		shader.uTime.value = [0.0];
-			
 		var bgs:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.cone__png);
 		bgs.scrollFactor.set(0, 0);
 		bgs.screenCenter();
 		bgs.shader = shader;
 		add(bgs);
+		addWiggleEffect('bgs', 2, 5);
 		}else if (SONG.song.toLowerCase() == 'photosynthesis')
 		{
 		curStage = 'purpleyay';
-		shader = new WiggleEffect();
-		var s = 4.2;
-		var a = 0.1;
-		var f = 5.0;
-		shader.uWaveAmplitude.value = [a];
-		shader.uFrequency.value = [f];
-		shader.uSpeed.value = [s];
-		shader.uTime.value = [0.0];
-			
 		var photo:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.purpling__png);
 		photo.scrollFactor.set(0, 0);
 		photo.screenCenter();
-		photo.shader = shader;
 		add(photo);
+		addWiggleEffect('photo', 4.3, 5);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
@@ -386,6 +369,9 @@ var rightPressed:Bool = false;
 
 			resetFastCar();
 			add(fastCar);
+			case 'deliriuned':
+			dad.y += 250;
+			dad.x += 150;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -894,11 +880,8 @@ for (touch in FlxG.touches.list)
 					}
 				}
 			case 'deliriuned':
-				shader.uTime.value[0] += elapsed;
-				dad.y += Math.sin(elapsed * 2) * 0.5;
-		   case 'purpleyay':
-				shader.uTime.value[0] += elapsed;
-				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
+				dad.y = 100 + Math.sin(dadFloatTime * 2) * 25;
+				
 		}
 
 		super.update(elapsed);
