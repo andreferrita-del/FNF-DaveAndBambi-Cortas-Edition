@@ -484,8 +484,8 @@ var rightPressed:Bool = false;
 		doof.cameras = [camHUD];
 	#if mobile
 
-var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 6);
-var hitboxHeight:Int = Std.int(hitboxWidth * 1); // 👈 FIXED
+var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 7);
+var hitboxHeight:Int = Std.int(FlxG.height); // 👈 FIXED
 
 var hitboxY:Int = Std.int(FlxG.height - hitboxHeight);
 
