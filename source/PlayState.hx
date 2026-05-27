@@ -484,33 +484,42 @@ var rightPressed:Bool = false;
 		doof.cameras = [camHUD];
 	#if mobile
 
-var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 7);
-var hitboxHeight:Int = Std.int(FlxG.height); // 👈 FIXED
+// ================= HITBOX SIZE =================
+var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 6);
+var hitboxHeight:Int = Std.int(FlxG.height);
 
-var hitboxY:Int = Std.int(FlxG.height - hitboxHeight);
+var hitboxY:Int = 0;
 
-// LEFT
-leftHitbox = new FlxSprite(0, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x44FF0000);
+// ================= LEFT =================
+leftHitbox = new FlxSprite(0, hitboxY);
+leftHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x44FF0000);
 leftHitbox.scrollFactor.set();
 leftHitbox.cameras = [camHUD];
+leftHitbox.alpha = 0.15;
 add(leftHitbox);
 
-// DOWN
-downHitbox = new FlxSprite(hitboxWidth, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x4400FF00);
+// ================= DOWN =================
+downHitbox = new FlxSprite(hitboxWidth, hitboxY);
+downHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x4400FF00);
 downHitbox.scrollFactor.set();
 downHitbox.cameras = [camHUD];
+downHitbox.alpha = 0.15;
 add(downHitbox);
 
-// UP
-upHitbox = new FlxSprite(hitboxWidth * 2, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x440000FF);
+// ================= UP =================
+upHitbox = new FlxSprite(hitboxWidth * 2, hitboxY);
+upHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x440000FF);
 upHitbox.scrollFactor.set();
 upHitbox.cameras = [camHUD];
+upHitbox.alpha = 0.15;
 add(upHitbox);
 
-// RIGHT
-rightHitbox = new FlxSprite(hitboxWidth * 3, hitboxY).makeGraphic(hitboxWidth, hitboxHeight, 0x44FFFF00);
+// ================= RIGHT =================
+rightHitbox = new FlxSprite(hitboxWidth * 3, hitboxY);
+rightHitbox.makeGraphic(hitboxWidth, hitboxHeight, 0x44FFFF00);
 rightHitbox.scrollFactor.set();
 rightHitbox.cameras = [camHUD];
+rightHitbox.alpha = 0.15;
 add(rightHitbox);
 
 #end
@@ -846,27 +855,53 @@ add(rightHitbox);
 
 		#if mobile
 
-leftPressed = downPressed = upPressed = rightPressed = false;
+leftPressed = false;
+downPressed = false;
+upPressed = false;
+rightPressed = false;
 
-var touch = FlxG.touches.getFirst();
+// RESET VISUAL
+leftHitbox.alpha = 0.15;
+downHitbox.alpha = 0.15;
+upHitbox.alpha = 0.15;
+rightHitbox.alpha = 0.15;
 
-if (touch != null)
+// REAL MULTITOUCH
+for (touch in FlxG.touches.list)
 {
-	if (touch.overlaps(leftHitbox))
+	// POINT FOR MOBILE
+	var point = touch.getPosition(camHUD);
+
+	// LEFT
+	if (leftHitbox.overlapsPoint(point))
+	{
 		leftPressed = true;
+		leftHitbox.alpha = 0.35;
+	}
 
-	else if (touch.overlaps(downHitbox))
+	// DOWN
+	if (downHitbox.overlapsPoint(point))
+	{
 		downPressed = true;
+		downHitbox.alpha = 0.35;
+	}
 
-	else if (touch.overlaps(upHitbox))
+	// UP
+	if (upHitbox.overlapsPoint(point))
+	{
 		upPressed = true;
+		upHitbox.alpha = 0.35;
+	}
 
-	else if (touch.overlaps(rightHitbox))
+	// RIGHT
+	if (rightHitbox.overlapsPoint(point))
+	{
 		rightPressed = true;
+		rightHitbox.alpha = 0.35;
+	}
 }
 
 #end
-	
 		switch (curStage)
 		{
 			case 'philly':
