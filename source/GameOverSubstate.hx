@@ -38,39 +38,65 @@ class GameOverSubstate extends MusicBeatSubstate
 	}
 
 	override function update(elapsed:Float)
+{
+	super.update(elapsed);
+
+	#if mobile
+
+	for (touch in FlxG.touches.list)
 	{
-		super.update(elapsed);
-
-		if (controls.ACCEPT)
+		if (touch.justPressed)
 		{
-			endBullshit();
-		}
+			// 📱 LEFT SIDE = BACK
+			if (touch.x < FlxG.width * 0.25)
+			{
+				FlxG.sound.music.stop();
 
-		if (controls.BACK)
-		{
-			FlxG.sound.music.stop();
-
-			if (PlayState.isStoryMode)
-				FlxG.switchState(new StoryMenuState());
+				if (PlayState.isStoryMode)
+					FlxG.switchState(new StoryMenuState());
+				else
+					FlxG.switchState(new FreeplayState());
+			}
 			else
-				FlxG.switchState(new FreeplayState());
-		}
-
-		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
-		{
-			FlxG.camera.follow(camFollow, LOCKON, 0.01);
-		}
-
-		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
-		{
-			FlxG.sound.playMusic('assets/music/gameOver' + TitleState.soundExt);
-		}
-
-		if (FlxG.sound.music.playing)
-		{
-			Conductor.songPosition = FlxG.sound.music.time;
+			{
+				// 📱 REST OF SCREEN = RESTART
+				endBullshit();
+			}
 		}
 	}
+
+	#end
+
+	if (controls.ACCEPT)
+	{
+		endBullshit();
+	}
+
+	if (controls.BACK)
+	{
+		FlxG.sound.music.stop();
+
+		if (PlayState.isStoryMode)
+			FlxG.switchState(new StoryMenuState());
+		else
+			FlxG.switchState(new FreeplayState());
+	}
+
+	if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
+	{
+		FlxG.camera.follow(camFollow, LOCKON, 0.01);
+	}
+
+	if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
+	{
+		FlxG.sound.playMusic('assets/music/gameOver' + TitleState.soundExt);
+	}
+
+	if (FlxG.sound.music.playing)
+	{
+		Conductor.songPosition = FlxG.sound.music.time;
+	}
+}
 
 	override function beatHit()
 	{
