@@ -55,7 +55,7 @@ class WiggleEffect extends FlxShader
 
 	// ADD WIGGLE EFFECT
 	public static function addWiggleEffect(
-		object:String,  // NUMBER 2
+		object:FlxSprite,  // NUMBER 2
 		speed:Float,     // NUMBER 3
 		frequency:Float  // NUMBER 4
 	):WiggleEffect
