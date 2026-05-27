@@ -859,7 +859,7 @@ rightHitbox.alpha = 0.15;
 
 for (touch in FlxG.touches.list)
 {
-	var tx = touch.x;
+	var tx = touch.x - 150;
 	var ty = touch.y;
 
 	// LEFT
