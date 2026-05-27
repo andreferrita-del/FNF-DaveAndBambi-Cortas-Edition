@@ -485,7 +485,7 @@ var rightPressed:Bool = false;
 	#if mobile
 
 // ================= HITBOX SIZE =================
-var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 6);
+var hitboxWidth:Int = Std.int(FlxG.stage.stageWidth / 8);
 var hitboxHeight:Int = Std.int(FlxG.height);
 
 var hitboxY:Int = 0;
