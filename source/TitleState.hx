@@ -198,7 +198,7 @@ class TitleState extends MusicBeatState
 		#if !mobile
 		var fullText:String = Assets.getText('mods/IntroMod/_append/data/IntroText.txt');
 		#else
-		var fullText:String = Assets.getText('assets/data/IntroText.txt');
+		var fullText:String = Assets.getText('assets/android/IntroText.txt');
 		#end
 		
 
