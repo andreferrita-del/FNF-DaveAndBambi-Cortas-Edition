@@ -1615,14 +1615,22 @@ var rightR = controls.RIGHT_R || (!rightPressed && controls.RIGHT);
 				case 0:
 					boyfriend.playAnim('singLEFT');
 			}
+				playerStrums.forEach(function(spr:FlxSprite)
+{
+	if (Math.abs(note.noteData) == spr.ID)
+	{
+		if (spr.animation.curAnim.name != 'confirm')
+		{
+			spr.animation.play('confirm', true);
+		}
+	}
 
-			playerStrums.forEach(function(spr:FlxSprite)
-			{
-				if (Math.abs(note.noteData) == spr.ID)
-				{
-					spr.animation.play('confirm', true);
-				}
-			});
+	if (spr.animation.curAnim.name == 'confirm'
+		&& spr.animation.curAnim.finished)
+	{
+		spr.animation.play('static');
+	}
+});
 
 			note.wasGoodHit = true;
 			vocals.volume = 1;
