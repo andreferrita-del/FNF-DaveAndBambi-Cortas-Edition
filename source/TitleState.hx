@@ -114,11 +114,13 @@ class TitleState extends MusicBeatState
 		Conductor.changeBPM(102);
 		persistentUpdate = true;
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+		var bg:FlxSprite = new FlxSprite();
 		// bg.antialiasing = true;
 		// bg.setGraphicSize(Std.int(bg.width * 0.6));
 		// bg.updateHitbox();
+		bg.loadGraphic('assets/images/menuBG.png');
 		add(bg);
+		addWiggleEffect('bg', 2, 5);
 
 		logoBl = new FlxSprite(-150, -100);
 		logoBl.frames = FlxAtlasFrames.fromSparrow(AssetPaths.logoBumpin__png, AssetPaths.logoBumpin__xml);
@@ -193,7 +195,12 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
+		#if !mobile
 		var fullText:String = Assets.getText('mods/IntroMod/_append/data/IntroText.txt');
+		#else
+		var fullText:String = Assets.getText('assets/data/IntroText.txt');
+		#end
+		
 
 		var firstArray:Array<String> = fullText.split('\n');
 		var swagGoodArray:Array<Array<String>> = [];
