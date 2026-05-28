@@ -305,7 +305,7 @@ var rightPressed:Bool = false;
 		photo.screenCenter();
 		photo.shader = shader;
 		add(photo);
-		}else if (SONG.song.toLowerCase() == 'pessimistic')
+		}else if (SONG.song.toLowerCase() == 'pessimistic' || SONG.song.toLowerCase() == 'taimuresu')
 		{
 		shader = new WiggleEffect();
 		curStage = 'hell';
@@ -917,7 +917,7 @@ for (touch in FlxG.touches.list)
 	   }else if (SONG.song.toLowerCase() == 'delirium')
        {
 	    dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
-	   }else if (SONG.song.toLowerCase() == 'pessimistic'){
+	   }else if (SONG.song.toLowerCase() == 'pessimistic' || SONG.song.toLowerCase() == 'taimuresu'){
 		dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
        }
 		
