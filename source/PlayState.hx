@@ -301,6 +301,22 @@ var rightPressed:Bool = false;
 		photo.screenCenter();
 		photo.shader = shader;
 		add(photo);
+		}else if (SONG.song.toLowerCase() == 'pessimistic')
+		{
+		shader = new WiggleEffect();
+		var s = 4.3;
+		var a = 0.1;
+		var f = 5.0;
+		shader.uWaveAmplitude.value = [a];
+		shader.uFrequency.value = [f];
+		shader.uSpeed.value = [s];
+		shader.uTime.value = [0.0];
+			
+		var bs:FlxSprite = new FlxSprite(-1500, -300).loadGraphic(AssetPaths.hellBG__png);
+		bs.scrollFactor.set(0, 0);
+		bs.screenCenter();
+		bs.shader = shader;
+		add(bss);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
