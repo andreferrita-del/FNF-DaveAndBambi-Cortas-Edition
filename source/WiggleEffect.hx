@@ -48,10 +48,12 @@ class WiggleEffect extends FlxShader
 	}
 
 	// UPDATE TIMER
-	public function update(elapsed:Float)
-	{
-		uTime.value[0] += elapsed;
-	}
+	override public function __updateGL():Void
+   {
+	super.__updateGL();
+
+	uTime.value[0] += FlxG.elapsed;
+   }
 
 	// ADD WIGGLE EFFECT
 	public static function addWiggleEffect(
