@@ -405,9 +405,10 @@ var rightPressed:Bool = false;
 			add(fastCar);
 
 			case 'hell':
-				dad.scale.set(2.55, 2.55);
+				dad.scale.set(2.15, 2.15);
 				dad.updateHitbox();
 				dad.y += 200;
+				dad.x += 300;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
