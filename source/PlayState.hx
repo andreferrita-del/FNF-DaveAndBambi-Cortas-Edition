@@ -632,7 +632,7 @@ rightHitbox.scrollFactor.set(0, 0);
 		lastReportedPlayheadPosition = 0;
 
 		if (!paused)
-			FlxG.sound.playMusic("assets/music/" + SONG.song + "_Inst" + TitleState.soundExt, 1, false);
+			FlxG.sound.playMusic("assets/songs/" + SONG.song + "_Inst" + TitleState.soundExt, 1, false);
 		FlxG.sound.music.onComplete = endSong;
 		vocals.play();
 	}
@@ -649,7 +649,7 @@ rightHitbox.scrollFactor.set(0, 0);
 
 	if (SONG.needsVoices)
 		vocals = new FlxSound().loadEmbedded(
-			"assets/music/" + curSong + "_Voices" + TitleState.soundExt
+			"assets/songs/" + curSong + "_Voices" + TitleState.soundExt
 		);
 	else
 		vocals = new FlxSound();

@@ -59,7 +59,7 @@
 
 	<!-- Icon -->
 	<icon path="art/icon.png" />
-	<assets path="assets/android/" if="android" />
+	<assets path="assets/songs/" />
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
