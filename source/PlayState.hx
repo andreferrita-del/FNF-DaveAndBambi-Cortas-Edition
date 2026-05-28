@@ -908,10 +908,15 @@ for (touch in FlxG.touches.list)
 }
 
 #end
-	    if (SONG.song.toLowerCase() == 'delirium' || SONG.song.toLowerCase() == 'pessimistic' || SONG.song.toLowerCase() == 'photosynthesis')
-{
-	dad.y = 200 + Math.sin(Conductor.songPosition / 500) * 20;
-}
+	    if (SONG.song.toLowerCase() == 'photosynthesis')
+       {
+	    dad.y = 200 + Math.sin(Conductor.songPosition / 500) * 20;
+	   }else if (SONG.song.toLowerCase() == 'delirium')
+       {
+	    dad.y = 700 + Math.sin(Conductor.songPosition / 500) * 20;
+	   }else if (SONG.song.toLowerCase() == 'pessimistic'){
+		dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
+       }
 		
 		switch (curStage)
 		{
