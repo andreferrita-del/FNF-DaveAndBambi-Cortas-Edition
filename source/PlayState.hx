@@ -486,53 +486,39 @@ var rightPressed:Bool = false;
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 	#if mobile
-var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
-// carrega atlas UMA vez
-var hitboxAtlas = FlxAtlasFrames.fromSparrow(
-	"assets/android/hitbox.png",
-	"assets/android/hitbox.xml"
-);
+var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
 // LEFT
 leftHitbox = new FlxSprite(0, 0);
-leftHitbox.frames = hitboxAtlas;
-leftHitbox.animation.addByPrefix("leftAnim", "left", 24, true);
-leftHitbox.animation.play("leftAnim");
+leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44C24B99);
 leftHitbox.alpha = 0.25;
 leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
 // DOWN
 downHitbox = new FlxSprite(hitboxWidth, 0);
-downHitbox.frames = hitboxAtlas;
-downHitbox.animation.addByPrefix("downAnim", "down", 24, true);
-downHitbox.animation.play("downAnim");
+downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4400FFFF);
 downHitbox.alpha = 0.25;
 downHitbox.cameras = [camHUD];
 add(downHitbox);
 
 // UP
 upHitbox = new FlxSprite(hitboxWidth * 2, 0);
-upHitbox.frames = hitboxAtlas;
-upHitbox.animation.addByPrefix("upAnim", "up", 24, true);
-upHitbox.animation.play("upAnim");
+upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4412FA05);
 upHitbox.alpha = 0.25;
 upHitbox.cameras = [camHUD];
 add(upHitbox);
 
 // RIGHT
 rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
-rightHitbox.frames = hitboxAtlas;
-rightHitbox.animation.addByPrefix("rightAnim", "right", 24, true);
-rightHitbox.animation.play("rightAnim");
+rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44F9393F);
 rightHitbox.alpha = 0.25;
 rightHitbox.cameras = [camHUD];
 add(rightHitbox);
 
 #end
 	
-
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
 		// UI_camera.zoom = 1;
