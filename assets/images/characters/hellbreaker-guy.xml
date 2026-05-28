@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="hellbreaker-guy.png">
+<SubTexture name="hellbreaker-guy idle0000" x="0" y="0" width="763" height="631" frameX="-102" frameY="-227" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0001" x="0" y="0" width="763" height="631" frameX="-102" frameY="-227" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0002" x="763" y="0" width="719" height="696" frameX="-135" frameY="-170" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0003" x="763" y="0" width="719" height="696" frameX="-135" frameY="-170" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0004" x="1482" y="0" width="731" height="743" frameX="-158" frameY="-124" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0005" x="1482" y="0" width="731" height="743" frameX="-158" frameY="-124" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0006" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0007" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0008" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0009" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0010" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy idle0011" x="0" y="743" width="755" height="770" frameX="-125" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy down0000" x="755" y="743" width="799" height="452" frameX="-118" frameY="-247" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy down0001" x="1554" y="743" width="681" height="481" frameX="-155" frameY="-213" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy left0000" x="0" y="1513" width="501" height="695" frameX="-1" frameY="-140" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy left0001" x="501" y="1513" width="606" height="758" frameX="-69" frameY="-113" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy right0000" x="1107" y="1513" width="954" height="667" frameX="0" frameY="-175" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy right0001" x="0" y="2271" width="674" height="667" frameX="-253" frameY="-140" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy up0000" x="674" y="2271" width="536" height="793" frameX="-134" frameY="-87" frameWidth="954" frameHeight="1007" />
+<SubTexture name="hellbreaker-guy up0001" x="1210" y="2271" width="608" height="780" frameX="-97" frameY="-113" frameWidth="954" frameHeight="1007" />
+</TextureAtlas>
