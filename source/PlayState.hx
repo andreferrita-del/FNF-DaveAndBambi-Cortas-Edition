@@ -304,6 +304,7 @@ var rightPressed:Bool = false;
 		}else if (SONG.song.toLowerCase() == 'pessimistic')
 		{
 		shader = new WiggleEffect();
+		curStage = 'hell';
 		var s = 4.3;
 		var a = 0.1;
 		var f = 5.0;
@@ -402,6 +403,11 @@ var rightPressed:Bool = false;
 
 			resetFastCar();
 			add(fastCar);
+
+			case 'hell':
+				dad.scale.set(2.55, 2.55);
+				dad.updateHitbox();
+				dad.y += 200;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -910,8 +916,9 @@ for (touch in FlxG.touches.list)
 				}
 			case 'deliriuned':
 				shader.uTime.value[0] += elapsed;
-				dad.y += Math.sin(elapsed * 2) * 0.5;
 		   case 'purpleyay':
+				shader.uTime.value[0] += elapsed;
+			case 'hell':
 				shader.uTime.value[0] += elapsed;
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
