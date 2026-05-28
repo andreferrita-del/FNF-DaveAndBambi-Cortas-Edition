@@ -475,29 +475,37 @@ var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
 // LEFT
 leftHitbox = new FlxSprite(0, 0);
-leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44C24B99);
-leftHitbox.alpha = 0.15;
+leftHitbox.frames = getSparrowAtlas("assets/android/hitbox");
+leftHitbox.animation.addByPrefix("hitboxLeft", "left", 24, true);
+leftHitbox.animation.play("hitboxLeft");
+leftHitbox.alpha = 0.25;
 leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
 // DOWN
 downHitbox = new FlxSprite(hitboxWidth, 0);
-downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4400FFFF);
-downHitbox.alpha = 0.15;
+downHitbox.frames = getSparrowAtlas("assets/android/hitbox");
+downHitbox.animation.addByPrefix("hitboxLef", "down", 24, true);
+downHitbox.animation.play("hitboxLef");
+downHitbox.alpha = 0.25;
 downHitbox.cameras = [camHUD];
 add(downHitbox);
 
 // UP
 upHitbox = new FlxSprite(hitboxWidth * 2, 0);
-upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4412FA05);
-upHitbox.alpha = 0.15;
+upHitbox.frames = getSparrowAtlas("assets/android/hitbox");
+upHitbox.animation.addByPrefix("hitboxLt", "up", 24, true);
+upHitbox.animation.play("hitboxLt");
+upHitbox.alpha = 0.25;
 upHitbox.cameras = [camHUD];
 add(upHitbox);
 
 // RIGHT
 rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
-rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44F9393F);
-rightHitbox.alpha = 0.15;
+rightHitbox.frames = getSparrowAtlas("assets/android/hitbox");
+rightHitbox.animation.addByPrefix("hitboxft", "right", 24, true);
+rightHitbox.animation.play("hitboxft");
+rightHitbox.alpha = 0.25;
 rightHitbox.cameras = [camHUD];
 add(rightHitbox);
 
