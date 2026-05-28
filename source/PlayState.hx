@@ -490,8 +490,8 @@ var hitboxWidth:Int = Std.int(FlxG.width / 4);
 
 // carrega atlas UMA vez
 var hitboxAtlas = FlxAtlasFrames.fromSparrow(
-	BitmapData.fromFile("assets/android/hitbox.png"),
-	File.getContent("assets/android/hitbox.xml")
+	"assets/android/hitbox.png",
+	"assets/android/hitbox.xml"
 );
 
 // LEFT
