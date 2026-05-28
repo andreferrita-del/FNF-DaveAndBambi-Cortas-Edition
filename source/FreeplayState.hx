@@ -15,7 +15,7 @@ import WiggleEffect;
 
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic"];
+	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic", "Taimuresu"];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -256,6 +256,9 @@ class FreeplayState extends MusicBeatState
 				targetColor = FlxColor.PURPLE;
 
 			case 3:
+				targetColor = FlxColor.RED;
+				
+			case 4:
 				targetColor = FlxColor.RED;
 		}
 
