@@ -316,7 +316,7 @@ var rightPressed:Bool = false;
 		bs.scrollFactor.set(0, 0);
 		bs.screenCenter();
 		bs.shader = shader;
-		add(bss);
+		add(bs);
 		}else{
 			curStage = 'stage';
 			var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(AssetPaths.stageback__png);
@@ -486,41 +486,46 @@ var rightPressed:Bool = false;
 		scoreTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 	#if mobile
-
 var hitboxWidth:Int = Std.int(FlxG.width / 4);
+
+// carrega atlas UMA vez
+var hitboxAtlas = FlxAtlasFrames.fromSparrow(
+	BitmapData.fromFile("assets/android/hitbox.png"),
+	File.getContent("assets/android/hitbox.xml")
+);
 
 // LEFT
 leftHitbox = new FlxSprite(0, 0);
-leftHitbox.frames = getSparrowAtlas("assets/android/hitbox");
-leftHitbox.animation.addByPrefix("hitboxLeft", "left", 24, true);
-leftHitbox.animation.play("hitboxLeft");
+leftHitbox.frames = hitboxAtlas;
+leftHitbox.animation.addByPrefix("leftAnim", "left", 24, true);
+leftHitbox.animation.play("leftAnim");
 leftHitbox.alpha = 0.25;
 leftHitbox.cameras = [camHUD];
 add(leftHitbox);
 
 // DOWN
 downHitbox = new FlxSprite(hitboxWidth, 0);
-downHitbox.frames = getSparrowAtlas("assets/android/hitbox");
-downHitbox.animation.addByPrefix("hitboxLef", "down", 24, true);
-downHitbox.animation.play("hitboxLef");
+downHitbox.frames = hitboxAtlas;
+downHitbox.animation.addByPrefix("downAnim", "down", 24, true);
+downHitbox.animation.play("downAnim");
 downHitbox.alpha = 0.25;
 downHitbox.cameras = [camHUD];
 add(downHitbox);
 
 // UP
 upHitbox = new FlxSprite(hitboxWidth * 2, 0);
-upHitbox.frames = getSparrowAtlas("assets/android/hitbox");
-upHitbox.animation.addByPrefix("hitboxLt", "up", 24, true);
-upHitbox.animation.play("hitboxLt");
+upHitbox.frames = hitboxAtlas;
+upHitbox.animation.addByPrefix("upAnim", "up", 24, true);
+upHitbox.animation.play("upAnim");
 upHitbox.alpha = 0.25;
 upHitbox.cameras = [camHUD];
 add(upHitbox);
 
 // RIGHT
 rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
-rightHitbox.frames = getSparrowAtlas("assets/android/hitbox");
-rightHitbox.animation.addByPrefix("hitboxft", "right", 24, true);
-rightHitbox.animation.play("hitboxft");
+rightHitbox.frames = hitboxAtlas;
+rightHitbox.animation.addByPrefix("rightAnim", "right", 24, true);
+rightHitbox.animation.play("rightAnim");
 rightHitbox.alpha = 0.25;
 rightHitbox.cameras = [camHUD];
 add(rightHitbox);
@@ -863,10 +868,10 @@ downPressed = false;
 upPressed = false;
 rightPressed = false;
 
-leftHitbox.alpha = 0.15;
-downHitbox.alpha = 0.15;
-upHitbox.alpha = 0.15;
-rightHitbox.alpha = 0.15;
+leftHitbox.alpha = 0.25;
+downHitbox.alpha = 0.25;
+upHitbox.alpha = 0.25;
+rightHitbox.alpha = 0.25;
 
 for (touch in FlxG.touches.list)
 {
