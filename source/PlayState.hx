@@ -923,13 +923,22 @@ for (touch in FlxG.touches.list)
 
 		if (SONG.song.toLowerCase() == 'taimuresu'){
 		for (i in 0...strumLineNotes.length)
-  {
+{
 	strumLineNotes.members[i].angle += 4;
 
 	strumLineNotes.members[i].x += Math.sin((Conductor.songPosition / 120) + (i * 2)) * 4;
 
 	strumLineNotes.members[i].y += Math.cos((Conductor.songPosition / 150) + (i * 2)) * 4;
-   }
+}
+
+notes.forEachAlive(function(daNote:Note)
+{
+	daNote.angle = strumLineNotes.members[daNote.noteData].angle;
+
+	daNote.x += Math.sin((Conductor.songPosition / 120) + (daNote.noteData * 2)) * 4;
+
+	//daNote.y += Math.cos((Conductor.songPosition / 150) + (daNote.noteData * 2)) * 4;
+});
 		}
 		
 		switch (curStage)
