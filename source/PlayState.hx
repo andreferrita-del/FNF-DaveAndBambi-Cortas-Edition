@@ -117,8 +117,8 @@ var rightPressed:Bool = false;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
 
-	var floatTime:Float = 0;
-    var dadStartY:Float = 0;
+	//var floatTime:Float = 0;
+    //var dadStartY:Float = 0;
 	
 
 	public static var campaignScore:Int = 0;
@@ -857,7 +857,7 @@ rightHitbox.scrollFactor.set(0, 0);
 
 	override public function update(elapsed:Float)
 	{
-		floatTime += elapsed;
+		//floatTime += elapsed;
 		#if !debug
 		perfectMode = false;
 		#end
@@ -910,7 +910,9 @@ for (touch in FlxG.touches.list)
 
 #end
 	    if (SONG.song.toLowerCase() == 'delirium' || SONG.song.toLowerCase() == 'hellbreaker' || SONG.song.toLowerCase() == 'photosynthesis')
-		{dad.y = dadStartY + Math.sin(floatTime * 2) * 20;}
+		{
+			dad.y = dad.y + Math.sin(elapsed * 2) * 20;
+		}
 		
 		switch (curStage)
 		{
