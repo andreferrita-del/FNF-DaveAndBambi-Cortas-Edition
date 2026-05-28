@@ -920,6 +920,17 @@ for (touch in FlxG.touches.list)
 	   }else if (SONG.song.toLowerCase() == 'pessimistic' || SONG.song.toLowerCase() == 'taimuresu'){
 		dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
        }
+
+		if (SONG.song.toLowerCase() == 'taimuresu'){
+		for (i in 0...strumLineNotes.length)
+  {
+	strumLineNotes.members[i].angle += 4;
+
+	strumLineNotes.members[i].x += Math.sin((Conductor.songPosition / 120) + (i * 2)) * 4;
+
+	strumLineNotes.members[i].y += Math.cos((Conductor.songPosition / 150) + (i * 2)) * 4;
+   }
+		}
 		
 		switch (curStage)
 		{
