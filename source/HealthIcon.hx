@@ -15,6 +15,7 @@ class HealthIcon extends FlxSprite
 		animation.add('gf', [2], 0, false, isPlayer);
 		animation.add('conbi', [3, 4], 0, false, isPlayer);
 		animation.add('hortas', [5, 6], 0, false, isPlayer);
+		animation.add('hellbreaker', [7, 8], 0, false, isPlayer);
 		animation.play(char);
 		scrollFactor.set();
 	}
