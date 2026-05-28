@@ -411,6 +411,9 @@ var rightPressed:Bool = false;
 			case 'hell':
 				dad.y -= 200;
 				dad.x -= 100;
+				
+			case 'deliriuned':
+			dad.x -= 100;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -913,7 +916,7 @@ for (touch in FlxG.touches.list)
 	    dad.y = 200 + Math.sin(Conductor.songPosition / 500) * 20;
 	   }else if (SONG.song.toLowerCase() == 'delirium')
        {
-	    dad.y = 700 + Math.sin(Conductor.songPosition / 500) * 20;
+	    dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
 	   }else if (SONG.song.toLowerCase() == 'pessimistic'){
 		dad.y = -200 + Math.sin(Conductor.songPosition / 500) * 20;
        }
