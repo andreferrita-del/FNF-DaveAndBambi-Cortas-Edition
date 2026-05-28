@@ -131,8 +131,7 @@ var rightPressed:Bool = false;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
-		dadStartY = dad.y;
-
+		
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		
