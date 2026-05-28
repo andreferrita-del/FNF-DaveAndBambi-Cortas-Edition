@@ -405,8 +405,8 @@ var rightPressed:Bool = false;
 			add(fastCar);
 
 			case 'hell':
-				dad.y += 200;
-				dad.x -= 300;
+				dad.y -= 200;
+				dad.x -= 100;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
@@ -521,6 +521,10 @@ rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44F9393F);
 rightHitbox.alpha = 0.25;
 rightHitbox.cameras = [camHUD];
 add(rightHitbox);
+leftHitbox.scrollFactor.set(0, 0);
+downHitbox.scrollFactor.set(0, 0);
+upHitbox.scrollFactor.set(0, 0);
+rightHitbox.scrollFactor.set(0, 0);
 
 #end
 	
