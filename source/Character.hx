@@ -47,6 +47,24 @@ class Character extends FlxSprite
 				
 				playAnim('idle');
 				
+			case "hellbreaker":
+				frames = FlxAtlasFrames.fromSparrow(
+					basePath + "hellbreaker-guy.png",
+					basePath + "hellbreaker-guy.xml"
+				);
+				animation.addByPrefix('idle', 'hellbreaker-guy idle', 24);
+				animation.addByPrefix('singUP', 'hellbreaker-guy up', 24);
+				animation.addByPrefix('singRIGHT', 'hellbreaker-guy right', 24);
+				animation.addByPrefix('singDOWN', 'hellbreaker-guy down', 24);
+				animation.addByPrefix('singLEFT', 'hellbreaker-guy left', 24);
+				addOffset("singUP", -80, 10);
+				addOffset("idle", 0, 0);
+				addOffset("singRIGHT", -150, -100);
+				addOffset("singLEFT", -143, -13);
+				addOffset("singDOWN", -50, -320);
+
+				playAnim('idle');
+				
 			case "gf":
 				frames = FlxAtlasFrames.fromSparrow(
 					basePath + "GF_assets.png",
