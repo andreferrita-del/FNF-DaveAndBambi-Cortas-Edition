@@ -59,8 +59,8 @@
 
 	<!-- Icon -->
 	<icon path="art/icon.png" />
-	<assets path="assets/songs/" />
-
+	
+    <assets path="assets/songs" include="*.ogg" />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="lime" />
