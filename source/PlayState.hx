@@ -274,6 +274,7 @@ var rightPressed:Bool = false;
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
 		curStage = 'deliriuned';
+		defaultCamZoom = 0.7;
 		shader = new WiggleEffect();
 		var s = 2.0;
 		var a = 0.1;
@@ -413,7 +414,7 @@ var rightPressed:Bool = false;
 				dad.x -= 100;
 				
 			case 'deliriuned':
-			dad.x -= 100;
+			dad.x -= 300;
 	    }
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
