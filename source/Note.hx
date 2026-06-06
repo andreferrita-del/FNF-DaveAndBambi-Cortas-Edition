@@ -43,7 +43,34 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var tex = FlxAtlasFrames.fromSparrow(AssetPaths.NOTE_assets__png, AssetPaths.NOTE_assets__xml);
+		var song = SONG.song.toLowerCase();
+var tex:FlxAtlasFrames;
+
+if (song == "delirium")
+{
+    tex = FlxAtlasFrames.fromSparrow(
+        AssetPaths.oppositionbsidenote__png,
+        AssetPaths.oppositionbsidenote__xml
+    );
+}
+else if (
+    song == "photosynthesis"
+    || song == "pessimistic"
+    || song == "taimuresu"
+)
+{
+    tex = FlxAtlasFrames.fromSparrow(
+        AssetPaths.NOTE_assets_3D__png,
+        AssetPaths.NOTE_assets_3D__xml
+    );
+}
+else
+{
+    tex = FlxAtlasFrames.fromSparrow(
+        AssetPaths.NOTE_assets__png,
+        AssetPaths.NOTE_assets__xml
+    );
+}
 		frames = tex;
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
