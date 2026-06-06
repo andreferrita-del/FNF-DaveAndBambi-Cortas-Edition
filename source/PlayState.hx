@@ -534,6 +534,9 @@ upHitbox.scrollFactor.set(0, 0);
 rightHitbox.scrollFactor.set(0, 0);
 
 #end
+	if (SONG.song.toLowerCase() == 'taimuresu'){
+		BlackFade.addBlackFade(this, camHUD, 10);
+	}
 	
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -613,6 +616,10 @@ rightHitbox.scrollFactor.set(0, 0);
 					});
 					FlxG.sound.play('assets/sounds/introGo' + TitleState.soundExt, 0.6);
 				case 4:
+					if (SONG.song.toLowerCase() == 'taimuresu'){
+	                  BlackFade.addBlackFade(this, camHUD, 10);
+	                }
+	
 			}
 
 			swagCounter += 1;
