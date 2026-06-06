@@ -1059,6 +1059,11 @@ notes.forEachAlive(function(daNote:Note)
 		{
 			if (curBeat % 4 == 0)
 			{
+				if (SONG.song.toLowerCase() == 'taimuresu'){
+					if (curBeat == 128){
+					FlxG.camera.flash(0xFF000000, 1);
+					}
+				}
 				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
 			}
 
