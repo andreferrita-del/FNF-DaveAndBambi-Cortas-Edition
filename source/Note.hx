@@ -3,6 +3,7 @@ package;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.util.FlxColor;
+import Song.SwagSong;
 
 class Note extends FlxSprite
 {
