@@ -45,7 +45,7 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var song = SONG.song.toLowerCase();
+		var song = SONG != null ? SONG.song.toLowerCase() : "";
 var tex:FlxAtlasFrames;
 
 if (song == "delirium")
@@ -113,7 +113,7 @@ else
 
 		if (isSustainNote && prevNote != null)
 		{
-			noteScore * 0.2;
+			noteScore *= 0.2;
 			alpha = 0.6;
 
 			x += width / 2;
