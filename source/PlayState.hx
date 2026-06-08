@@ -757,7 +757,7 @@ rightHitbox.scrollFactor.set(0, 0);
 		{
 			FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
-			var arrTex = FlxAtlasFrames.fromSparrow(AssetPaths.NOTE_assets__png, AssetPaths.NOTE_assets__xml);
+			var arrTex = FlxAtlasFrames.fromSparrow(AssetPaths.NOTE_assets_3D__png, AssetPaths.NOTE_assets_3D__xml);
 			babyArrow.frames = arrTex;
 			babyArrow.animation.addByPrefix('green', 'arrowUP');
 			babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
