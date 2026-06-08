@@ -135,16 +135,7 @@ class Note extends FlxSprite
 		var tex:FlxAtlasFrames;
 		var song = SONG != null ? SONG.song.toLowerCase() : "";
 
-		// Determina qual skin usar baseado na música ou no noteSkin customizado
-		if (noteSkin != "default")
-		{
-			var skinName = noteSkin;
-			tex = FlxAtlasFrames.fromSparrow(
-				AssetPaths.getPNG(skinName),
-				AssetPaths.getXML(skinName)
-			);
-		}
-		else if (song == "delirium")
+		if (song == "delirium")
 		{
 			tex = FlxAtlasFrames.fromSparrow(
 				AssetPaths.oppositionbsidenote__png,
