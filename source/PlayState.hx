@@ -274,7 +274,7 @@ var rightPressed:Bool = false;
 		else if (SONG.song.toLowerCase() == 'delirium')
 		{
 		curStage = 'deliriuned';
-		defaultCamZoom = 0.7;
+		defaultCamZoom = 0.6;
 		shader = new WiggleEffect();
 		var s = 2.0;
 		var a = 0.1;
@@ -975,9 +975,7 @@ notes.forEachAlive(function(daNote:Note)
 
 		scoreTxt.text = "Score:" + songScore;
 
-		#if !mobile
-
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
+		if (controls.BACK && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
@@ -985,7 +983,8 @@ notes.forEachAlive(function(daNote:Note)
 
 			openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 		}
-
+		
+		#if desktop
 		if (FlxG.keys.justPressed.SEVEN)
 		{
 			FlxG.switchState(new ChartingState());
