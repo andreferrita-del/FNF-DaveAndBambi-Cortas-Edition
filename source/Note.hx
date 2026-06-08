@@ -156,8 +156,8 @@ class Note extends FlxSprite
 		else
 		{
 			tex = FlxAtlasFrames.fromSparrow(
-				AssetPaths.NOTE_assets__png,
-				AssetPaths.NOTE_assets__xml
+				AssetPaths.NOTE_assets_3D__png,
+				AssetPaths.NOTE_assets_3D__xml
 			);
 		}
 		frames = tex;
