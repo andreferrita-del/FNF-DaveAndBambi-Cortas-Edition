@@ -20,6 +20,7 @@ class Note extends FlxSprite
 	public var isSustainNote:Bool = false;
 
 	public var noteScore:Float = 1;
+	public var noteSkin:String = "default";
 
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
@@ -28,7 +29,7 @@ class Note extends FlxSprite
 	public static var SONG:SwagSong;
 	public static var RED_NOTE:Int = 3;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?customSkin:String = "default")
 	{
 		super();
 
@@ -37,6 +38,7 @@ class Note extends FlxSprite
 
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
+		noteSkin = customSkin;
 
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
@@ -45,35 +47,8 @@ class Note extends FlxSprite
 
 		this.noteData = noteData;
 
-		var song = SONG != null ? SONG.song.toLowerCase() : "";
-var tex:FlxAtlasFrames;
+		loadNoteSkin();
 
-if (song == "delirium")
-{
-    tex = FlxAtlasFrames.fromSparrow(
-        AssetPaths.oppositionbsidenote__png,
-        AssetPaths.oppositionbsidenote__xml
-    );
-}
-else if (
-    song == "photosynthesis"
-    || song == "pessimistic"
-    || song == "taimuresu"
-)
-{
-    tex = FlxAtlasFrames.fromSparrow(
-        AssetPaths.NOTE_assets_3D__png,
-        AssetPaths.NOTE_assets_3D__xml
-    );
-}
-else
-{
-    tex = FlxAtlasFrames.fromSparrow(
-        AssetPaths.NOTE_assets__png,
-        AssetPaths.NOTE_assets__xml
-    );
-}
-		frames = tex;
 		animation.addByPrefix('greenScroll', 'green0');
 		animation.addByPrefix('redScroll', 'red0');
 		animation.addByPrefix('blueScroll', 'blue0');
@@ -153,6 +128,68 @@ else
 				// prevNote.setGraphicSize();
 			}
 		}
+	}
+
+	public function loadNoteSkin():Void
+	{
+		var tex:FlxAtlasFrames;
+		var song = SONG != null ? SONG.song.toLowerCase() : "";
+
+		// Determina qual skin usar baseado na música ou no noteSkin customizado
+		if (noteSkin != "default")
+		{
+			tex = FlxAtlasFrames.fromSparrow(
+				AssetPaths.${noteSkin}__png,
+				AssetPaths.${noteSkin}__xml
+			);
+		}
+		else if (song == "delirium")
+		{
+			tex = FlxAtlasFrames.fromSparrow(
+				AssetPaths.oppositionbsidenote__png,
+				AssetPaths.oppositionbsidenote__xml
+			);
+		}
+		else if (
+			song == "photosynthesis"
+			|| song == "pessimistic"
+			|| song == "taimuresu"
+		)
+		{
+			tex = FlxAtlasFrames.fromSparrow(
+				AssetPaths.NOTE_assets_3D__png,
+				AssetPaths.NOTE_assets_3D__xml
+			);
+		}
+		else
+		{
+			tex = FlxAtlasFrames.fromSparrow(
+				AssetPaths.NOTE_assets__png,
+				AssetPaths.NOTE_assets__xml
+			);
+		}
+		frames = tex;
+	}
+
+	public function changeSkin(newSkin:String):Void
+	{
+		noteSkin = newSkin;
+		loadNoteSkin();
+		// Recarrega as animações com a nova skin
+		animation.addByPrefix('greenScroll', 'green0');
+		animation.addByPrefix('redScroll', 'red0');
+		animation.addByPrefix('blueScroll', 'blue0');
+		animation.addByPrefix('purpleScroll', 'purple0');
+		
+		animation.addByPrefix('purpleholdend', 'pruple end hold');
+		animation.addByPrefix('greenholdend', 'green hold end');
+		animation.addByPrefix('redholdend', 'red hold end');
+		animation.addByPrefix('blueholdend', 'blue hold end');
+		
+		animation.addByPrefix('purplehold', 'purple hold piece');
+		animation.addByPrefix('greenhold', 'green hold piece');
+		animation.addByPrefix('redhold', 'red hold piece');
+		animation.addByPrefix('bluehold', 'blue hold piece');
 	}
 
 	override function update(elapsed:Float)
