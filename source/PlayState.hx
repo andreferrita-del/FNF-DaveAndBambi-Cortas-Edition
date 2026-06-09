@@ -981,7 +981,7 @@ notes.forEachAlive(function(daNote:Note)
 
 		scoreTxt.text = "Score:" + songScore;
 
-		if (controls.BACK && startedCountdown && canPause)
+		if (FlxG.android.justReleased.BACK && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
 			persistentDraw = true;
