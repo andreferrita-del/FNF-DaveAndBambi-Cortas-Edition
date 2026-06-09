@@ -100,6 +100,7 @@ var rightPressed:Bool = false;
 	private var iconP2:HealthIcon;
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
+	public var camOther:FlxCamera;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
@@ -131,10 +132,13 @@ var rightPressed:Bool = false;
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = new FlxCamera();
 		camHUD = new FlxCamera();
+		camOther = new FlxCamera();
+        camOther.bgColor.alpha = 0;
 		camHUD.bgColor.alpha = 0;
 		
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
+		FlxG.cameras.add(camOther, false);
 		
 		//FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
@@ -507,28 +511,28 @@ var hitboxWidth:Int = Std.int(FlxG.width / 4);
 leftHitbox = new FlxSprite(0, 0);
 leftHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44C24B99);
 leftHitbox.alpha = 0.25;
-leftHitbox.cameras = [camHUD];
+leftHitbox.cameras = [camOther];
 add(leftHitbox);
 
 // DOWN
 downHitbox = new FlxSprite(hitboxWidth, 0);
 downHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4400FFFF);
 downHitbox.alpha = 0.25;
-downHitbox.cameras = [camHUD];
+downHitbox.cameras = [camOther];
 add(downHitbox);
 
 // UP
 upHitbox = new FlxSprite(hitboxWidth * 2, 0);
 upHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x4412FA05);
 upHitbox.alpha = 0.25;
-upHitbox.cameras = [camHUD];
+upHitbox.cameras = [camOther];
 add(upHitbox);
 
 // RIGHT
 rightHitbox = new FlxSprite(hitboxWidth * 3, 0);
 rightHitbox.makeGraphic(hitboxWidth, FlxG.height, 0x44F9393F);
 rightHitbox.alpha = 0.25;
-rightHitbox.cameras = [camHUD];
+rightHitbox.cameras = [camOther];
 add(rightHitbox);
 leftHitbox.scrollFactor.set(0, 0);
 downHitbox.scrollFactor.set(0, 0);
@@ -537,7 +541,7 @@ rightHitbox.scrollFactor.set(0, 0);
 
 #end
 	if (SONG.song.toLowerCase() == 'taimuresu'){
-		AlertMessage.show("i will kill you...", "THE FINALE...");
+		AlertMessage.show("i will kill you...", "the finale...");
 		BlackFade.addBlackFade(this, camHUD, 10);
 	}
 	
