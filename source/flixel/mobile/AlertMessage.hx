@@ -6,7 +6,7 @@ class AlertMessage
 {
 	public static function show(title:String, message:String):Void
 	{
-		#if (desktop || android || ios)
+		#if mobile
 		lime.Application.current.window.alert(message, title);
 		#else
 		trace(title + ": " + message);
