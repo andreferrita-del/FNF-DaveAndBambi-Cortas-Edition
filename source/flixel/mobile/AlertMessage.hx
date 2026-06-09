@@ -1,13 +1,13 @@
-package;
+package flixel.mobile;
 
 import lime.app.Application;
 
 class AlertMessage
 {
-	public static function show(title:String, message:String):Void
+	public static function show(message:String, title:String):Void
 	{
 		#if mobile
-		lime.Application.current.window.alert(message, title);
+		Application.current.window.alert(message, title);
 		#else
 		trace(title + ": " + message);
 		#end
