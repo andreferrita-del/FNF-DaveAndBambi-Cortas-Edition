@@ -134,6 +134,7 @@ var rightPressed:Bool = false;
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
         camOther.bgColor.alpha = 0;
+		camOther.zoom = 1.;
 		camHUD.bgColor.alpha = 0;
 		
 		FlxG.cameras.reset(camGame);
