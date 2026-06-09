@@ -28,6 +28,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
+import flixel.mobile.AlertMessage;
 import haxe.Json;
 import lime.utils.Assets;
 import openfl.display.BlendMode;
@@ -536,6 +537,7 @@ rightHitbox.scrollFactor.set(0, 0);
 
 #end
 	if (SONG.song.toLowerCase() == 'taimuresu'){
+		AlertMessage.show("i will kill you...", "THE FINALE...");
 		BlackFade.addBlackFade(this, camHUD, 10);
 	}
 	
