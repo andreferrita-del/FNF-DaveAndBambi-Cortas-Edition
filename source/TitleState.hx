@@ -216,7 +216,7 @@ class TitleState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		Conductor.songPosition = FlxG.sound.music.time;
-		WiggleEffect.updateGL();
+		//WiggleEffect.updateGL();
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
 		var pressedEnter:Bool =  #if mobile FlxG.touches.justStarted().length > 0 #else FlxG.keys.justPressed.ENTER #end;
