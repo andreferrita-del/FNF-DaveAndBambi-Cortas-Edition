@@ -52,8 +52,8 @@ class WiggleEffect extends FlxShader
    {
 	super.updateGL();
 
-	uTime.value[0] += FlxG.elapsed;
-   }
+	uTime.value[0] += 1;
+11   }
 
 	// ADD WIGGLE EFFECT
 	public static function addWiggleEffect(
