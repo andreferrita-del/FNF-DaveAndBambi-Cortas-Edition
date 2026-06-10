@@ -1,4 +1,4 @@
-package;
+ipackage;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -48,9 +48,9 @@ class WiggleEffect extends FlxShader
 	}
 
 	// UPDATE TIMER
-	override public function __updateGL():Void
+	override public function updateGL():Void
    {
-	super.__updateGL();
+	super.updateGL();
 
 	uTime.value[0] += FlxG.elapsed;
    }
