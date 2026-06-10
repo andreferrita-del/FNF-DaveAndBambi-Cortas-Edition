@@ -1,9 +1,6 @@
 package;
 
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.FlxCamera;
-import openfl.filters.ShaderFilter;
 import flixel.system.FlxAssets.FlxShader;
 
 class WiggleEffect extends FlxShader
@@ -18,16 +15,13 @@ class WiggleEffect extends FlxShader
 
 	vec2 sineWave(vec2 pt)
 	{
-		float x = 0.0;
-		float y = 0.0;
-
 		float offsetY = sin(pt.y * uFrequency + 10.0 * pt.x + uTime * uSpeed) * uWaveAmplitude;
 		float offsetX = sin(pt.x * uFrequency + 5.0 * pt.y + uTime * uSpeed) * uWaveAmplitude;
 
 		pt.y += offsetY;
 		pt.x += offsetX;
 
-		return vec2(pt.x + x, pt.y + y);
+		return pt;
 	}
 
 	void main()
@@ -47,19 +41,15 @@ class WiggleEffect extends FlxShader
 		uWaveAmplitude.value = [0.01];
 	}
 
-	// UPDATE TIMER
-	override public function updateGL():Void
-   {
-	super.updateGL();
+	public function update(elapsed:Float):Void
+	{
+		uTime.value[0] += elapsed;
+	}
 
-	uTime.value[0] += 1;
-11   }
-
-	// ADD WIGGLE EFFECT
 	public static function addWiggleEffect(
-		object:FlxSprite,  // NUMBER 2
-		speed:Float,     // NUMBER 3
-		frequency:Float  // NUMBER 4
+		object:FlxSprite,
+		speed:Float,
+		frequency:Float
 	):WiggleEffect
 	{
 		var wiggle = new WiggleEffect();
