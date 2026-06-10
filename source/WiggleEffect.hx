@@ -5,19 +5,15 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxShader;
 
-class WiggleEffect
+class WiggleEffect extends FlxShader
 {
-	public var shader:WiggleShader;
+	public var shader:WiggleEffect;
 
-	public function addWiggleEffect(
-		target:FlxSprite,
-		speed:Float = 1,
-		frequency:Float = 5
-	)
+	public function addWiggleEffect(target:FlxSprite, speed:Float = 1, frequency:Float = 5)
 	{
-		super();
+		super.addWiggleEffect();
 
-		shader = new WiggleShader();
+		shader = new WiggleEffect();
 
 		shader.uSpeed.value = [speed];
 		shader.uFrequency.value = [frequency];
@@ -25,7 +21,7 @@ class WiggleEffect
 
 		target.shader = shader;
 
-		FlxG.state.add(this);
+		//FlxG.state.add(this);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -34,10 +30,7 @@ class WiggleEffect
 
 		shader.uTime.value[0] += elapsed;
 	}
-}
-
-class WiggleShader extends FlxShader
-{
+	
 	@:glFragmentSource('
 	#pragma header
 
@@ -67,10 +60,5 @@ class WiggleShader extends FlxShader
 	public function new()
 	{
 		super();
-
-		uTime.value = [0];
-		uSpeed.value = [1];
-		uFrequency.value = [5];
-		uWaveAmplitude.value = [0.1];
 	}
 }
