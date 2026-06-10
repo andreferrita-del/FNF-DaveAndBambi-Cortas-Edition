@@ -1,11 +1,11 @@
 package;
 
-import flixel.FlxBasic;
+//import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxShader;
 
-class WiggleEffect extends FlxBasic
+class WiggleEffect
 {
 	public var shader:WiggleShader;
 
@@ -30,7 +30,7 @@ class WiggleEffect extends FlxBasic
 
 	override public function update(elapsed:Float):Void
 	{
-		super.update(elapsed);
+		super.update();
 
 		shader.uTime.value[0] += elapsed;
 	}
