@@ -901,7 +901,7 @@ for (touch in FlxG.touches.list)
 	}
 
 	// DOWN
-	else if (tx >= downHitbox.x && tx <= downHitbox.x + downHitbox.width)
+	if (tx >= downHitbox.x && tx <= downHitbox.x + downHitbox.width)
 	{
 		downPressed = true;
 		downHitbox.alpha = 0.35;
@@ -910,7 +910,7 @@ for (touch in FlxG.touches.list)
 	}
 
 	// UP
-	else if (tx >= upHitbox.x && tx <= upHitbox.x + upHitbox.width)
+	if (tx >= upHitbox.x && tx <= upHitbox.x + upHitbox.width)
 	{
 		upPressed = true;
 		upHitbox.alpha = 0.35;
@@ -919,7 +919,7 @@ for (touch in FlxG.touches.list)
 	}
 
 	// RIGHT
-	else if (tx >= rightHitbox.x && tx <= rightHitbox.x + rightHitbox.width)
+	if (tx >= rightHitbox.x && tx <= rightHitbox.x + rightHitbox.width)
 	{
 		rightPressed = true;
 		rightHitbox.alpha = 0.35;
