@@ -1,36 +1,13 @@
 package;
 
-//import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxCamera;
+import openfl.filters.ShaderFilter;
 import flixel.system.FlxAssets.FlxShader;
 
 class WiggleEffect extends FlxShader
 {
-	public var shader:WiggleEffect;
-
-	public function addWiggleEffect(target:FlxSprite, speed:Float = 1, frequency:Float = 5)
-	{
-		super.addWiggleEffect();
-
-		shader = new WiggleEffect();
-
-		shader.uSpeed.value = [speed];
-		shader.uFrequency.value = [frequency];
-		shader.uWaveAmplitude.value = [0.1];
-
-		target.shader = shader;
-
-		//FlxG.state.add(this);
-	}
-
-	override public function update(elapsed:Float):Void
-	{
-		super.update();
-
-		shader.uTime.value[0] += elapsed;
-	}
-	
 	@:glFragmentSource('
 	#pragma header
 
@@ -41,13 +18,16 @@ class WiggleEffect extends FlxShader
 
 	vec2 sineWave(vec2 pt)
 	{
+		float x = 0.0;
+		float y = 0.0;
+
 		float offsetY = sin(pt.y * uFrequency + 10.0 * pt.x + uTime * uSpeed) * uWaveAmplitude;
 		float offsetX = sin(pt.x * uFrequency + 5.0 * pt.y + uTime * uSpeed) * uWaveAmplitude;
 
 		pt.y += offsetY;
 		pt.x += offsetX;
 
-		return pt;
+		return vec2(pt.x + x, pt.y + y);
 	}
 
 	void main()
@@ -60,5 +40,34 @@ class WiggleEffect extends FlxShader
 	public function new()
 	{
 		super();
+
+		uTime.value = [0];
+		uSpeed.value = [1];
+		uFrequency.value = [5];
+		uWaveAmplitude.value = [0.01];
+	}
+
+	// UPDATE TIMER
+	public function updateGL():Void
+   {
+	super.updateGL();
+   }
+
+	// ADD WIGGLE EFFECT
+	public static function addWiggleEffect(
+		object:FlxSprite,  // NUMBER 2
+		speed:Float,     // NUMBER 3
+		frequency:Float  // NUMBER 4
+	):WiggleEffect
+	{
+		var wiggle = new WiggleEffect();
+
+		wiggle.uWaveAmplitude.value = [0.1];
+		wiggle.uSpeed.value = [speed];
+		wiggle.uFrequency.value = [frequency];
+
+		object.shader = wiggle;
+
+		return wiggle;
 	}
 }
