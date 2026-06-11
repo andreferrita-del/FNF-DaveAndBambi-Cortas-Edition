@@ -48,11 +48,7 @@ class WiggleEffect extends FlxShader
 	}
 
 	// UPDATE TIMER
-	public function updateGL():Void
-   {
-	super.updateGL();
-   }
-
+	
 	// ADD WIGGLE EFFECT
 	public static function addWiggleEffect(
 		object:FlxSprite,  // NUMBER 2
