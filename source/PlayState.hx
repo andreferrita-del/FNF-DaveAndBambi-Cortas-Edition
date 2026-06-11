@@ -134,7 +134,6 @@ var rightPressed:Bool = false;
 		camHUD = new FlxCamera();
 		camOther = new FlxCamera();
         camOther.bgColor.alpha = 0;
-		camOther.zoom = 1.;
 		camHUD.bgColor.alpha = 0;
 		
 		FlxG.cameras.reset(camGame);
@@ -875,16 +874,12 @@ rightHitbox.scrollFactor.set(0, 0);
 	override public function update(elapsed:Float)
 	{
 		//floatTime += elapsed;
+		camOther.zoom = 1.05;
 		#if !debug
 		perfectMode = false;
 		#end
 
 		#if mobile
-
-leftPressed = false;
-downPressed = false;
-upPressed = false;
-rightPressed = false;
 
 leftHitbox.alpha = 0.25;
 downHitbox.alpha = 0.25;
@@ -901,6 +896,8 @@ for (touch in FlxG.touches.list)
 	{
 		leftPressed = true;
 		leftHitbox.alpha = 0.35;
+	}else{
+		leftPressed = false;
 	}
 
 	// DOWN
@@ -908,6 +905,8 @@ for (touch in FlxG.touches.list)
 	{
 		downPressed = true;
 		downHitbox.alpha = 0.35;
+		}else{
+	downPressed = false;
 	}
 
 	// UP
@@ -915,6 +914,8 @@ for (touch in FlxG.touches.list)
 	{
 		upPressed = true;
 		upHitbox.alpha = 0.35;
+			}else{
+	upPressed = false;
 	}
 
 	// RIGHT
@@ -922,6 +923,8 @@ for (touch in FlxG.touches.list)
 	{
 		rightPressed = true;
 		rightHitbox.alpha = 0.35;
+		}else{
+	rightPressed = false;
 	}
 }
 
@@ -950,7 +953,7 @@ notes.forEachAlive(function(daNote:Note)
 {
 	daNote.angle = strumLineNotes.members[daNote.noteData].angle;
 
-	daNote.x += Math.sin((Conductor.songPosition / 120) + (daNote.noteData * 2)) * 4;
+	daNote.x = strumLineNotes.members[daNote.noteData].x;
 
 	//daNote.y += Math.cos((Conductor.songPosition / 150) + (daNote.noteData * 2)) * 4;
 });
