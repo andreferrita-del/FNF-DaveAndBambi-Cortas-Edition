@@ -881,10 +881,15 @@ rightHitbox.scrollFactor.set(0, 0);
 
 		#if mobile
 
-leftHitbox.alpha = 0.25;
-downHitbox.alpha = 0.25;
-upHitbox.alpha = 0.25;
-rightHitbox.alpha = 0.25;
+leftPressed = false;
+downPressed = false;
+upPressed = false;
+rightPressed = false;
+
+leftHitbox.alpha = 0.2;
+downHitbox.alpha = 0.2;
+upHitbox.alpha = 0.2;
+rightHitbox.alpha = 0.2;
 
 for (touch in FlxG.touches.list)
 {
@@ -896,8 +901,6 @@ for (touch in FlxG.touches.list)
 	{
 		leftPressed = true;
 		leftHitbox.alpha = 0.35;
-	}else{
-		leftPressed = false;
 	}
 
 	// DOWN
@@ -905,8 +908,6 @@ for (touch in FlxG.touches.list)
 	{
 		downPressed = true;
 		downHitbox.alpha = 0.35;
-		}else{
-	downPressed = false;
 	}
 
 	// UP
@@ -914,8 +915,6 @@ for (touch in FlxG.touches.list)
 	{
 		upPressed = true;
 		upHitbox.alpha = 0.35;
-			}else{
-	upPressed = false;
 	}
 
 	// RIGHT
@@ -923,8 +922,6 @@ for (touch in FlxG.touches.list)
 	{
 		rightPressed = true;
 		rightHitbox.alpha = 0.35;
-		}else{
-	rightPressed = false;
 	}
 }
 
@@ -944,7 +941,7 @@ for (touch in FlxG.touches.list)
 {
 	strumLineNotes.members[i].angle += 4;
 
-	strumLineNotes.members[i].x += Math.sin((Conductor.songPosition / 120) + (i * 2)) * 4;
+	//strumLineNotes.members[i].x += Math.sin((Conductor.songPosition / 120) + (i * 2)) * 4;
 
 	strumLineNotes.members[i].y += Math.cos((Conductor.songPosition / 150) + (i * 2)) * 4;
 }
@@ -953,7 +950,6 @@ notes.forEachAlive(function(daNote:Note)
 {
 	daNote.angle = strumLineNotes.members[daNote.noteData].angle;
 
-	daNote.x = strumLineNotes.members[daNote.noteData].x;
 
 	//daNote.y += Math.cos((Conductor.songPosition / 150) + (daNote.noteData * 2)) * 4;
 });
@@ -1070,8 +1066,8 @@ notes.forEachAlive(function(daNote:Note)
 			if (curBeat % 4 == 0)
 			{
 				if (SONG.song.toLowerCase() == 'taimuresu'){
-					if (curBeat == 128){
-					FlxG.camera.flash(0xFF000000, 1);
+					if (curBeat == 148){
+					FlxG.camera.flash(0xFFFFFFFF, 1);
 					}
 				}
 				// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
