@@ -1,50 +1,83 @@
 package;
 
-import openfl.display.FPS;
+import openfl.text.TextField;
+import openfl.text.TextFormat;
 import openfl.events.Event;
 import openfl.system.System;
-import flixel.FlxG;
+import openfl.Lib;
 
-class DebugInfo extends FPS
+#if sys
+import sys.io.Process;
+#end
+
+class DebugInfo extends TextField
 {
-	#if GIT_COMMIT
-	public static inline var COMMIT:String = GIT_COMMIT;
-	#else
-	public static inline var COMMIT:String = "UNKNOWN";
-	#end
-
-	public static inline var ENGINE_VERSION:String = "0.2.5";
-
+	var times:Array<Float> = [];
 	var peakMemory:Float = 0;
+	var commit:String = "UNKNOWN";
 
-	public function new(x:Float = 10, y:Float = 3, color:Int = 0xFFFFFF)
+	public function new(x:Float = 10, y:Float = 3)
 	{
-		super(x, y, color);
+		super();
+
+		this.x = x;
+		this.y = y;
+
+		width = 500;
+		height = 200;
 
 		selectable = false;
 		mouseEnabled = false;
 
+		defaultTextFormat = new TextFormat("_sans", 14, 0xFFFFFF);
+
+		commit = getCommit();
+
 		addEventListener(Event.ENTER_FRAME, updateInfo);
+	}
+
+	function getCommit():String
+	{
+		#if sys
+		try
+		{
+			var process = new Process("git", ["rev-parse", "--short", "HEAD"]);
+			var result = StringTools.trim(process.stdout.readAll().toString());
+
+			process.close();
+
+			if (result != "")
+				return result;
+		}
+		catch (e:Dynamic)
+		{
+			trace("Failed to get git commit: " + e);
+		}
+		#end
+
+		return "UNKNOWN";
 	}
 
 	function updateInfo(e:Event):Void
 	{
+		var now = Lib.getTimer();
+
+		times.push(now);
+
+		while (times.length > 0 && times[0] < now - 1000)
+			times.shift();
+
+		var fps:Int = times.length;
+
 		var memory:Float = System.totalMemory / 1024 / 1024;
 
 		if (memory > peakMemory)
 			peakMemory = memory;
 
-		var state:String = "Unknown";
-
-		if (FlxG.state != null)
-			state = Type.getClassName(Type.getClass(FlxG.state));
-
 		text =
-			"FPS: " + currentFPS +
+			"FPS: " + fps +
 			"\nMEM: " + Std.int(memory) + " MB" +
 			"\nPEAK: " + Std.int(peakMemory) + " MB" +
-			"\nSTATE: " + state +
-			"\nENGINE: " + ENGINE_VERSION +
-			"\nCOMMIT: " + COMMIT;
+			"\nCOMMIT: " + commit;
 	}
 }
