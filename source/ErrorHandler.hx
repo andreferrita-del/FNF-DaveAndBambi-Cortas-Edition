@@ -21,59 +21,47 @@ class ErrorHandler
 		);
 	}
 
-	// CODE ERROR (HAXE / ENGINE)
 	static function onError(event:UncaughtErrorEvent):Void
 	{
 		event.preventDefault();
-
 		showCrash("CODE ERROR", Std.string(event.error));
 	}
 
-	// SHADER ERROR (MANUAL CALL)
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
-		showCrash(
-			"OPENGL / SHADER ERROR",
-			"Shader: " + shaderName + "\n\n" + Std.string(error)
-		);
+		showCrash("SHADER ERROR", "Shader: " + shaderName + "\n\n" + Std.string(error));
 	}
 
-	// MAIN CRASH SCREEN
-	static function showCrash(errorType:String, message:String):Void
+	static function showCrash(type:String, message:String):Void
 	{
-		var stack:String = CallStack.toString(CallStack.exceptionStack());
-
-		var fullMessage:String =
-			"TYPE: " + errorType + "\n\n" +
-			"ERROR:\n" + message + "\n\n" +
-			"STACK TRACE:\n" + stack;
-
 		var state = FlxG.state;
 
-		// 💜 BACKGROUND
+		var full = type + "\n\n" + message;
+
+		// 💜 DARK BACKGROUND
 		var bg = new FlxSprite().makeGraphic(
 			Std.int(FlxG.width),
 			Std.int(FlxG.height),
-			0xFF1A001F
+			0xCC120012
 		);
 
-		// 💜 GLOW TITLE
-		var glow = new FlxText(22, 22, FlxG.width - 40, "ENGINE CRASH", 28);
-		glow.setFormat(null, 28, 0xFF6A00FF, "center");
-		glow.alpha = 0.5;
+		// 🟣 MODAL BOX (fake rounded look)
+		var boxWidth = 500;
+		var boxHeight = 300;
 
-		// 💜 TITLE
-		var title = new FlxText(20, 20, FlxG.width - 40, "ENGINE CRASH", 28);
-		title.setFormat(null, 28, 0xFFB300FF, "center");
+		var box = new FlxSprite().makeGraphic(boxWidth, boxHeight, 0xFF2A0033);
 
-		// 💜 ERROR TEXT
-		var text = new FlxText(20, 80, FlxG.width - 40, fullMessage, 14);
-		text.setFormat(null, 14, 0xFFE6CCFF, "left");
+		box.x = FlxG.width / 2 - boxWidth / 2;
+		box.y = FlxG.height / 2 - boxHeight / 2;
 
-		// 🟣 OK BUTTON
+		// 💜 TEXT (CENTERED)
+		var text = new FlxText(box.x + 20, box.y + 20, boxWidth - 40, full, 16);
+		text.setFormat(null, 16, 0xFFE6CCFF, "center");
+
+		// 🟣 OK BUTTON (ONLY CONTROL)
 		var okBtn = new FlxButton(
-			Std.int(FlxG.width / 2 - 50),
-			Std.int(FlxG.height - 80),
+			Std.int(FlxG.width / 2 - 40),
+			Std.int(box.y + boxHeight - 60),
 			"OK",
 			function()
 			{
@@ -81,17 +69,15 @@ class ErrorHandler
 			}
 		);
 
-		okBtn.color = 0xFFB300FF;
+		okBtn.color = 0xFF7A00FF;
 		okBtn.label.color = 0xFFFFFFFF;
 
 		// ADD TO STATE
 		state.add(bg);
-		state.add(glow);
-		state.add(title);
+		state.add(box);
 		state.add(text);
 		state.add(okBtn);
 
-		// FREEZE GAME
 		FlxG.timeScale = 0;
 		state.persistentUpdate = true;
 		state.persistentDraw = true;
