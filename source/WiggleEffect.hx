@@ -6,7 +6,7 @@ import flixel.FlxCamera;
 import openfl.filters.ShaderFilter;
 import flixel.system.FlxAssets.FlxShader;
 
-class WiggleEffect extends FlxShader
+class WiggleEffect extends ErrorHandledShader
 {
 	@:glFragmentSource('
 	#pragma header
