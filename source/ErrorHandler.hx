@@ -3,7 +3,6 @@ package;
 import openfl.Lib;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
-import haxe.CallStack.StackItem;
 import flixel.mobile.AlertMessage;
 import Sys;
 
@@ -11,74 +10,52 @@ class ErrorHandler
 {
 	public static function init():Void
 	{
+		trace("ErrorHandler ACTIVE");
+
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
 			onError
 		);
-
-		trace("ErrorHandler initialized");
 	}
 
 	static function onError(event:UncaughtErrorEvent):Void
 	{
 		event.preventDefault();
 
-		var error:Dynamic = event.error;
-
-		showCrash(
-			"CODE ERROR",
-			Std.string(error),
-			CallStack.exceptionStack()
-		);
+		handle("CODE ERROR", Std.string(event.error));
 	}
 
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
-		showCrash(
+		handle(
 			"OPENGL / SHADER ERROR",
-			'Shader: $shaderName\n\n${Std.string(error)}',
-			CallStack.exceptionStack()
+			"Shader: " + shaderName + "\n\n" + Std.string(error)
 		);
 	}
 
-	static function showCrash(type:String, error:String, stack:Array<StackItem>):Void
+	static function handle(errorType:String, message:String):Void
 	{
-		var fileName:String = "UNKNOWN";
-		var lineNumber:Int = -1;
+		var stack:String = CallStack.toString(CallStack.exceptionStack());
 
-		for (item in stack)
+		var fullMessage:String =
+			"ENGINE CRASH\n\n" +
+			"TYPE: " + errorType + "\n\n" +
+			"ERROR:\n" + message + "\n\n" +
+			"STACK TRACE:\n" + stack;
+
+		// Show alert
+		AlertMessage.show(fullMessage, "ENGINE CRASH");
+
+		// Force exit after user closes alert (or fallback)
+		Lib.application.window.onClose.add(function()
 		{
-			switch (item)
-			{
-				case FilePos(_, file, line, _):
-					fileName = file;
-					lineNumber = line;
+			Sys.exit(1);
+		});
 
-				default:
-			}
-		}
-
-		var msg:String = "";
-
-		msg += "ENGINE CRASH\n\n";
-
-		msg += "TYPE:\n";
-		msg += type + "\n\n";
-
-		msg += "FILE:\n";
-		msg += fileName + "\n\n";
-
-		msg += "LINE:\n";
-		msg += lineNumber + "\n\n";
-
-		msg += "ERROR:\n";
-		msg += error + "\n\n";
-
-		msg += "STACK TRACE:\n";
-		msg += CallStack.toString(stack);
-
-		AlertMessage.show(msg, "ENGINE CRASH");
-
-		Sys.exit(1);
+		// Safety fallback crash
+		haxe.Timer.delay(function()
+		{
+			Sys.exit(1);
+		}, 5000);
 	}
 }
