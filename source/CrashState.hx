@@ -28,10 +28,20 @@ class CrashState extends FlxState
 			"ERROR:\n" + message + "\n\n" +
 			"STACK TRACE:\n" + stack;
 
-		// 💥 LIME POPUP
-		Application.current.window.alert(fullText, "ENGINE CRASH");
+		// 💥 LIME ALERT (native popup)
+		try
+		{
+			Application.current.window.alert(fullText, "ENGINE CRASH");
+		}
+		catch (e:Dynamic)
+		{
+			trace("Alert failed: " + e);
+		}
 
-		// 💀 force exit after popup
-		Sys.exit(1);
+		// 💀 ensure alert shows before exit
+		haxe.Timer.delay(function()
+		{
+			Sys.exit(1);
+		}, 200);
 	}
 }
