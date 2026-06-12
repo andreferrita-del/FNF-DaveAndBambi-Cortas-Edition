@@ -13,17 +13,29 @@ class ErrorHandler
 	{
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
-			onError
+			onCodeError
 		);
 	}
 
-	static function onError(event:UncaughtErrorEvent):Void
+	static function onCodeError(event:UncaughtErrorEvent):Void
 	{
-		var error:Dynamic = event.error;
+		reportError("CODE ERROR", event.error);
+	}
+
+	public static function onShaderError(shaderName:String, error:Dynamic):Void
+	{
+		reportError(
+			"OPENGL / SHADER ERROR",
+			'Shader "$shaderName"\n\n${Std.string(error)}'
+		);
+	}
+
+	static function reportError(errorType:String, error:Dynamic):Void
+	{
 		var stack = CallStack.exceptionStack();
 
-		var fileName:String = "UNKNOWN";
-		var lineNumber:Int = -1;
+		var fileName = "UNKNOWN";
+		var lineNumber = -1;
 
 		for (item in stack)
 		{
@@ -37,15 +49,13 @@ class ErrorHandler
 			}
 		}
 
-		var msg:String = "";
-
+		var msg = "";
 		msg += "ENGINE CRASH\n\n";
+		msg += "TYPE: " + errorType + "\n\n";
 		msg += "FILE: " + fileName + "\n";
 		msg += "LINE: " + lineNumber + "\n\n";
 		msg += "ERROR:\n";
-		msg += Std.string(error) + "\n\n";
-		msg += "STACK TRACE:\n";
-		msg += CallStack.toString(stack);
+		msg += Std.string(error);
 
 		AlertMessage.show(msg, "ENGINE CRASH");
 
