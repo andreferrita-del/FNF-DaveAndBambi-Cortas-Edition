@@ -13,7 +13,7 @@ class DebugInfo extends FPS
 	public static inline var COMMIT:String = "UNKNOWN";
 	#end
 
-	public static inline var ENGINE_VERSION:String = "1.0.0";
+	public static inline var ENGINE_VERSION:String = "0.2.5";
 
 	var peakMemory:Float = 0;
 
