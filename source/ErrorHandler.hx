@@ -13,29 +13,38 @@ class ErrorHandler
 	{
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
-			onCodeError
+			onError
 		);
+
+		trace("ErrorHandler initialized");
 	}
 
-	static function onCodeError(event:UncaughtErrorEvent):Void
+	static function onError(event:UncaughtErrorEvent):Void
 	{
-		reportError("CODE ERROR", event.error);
+		event.preventDefault();
+
+		var error:Dynamic = event.error;
+
+		showCrash(
+			"CODE ERROR",
+			Std.string(error),
+			CallStack.exceptionStack()
+		);
 	}
 
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
-		reportError(
+		showCrash(
 			"OPENGL / SHADER ERROR",
-			'Shader "$shaderName"\n\n${Std.string(error)}'
+			'Shader: $shaderName\n\n${Std.string(error)}',
+			CallStack.exceptionStack()
 		);
 	}
 
-	static function reportError(errorType:String, error:Dynamic):Void
+	static function showCrash(type:String, error:String, stack:Array<StackItem>):Void
 	{
-		var stack = CallStack.exceptionStack();
-
-		var fileName = "UNKNOWN";
-		var lineNumber = -1;
+		var fileName:String = "UNKNOWN";
+		var lineNumber:Int = -1;
 
 		for (item in stack)
 		{
@@ -49,13 +58,24 @@ class ErrorHandler
 			}
 		}
 
-		var msg = "";
+		var msg:String = "";
+
 		msg += "ENGINE CRASH\n\n";
-		msg += "TYPE: " + errorType + "\n\n";
-		msg += "FILE: " + fileName + "\n";
-		msg += "LINE: " + lineNumber + "\n\n";
+
+		msg += "TYPE:\n";
+		msg += type + "\n\n";
+
+		msg += "FILE:\n";
+		msg += fileName + "\n\n";
+
+		msg += "LINE:\n";
+		msg += lineNumber + "\n\n";
+
 		msg += "ERROR:\n";
-		msg += Std.string(error);
+		msg += error + "\n\n";
+
+		msg += "STACK TRACE:\n";
+		msg += CallStack.toString(stack);
 
 		AlertMessage.show(msg, "ENGINE CRASH");
 
