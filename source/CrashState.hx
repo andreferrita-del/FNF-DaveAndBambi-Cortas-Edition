@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxState;
 import lime.app.Application;
+import Sys;
 
 class CrashState extends FlxState
 {
@@ -27,8 +28,10 @@ class CrashState extends FlxState
 			"ERROR:\n" + message + "\n\n" +
 			"STACK TRACE:\n" + stack;
 
-		// 💥 ONLY POPUP (NO CUSTOM UI)
+		// 💥 LIME POPUP
 		Application.current.window.alert(fullText, "ENGINE CRASH");
 
-		// close af
-Sys.exit(0);
+		// 💀 force exit after popup
+		Sys.exit(1);
+	}
+}
