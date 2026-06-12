@@ -194,9 +194,9 @@ class MainMenuState extends MusicBeatState
 		{
 			#if linux
 			Sys.command('/usr/bin/xdg-open',
-				["https://ninja-muffin24.itch.io/funkin", "&"]);
+				["https://github.com/andreferrita-collab/FNF-DaveAndBambi-Cortas-Edition", "&"]);
 			#else
-			FlxG.openURL('https://ninja-muffin24.itch.io/funkin');
+			FlxG.openURL('https://github.com/andreferrita-collab/FNF-DaveAndBambi-Cortas-Edition');
 			#end
 		}
 		else
