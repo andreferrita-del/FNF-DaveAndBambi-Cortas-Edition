@@ -12,7 +12,7 @@ class WiggleEffect extends FlxShader
 	#pragma header
 
 	uniform float uTime;
-	uniform float uSpeed;
+	uniform float uSpeed = 2;
 	uniform float uFrequency;
 	uniform float uWaveAmplitude;
 
