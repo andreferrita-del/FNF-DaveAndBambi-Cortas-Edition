@@ -88,7 +88,9 @@ class CrashState extends FlxState
 
 
 		FlxG.timeScale = 0;
+		#if !mobile
 		FlxG.mouse.enabled = true;
+		#end
 	}
 
 	function saveLog(data:String)
