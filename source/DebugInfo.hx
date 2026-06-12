@@ -1,26 +1,50 @@
 package;
 
 import openfl.display.FPS;
-import openfl.system.System;
 import openfl.events.Event;
+import openfl.system.System;
+import flixel.FlxG;
 
 class DebugInfo extends FPS
 {
-	public static var commit:String = "DEV";
+	#if GIT_COMMIT
+	public static inline var COMMIT:String = GIT_COMMIT;
+	#else
+	public static inline var COMMIT:String = "UNKNOWN";
+	#end
+
+	public static inline var ENGINE_VERSION:String = "1.0.0";
+
+	var peakMemory:Float = 0;
 
 	public function new(x:Float = 10, y:Float = 3, color:Int = 0xFFFFFF)
 	{
 		super(x, y, color);
 
-		addEventListener(Event.ENTER_FRAME, updateText);
+		selectable = false;
+		mouseEnabled = false;
+
+		addEventListener(Event.ENTER_FRAME, updateInfo);
 	}
 
-	function updateText(e:Event):Void
+	function updateInfo(e:Event):Void
 	{
-		var mem:Float = System.totalMemory / 1024 / 1024;
+		var memory:Float = System.totalMemory / 1024 / 1024;
 
-		text = "FPS: " + currentFPS
-			+ "\nMEM: " + Std.int(mem) + " MB"
-			+ "\nCOMMIT: " + commit;
+		if (memory > peakMemory)
+			peakMemory = memory;
+
+		var state:String = "Unknown";
+
+		if (FlxG.state != null)
+			state = Type.getClassName(Type.getClass(FlxG.state));
+
+		text =
+			"FPS: " + currentFPS +
+			"\nMEM: " + Std.int(memory) + " MB" +
+			"\nPEAK: " + Std.int(peakMemory) + " MB" +
+			"\nSTATE: " + state +
+			"\nENGINE: " + ENGINE_VERSION +
+			"\nCOMMIT: " + COMMIT;
 	}
 }
