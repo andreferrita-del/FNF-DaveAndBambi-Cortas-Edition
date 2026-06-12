@@ -33,7 +33,23 @@ class WiggleEffect extends ErrorHandledShader
 
 	public function new()
 	{
-		super("WiggleEffect"); 
+		super("WiggleEffect");
+
+		uTime.value = [0.0];
+		uSpeed.value = [1.0];
+		uFrequency.value = [5.0];
+		uWaveAmplitude.value = [0.01];
+	}
+
+	public function update(elapsed:Float):Void
+	{
+		uTime.value[0] += elapsed;
+	}
+
+	// APPLY EFFECT TO SPRITE
+	public static function addWiggleEffect(sprite:FlxSprite, speed:Float, frequency:Float):WiggleEffect
+	{
+		var fx:WiggleEffect = null;
 
 		try
 		{
