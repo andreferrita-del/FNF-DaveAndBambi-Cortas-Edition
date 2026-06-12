@@ -3,14 +3,14 @@ package;
 import openfl.Lib;
 import openfl.events.UncaughtErrorEvent;
 import haxe.CallStack;
-import flixel.mobile.AlertMessage;
+import lime.app.Application;
 import Sys;
 
 class ErrorHandler
 {
 	public static function init():Void
 	{
-		trace("ErrorHandler ACTIVE");
+		trace("ErrorHandler initialized");
 
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
@@ -18,41 +18,57 @@ class ErrorHandler
 		);
 	}
 
+	// CODE ERRORS (HAXE / OPENFL)
 	static function onError(event:UncaughtErrorEvent):Void
 	{
 		event.preventDefault();
 
-		handle("CODE ERROR", Std.string(event.error));
+		handleError(
+			"CODE ERROR",
+			Std.string(event.error)
+		);
 	}
 
+	// SHADER ERRORS (MANUAL CALL)
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
-		handle(
+		handleError(
 			"OPENGL / SHADER ERROR",
 			"Shader: " + shaderName + "\n\n" + Std.string(error)
 		);
 	}
 
-	static function handle(errorType:String, message:String):Void
+	// MAIN CRASH HANDLER
+	static function handleError(errorType:String, message:String):Void
 	{
 		var stack:String = CallStack.toString(CallStack.exceptionStack());
 
 		var fullMessage:String =
-			"ENGINE CRASH\n\n" +
+			"============================\n" +
+			"        ENGINE CRASH        \n" +
+			"============================\n\n" +
 			"TYPE: " + errorType + "\n\n" +
 			"ERROR:\n" + message + "\n\n" +
 			"STACK TRACE:\n" + stack;
 
-		// Show alert
-		AlertMessage.show(fullMessage, "ENGINE CRASH");
+		// LIME ALERT (engine-level popup)
+		Application.current.window.alert(fullMessage, "ENGINE CRASH");
 
-		// Force exit after user closes alert (or fallback)
-		Lib.application.window.onClose.add(function()
+		// TRY SAFE EXIT AFTER WINDOW CLOSE
+		try
 		{
+			Application.current.window.onClose.add(function()
+			{
+				Sys.exit(1);
+			});
+		}
+		catch (e:Dynamic)
+		{
+			// fallback if window is not available
 			Sys.exit(1);
-		});
+		}
 
-		// Safety fallback crash
+		// HARD SAFETY FALLBACK
 		haxe.Timer.delay(function()
 		{
 			Sys.exit(1);
