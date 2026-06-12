@@ -10,8 +10,9 @@ class Main extends Sprite
 	{
 		super();
 		addChild(new FlxGame(1280, 720, TitleState));
+		
 		ErrorHandler.init();
 
-		addChild(new FPS(10, 3, 0xFFFFFF));
+		addChild(new DebugInfo(10, 3));
 	}
 }
