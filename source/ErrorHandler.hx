@@ -2,43 +2,109 @@ package;
 
 import openfl.Lib;
 import openfl.events.UncaughtErrorEvent;
+import openfl.errors.Error;
+import openfl.events.ErrorEvent;
 import haxe.CallStack;
 import flixel.FlxG;
 
 class ErrorHandler
 {
+	public static var crashed:Bool = false;
+
 	public static function init():Void
 	{
-		trace("ErrorHandler initialized");
-
+		// 💥 HAXE / OPENFL ERRORS
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
-			onError
+			onUncaughtError
 		);
+
+		// 💀 NATIVE CRASH (HXCPP)
+		untyped __global__.__hxcpp_set_critical_error_handler(onCriticalError);
 	}
 
-	// CODE ERROR
-	static function onError(event:UncaughtErrorEvent):Void
+	// =========================
+	// 💥 MAIN UNCUGHT HANDLER
+	// =========================
+	static function onUncaughtError(e:UncaughtErrorEvent):Void
 	{
-		event.preventDefault();
+		if (crashed) return;
+		crashed = true;
 
-		showCrash("CODE ERROR", Std.string(event.error));
-	}
+		try
+		{
+			e.preventDefault();
+			e.stopPropagation();
+			e.stopImmediatePropagation();
+		}
+		catch (ex:Dynamic) {}
 
-	// SHADER ERROR
-	public static function onShaderError(shaderName:String, error:Dynamic):Void
-	{
-		showCrash(
-			"OPENGL / SHADER ERROR",
-			"Shader: " + shaderName + "\n\n" + Std.string(error)
-		);
-	}
+		var msg:String = Std.string(e.error);
 
-	// SEND TO CRASH STATE
-	static function showCrash(type:String, message:String):Void
-	{
+		if (Std.isOfType(e.error, Error))
+		{
+			var err:Error = cast e.error;
+			msg = err.message;
+		}
+		else if (Std.isOfType(e.error, ErrorEvent))
+		{
+			var err:ErrorEvent = cast e.error;
+			msg = err.text;
+		}
+
 		var stack = CallStack.toString(CallStack.exceptionStack());
 
-		FlxG.switchState(new CrashState(type, message, stack));
+		finishCrash("CODE ERROR", msg, stack);
+	}
+
+	// =========================
+	// 💀 NATIVE CRASH HANDLER
+	// =========================
+	static function onCriticalError(msg:Dynamic):Void
+	{
+		if (crashed) return;
+		crashed = true;
+
+		var stack = CallStack.toString(CallStack.callStack());
+
+		finishCrash("NATIVE ERROR", Std.string(msg), stack);
+	}
+
+	// =========================
+	// 💥 FINAL CRASH ROUTE
+	// =========================
+	static function finishCrash(type:String, msg:String, stack:String):Void
+	{
+		try
+		{
+			FlxG.resetState();
+
+			haxe.Timer.delay(function()
+			{
+				FlxG.switchState(new CrashState(type, msg, stack));
+			}, 50);
+		}
+		catch (e:Dynamic)
+		{
+			// 💀 fallback hard crash if everything dies
+			trace("CRASH FAILED: " + e);
+		}
+	}
+
+	// =========================
+	// 💥 SHADER ERROR CALL
+	// =========================
+	public static function shaderCrash(name:String, err:Dynamic):Void
+	{
+		if (crashed) return;
+		crashed = true;
+
+		var stack = CallStack.toString(CallStack.callStack());
+
+		finishCrash(
+			"SHADER ERROR: " + name,
+			Std.string(err),
+			stack
+		);
 	}
 }
