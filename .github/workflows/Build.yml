@@ -1,4 +1,4 @@
-name: FNF 0.2.5 Full Build
+name: FNF Full Build
 
 on:
   push:
@@ -8,155 +8,98 @@ on:
 jobs:
 
 # =====================================
-# 🎮 FNF 0.2.5 WINDOWS BUILD (CORRETO)
+# 🪟 WINDOWS BUILD (CORRETO)
 # =====================================
   fnf_windows:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@v1.5.1
         with:
-          haxe-version: 4.2.5
+          haxe-version: 4.3.6
 
       - name: Setup Haxelib
         run: |
-          mkdir -p ~/haxelib
-          haxelib setup ~/haxelib
+          haxelib setup C:\haxelib
 
-      - name: Install FNF 0.2.5 Dependencies
+      - name: Install Dependencies
         run: |
-          haxelib install lime 7.7.0 --quiet
-          haxelib install openfl 8.7.0 --quiet
-          haxelib install flixel 4.11.0 --quiet
-          haxelib install flixel-addons --quiet
-          haxelib install flixel-ui --quiet
-          haxelib install hxcpp --quiet
-          haxelib install hscript --quiet
-
-      - name: Setup Lime
-        run: |
-          haxelib run lime setup -y
-
-      - name: Build Windows (FNF)
-        run: |
-          haxelib run lime build windows -release
-
-      - name: Upload Windows Build
-        uses: actions/upload-artifact@v4
-        with:
-          name: FNF-Windows
-          path: export/release/windows/bin/*
-
-
-# =====================================
-# ⚙️ C++ BUILD (HXCPP REAL)
-# =====================================
-  cpp_build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup Haxe
-        uses: krdlab/setup-haxe@v1.5.1
-        with:
-          haxe-version: 4.2.5
-
-      - name: Setup Haxelib
-        run: |
-          mkdir -p ~/haxelib
-          haxelib setup ~/haxelib
-
-      - name: Install HXCPP
-        run: |
-          haxelib install hxcpp --quiet
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
           haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
           haxelib install flixel-ui --quiet
           haxelib install hscript --quiet
+          haxelib install newgrounds 1.1.5 --quiet
 
-      - name: Build C++ (HXCPP)
+      - name: Build Windows
         run: |
-          haxe -cp source -main Main -cpp export/cpp
+          haxelib run lime build windows -release
 
-      - name: Zip C++ Output
-        run: |
-          zip -r cpp_build.zip export/cpp
-
-      - name: Upload C++ Build
+      - name: Upload Windows
         uses: actions/upload-artifact@v4
         with:
-          name: CppBuild
-          path: cpp_build.zip
+          name: FNF-Windows
+          path: export/release/windows/bin/
 
 
 # =====================================
-# 📱 ANDROID BUILD (LIME)
+# 📱 ANDROID BUILD (LINUX)
 # =====================================
-  android_build:
+  fnf_android:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Haxe
         uses: krdlab/setup-haxe@v1.5.1
         with:
-          haxe-version: 4.2.5
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+          haxe-version: 4.3.6
 
       - name: Setup Haxelib
         run: |
           mkdir -p ~/haxelib
           haxelib setup ~/haxelib
 
-      - name: Install Android Dependencies
+      - name: Install Dependencies
         run: |
-          haxelib install lime 7.7.0 --quiet
-          haxelib install newgrounds
-          haxelib install openfl 8.7.0 --quiet
-          haxelib install flixel 4.11.0 --quiet
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
           haxelib install flixel-addons --quiet
           haxelib install flixel-ui --quiet
-          haxelib install hxcpp --quiet
           haxelib install hscript --quiet
+          haxelib install newgrounds 1.1.5 --quiet
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android Tools
+      - name: Install SDK Tools
         run: |
           yes | sdkmanager --licenses
-          sdkmanager --update
           sdkmanager \
             "platform-tools" \
-            "platforms;android-30" \
-            "build-tools;30.0.3" \
-            "ndk;21.4.7075529"
+            "platforms;android-33" \
+            "build-tools;33.0.2" \
+            "ndk;25.2.9519653"
 
-      - name: Configure Lime Android
+      - name: Configure Android
         run: |
           haxelib run lime config ANDROID_SDK $ANDROID_SDK_ROOT
-          haxelib run lime config ANDROID_NDK_ROOT "$ANDROID_SDK_ROOT/ndk/21.4.7075529"
+          haxelib run lime config ANDROID_NDK_ROOT "$ANDROID_SDK_ROOT/ndk/25.2.9519653"
           haxelib run lime config JAVA_HOME $JAVA_HOME
-          haxelib run lime config ANDROID_SETUP true
 
-      - name: Build Android APK
+      - name: Build Android
         run: |
-          haxelib run lime build android 
+          haxelib run lime build android -release
 
-      - name: Upload Android Build
+      - name: Upload Android
         uses: actions/upload-artifact@v4
         with:
           name: FNF-Android
