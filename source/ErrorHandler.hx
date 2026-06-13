@@ -1,11 +1,14 @@
 package;
 
+import lime.app.Application;
+
 import openfl.Lib;
 import openfl.events.UncaughtErrorEvent;
-import openfl.errors.Error;
 import openfl.events.ErrorEvent;
+import openfl.errors.Error;
+
 import haxe.CallStack;
-import flixel.FlxG;
+import haxe.CallStack.StackItem;
 
 class ErrorHandler
 {
@@ -13,25 +16,15 @@ class ErrorHandler
 
 	public static function init():Void
 	{
-		// 💥 HAXE / OPENFL ERRORS
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
 			UncaughtErrorEvent.UNCAUGHT_ERROR,
-			onUncaughtError
+			onError
 		);
 
-		// 💀 NATIVE CRASH (HXCPP)
 		untyped __global__.__hxcpp_set_critical_error_handler(onCriticalError);
 	}
 
-	// =========================
-	// 💥 MAIN UNCUGHT HANDLER
-	// =========================
-	public static function onShaderError(name:String, err:Dynamic):Void
-	{
-	shaderCrash(name, err);
-     
-	}
-	static function onUncaughtError(e:UncaughtErrorEvent):Void
+	static function onError(e:UncaughtErrorEvent):Void
 	{
 		if (crashed) return;
 		crashed = true;
@@ -42,74 +35,114 @@ class ErrorHandler
 			e.stopPropagation();
 			e.stopImmediatePropagation();
 		}
-		catch (ex:Dynamic) {}
+		catch (_:Dynamic) {}
 
-		var msg:String = Std.string(e.error);
-
-		if (Std.isOfType(e.error, Error))
-		{
-			var err:Error = cast e.error;
-			msg = err.message;
-		}
-		else if (Std.isOfType(e.error, ErrorEvent))
-		{
-			var err:ErrorEvent = cast e.error;
-			msg = err.text;
-		}
-
-		var stack = CallStack.toString(CallStack.exceptionStack());
-
-		finishCrash("CODE ERROR", msg, stack);
+		handleCrash(e.error, "ENGINE CRASH");
 	}
 
-	// =========================
-	// 💀 NATIVE CRASH HANDLER
-	// =========================
-	static function onCriticalError(msg:Dynamic):Void
+	static function onCriticalError(message:Dynamic):Void
 	{
 		if (crashed) return;
 		crashed = true;
 
-		var stack = CallStack.toString(CallStack.callStack());
-
-		finishCrash("NATIVE ERROR", Std.string(msg), stack);
+		handleCrash(message, "NATIVE CRASH");
 	}
 
-	// =========================
-	// 💥 FINAL CRASH ROUTE
-	// =========================
-	static function finishCrash(type:String, msg:String, stack:String):Void
+	static function handleCrash(error:Dynamic, title:String):Void
 	{
+		var errorMessage:String = "";
+
+		if (Std.isOfType(error, Error))
+		{
+			errorMessage = cast(error, Error).message;
+		}
+		else if (Std.isOfType(error, ErrorEvent))
+		{
+			errorMessage = cast(error, ErrorEvent).text;
+		}
+		else
+		{
+			errorMessage = Std.string(error);
+		}
+
+		var stack:Array<StackItem> = CallStack.exceptionStack(true);
+		var stackText:String = "";
+
+		for (item in stack)
+		{
+			switch (item)
+			{
+				case FilePos(_, file, line, _):
+					stackText += file + " (line " + line + ")\n";
+
+				case Method(cls, func):
+					stackText += cls + "." + func + "()\n";
+
+				default:
+			}
+		}
+
+		var crashText =
+			title +
+			"\n\nERROR:\n" +
+			errorMessage +
+			"\n\nSTACK TRACE:\n" +
+			stackText;
+
+		trace(crashText);
+
 		try
 		{
-			FlxG.resetState();
-
-			haxe.Timer.delay(function()
-			{
-				FlxG.switchState(new CrashState(type, msg, stack));
-			}, 50);
+			Application.current.window.alert(
+				crashText,
+				title
+			);
 		}
 		catch (e:Dynamic)
 		{
-			// 💀 fallback hard crash if everything dies
-			trace("CRASH FAILED: " + e);
+			trace("FAILED TO SHOW ALERT: " + e);
 		}
+
+		Sys.exit(1);
 	}
 
 	// =========================
-	// 💥 SHADER ERROR CALL
+	// SHADER SUPPORT
 	// =========================
-	public static function shaderCrash(name:String, err:Dynamic):Void
+
+	public static function shaderCrash(shaderName:String, error:Dynamic):Void
 	{
 		if (crashed) return;
 		crashed = true;
 
-		var stack = CallStack.toString(CallStack.callStack());
+		var stack:String = CallStack.toString(CallStack.callStack());
 
-		finishCrash(
-			"SHADER ERROR: " + name,
-			Std.string(err),
-			stack
-		);
+		var crashText =
+			"SHADER ERROR\n\n" +
+			"SHADER:\n" + shaderName +
+			"\n\nERROR:\n" + Std.string(error) +
+			"\n\nSTACK TRACE:\n" + stack;
+
+		trace(crashText);
+
+		try
+		{
+			Application.current.window.alert(
+				crashText,
+				"SHADER ERROR"
+			);
+		}
+		catch (e:Dynamic)
+		{
+			trace("FAILED TO SHOW ALERT: " + e);
+		}
+
+		Sys.exit(1);
+	}
+
+	// Compatibilidade com engines antigas
+	public static function onShaderError(shaderName:String, error:Dynamic):Void
+	{
+		shaderCrash(shaderName, error);
 	}
 }
