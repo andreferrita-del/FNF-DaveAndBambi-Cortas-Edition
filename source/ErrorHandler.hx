@@ -37,7 +37,7 @@ class ErrorHandler
 		}
 		catch (_:Dynamic) {}
 
-		handleCrash(e.error, "ENGINE CRASH");
+		handleCrash(e.error, "Uncaught Error:(!");
 	}
 
 	static function onCriticalError(message:Dynamic):Void
@@ -45,7 +45,7 @@ class ErrorHandler
 		if (crashed) return;
 		crashed = true;
 
-		handleCrash(message, "NATIVE CRASH");
+		handleCrash(message, "Uncaught Error:(!");
 	}
 
 	static function handleCrash(error:Dynamic, title:String):Void
@@ -118,7 +118,7 @@ class ErrorHandler
 		var stack:String = CallStack.toString(CallStack.callStack());
 
 		var crashText =
-			"SHADER ERROR\n\n" +
+			"SHADER COMPILATION ERROR:(!\n\n" +
 			"SHADER:\n" + shaderName +
 			"\n\nERROR:\n" + Std.string(error) +
 			"\n\nSTACK TRACE:\n" + stack;
@@ -129,7 +129,7 @@ class ErrorHandler
 		{
 			Application.current.window.alert(
 				crashText,
-				"SHADER ERROR"
+				"SHADER COMPILATION ERROR:(!"
 			);
 		}
 		catch (e:Dynamic)
@@ -140,9 +140,8 @@ class ErrorHandler
 		Sys.exit(1);
 	}
 
-	// Compatibilidade com engines antigas
+	
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
 		shaderCrash(shaderName, error);
-	}
-}
+	
