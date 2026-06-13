@@ -477,7 +477,7 @@ var rightPressed:Bool = false;
 		dad.healthColorArray[1],
 		dad.healthColorArray[2]
 	)*/
-);
+
 		// healthBar
 		add(healthBar);
 
