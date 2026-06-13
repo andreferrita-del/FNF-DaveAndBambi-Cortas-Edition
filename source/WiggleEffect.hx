@@ -6,7 +6,7 @@ import flixel.system.FlxAssets.FlxShader;
 class WiggleEffect extends ErrorHandledShader
 {
 	@:glFragmentSource('
-	#pragma headere
+	#pragma header
 
 	uniform float uTime;
 	uniform float uSpeed;
