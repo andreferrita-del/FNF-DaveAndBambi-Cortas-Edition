@@ -280,7 +280,7 @@ var rightPressed:Bool = false;
 		{
 		curStage = 'deliriuned';
 		defaultCamZoom = 0.6;
-		//shader = new WiggleEffect();
+		shader = new WiggleEffect();
 		var s = 2.0;
 		var a = 0.1;
 		var f = 5.0;
