@@ -26,6 +26,11 @@ class ErrorHandler
 	// =========================
 	// 💥 MAIN UNCUGHT HANDLER
 	// =========================
+	public static function onShaderError(name:String, err:Dynamic):Void
+	{
+	shaderCrash(name, err);
+     
+	}
 	static function onUncaughtError(e:UncaughtErrorEvent):Void
 	{
 		if (crashed) return;
