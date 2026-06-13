@@ -37,7 +37,7 @@ class ErrorHandler
 		}
 		catch (_:Dynamic) {}
 
-		handleCrash(e.error, "Uncaught Error:(!");
+		handleCrash(e.error);
 	}
 
 	static function onCriticalError(message:Dynamic):Void
@@ -45,10 +45,10 @@ class ErrorHandler
 		if (crashed) return;
 		crashed = true;
 
-		handleCrash(message, "Uncaught Error:(!");
+		handleCrash(message);
 	}
 
-	static function handleCrash(error:Dynamic, title:String):Void
+	static function handleCrash(error:Dynamic):Void
 	{
 		var errorMessage:String = "";
 
@@ -83,10 +83,8 @@ class ErrorHandler
 		}
 
 		var crashText =
-			title +
-			"\n\nERROR:\n" +
 			errorMessage +
-			"\n\nSTACK TRACE:\n" +
+			"\n\n" +
 			stackText;
 
 		trace(crashText);
@@ -95,7 +93,7 @@ class ErrorHandler
 		{
 			Application.current.window.alert(
 				crashText,
-				title
+				"Uncaught Error :(!"
 			);
 		}
 		catch (e:Dynamic)
@@ -107,7 +105,7 @@ class ErrorHandler
 	}
 
 	// =========================
-	// SHADER SUPPORT
+	// SHADER ERRORS
 	// =========================
 
 	public static function shaderCrash(shaderName:String, error:Dynamic):Void
@@ -118,10 +116,11 @@ class ErrorHandler
 		var stack:String = CallStack.toString(CallStack.callStack());
 
 		var crashText =
-			"SHADER COMPILATION ERROR:(!\n\n" +
-			"SHADER:\n" + shaderName +
-			"\n\nERROR:\n" + Std.string(error) +
-			"\n\nSTACK TRACE:\n" + stack;
+			"Shader: " + shaderName +
+			"\n\n" +
+			Std.string(error) +
+			"\n\n" +
+			stack;
 
 		trace(crashText);
 
@@ -129,7 +128,7 @@ class ErrorHandler
 		{
 			Application.current.window.alert(
 				crashText,
-				"SHADER COMPILATION ERROR:(!"
+				"SHADER COMPILATION ERROR"
 			);
 		}
 		catch (e:Dynamic)
@@ -140,10 +139,8 @@ class ErrorHandler
 		Sys.exit(1);
 	}
 
-	
 	public static function onShaderError(shaderName:String, error:Dynamic):Void
 	{
 		shaderCrash(shaderName, error);
-	
-
 	}
+}
