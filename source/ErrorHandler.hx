@@ -145,3 +145,5 @@ class ErrorHandler
 	{
 		shaderCrash(shaderName, error);
 	
+
+	}
