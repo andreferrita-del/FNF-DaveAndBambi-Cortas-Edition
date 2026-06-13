@@ -1,8 +1,5 @@
 package;
 
-import flixel.FlxSprite;
-import flixel.system.FlxAssets.FlxShader;
-
 class WiggleEffect extends ErrorHandledShader
 {
 	@:glFragmentSource('
@@ -35,37 +32,36 @@ class WiggleEffect extends ErrorHandledShader
 	{
 		super("WiggleEffect");
 
-		uTime.value = [0.0];
 		uSpeed.value = [1.0];
 		uFrequency.value = [5.0];
 		uWaveAmplitude.value = [0.01];
 	}
+}
 
-	public function update(elapsed:Float):Void
+class WaveShader extends ErrorHandledShader
+{
+	@:glFragmentSource('
+	#pragma header
+
+	uniform float iTime = 0.0;
+
+	void main()
 	{
-		uTime.value[0] += elapsed;
+		vec2 uv = openfl_TextureCoordv;
+
+		float speed = 1.0;
+		float frequency = 5.0;
+		float amplitude = 0.2;
+
+		uv.x += sin(uv.y * frequency + iTime * speed) * amplitude;
+		uv.y += sin(uv.x * frequency - iTime * speed) * amplitude;
+
+		gl_FragColor = texture2D(bitmap, uv);
 	}
+	')
 
-	// APPLY EFFECT TO SPRITE
-	public static function addWiggleEffect(sprite:FlxSprite, speed:Float, frequency:Float):WiggleEffect
+	public function new()
 	{
-		var fx:WiggleEffect = null;
-
-		try
-		{
-			fx = new WiggleEffect();
-
-			fx.uSpeed.value = [speed];
-			fx.uFrequency.value = [frequency];
-			fx.uWaveAmplitude.value = [0.1];
-
-			sprite.shader = fx;
-		}
-		catch (e:Dynamic)
-		{
-			ErrorHandler.onShaderError("WiggleEffect", e);
-		}
-
-		return fx;
+		super("WaveShader");
 	}
 }
