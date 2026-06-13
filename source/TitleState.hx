@@ -2,7 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-//import WiggleEffect;
+import WiggleEffect.WavyShader;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
