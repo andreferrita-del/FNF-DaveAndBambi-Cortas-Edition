@@ -469,13 +469,14 @@ var rightPressed:Bool = false;
 		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
 			'health', 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(
+		healthBar.createFilledBar(0xFFFF0000, dad.color);
+		/*
 	0xFFFF0000,
 	FlxColor.fromRGB(
 		dad.healthColorArray[0],
 		dad.healthColorArray[1],
 		dad.healthColorArray[2]
-	)
+	)*/
 );
 		// healthBar
 		add(healthBar);
