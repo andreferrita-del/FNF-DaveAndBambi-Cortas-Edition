@@ -1,5 +1,8 @@
 package;
 
+import flixel.FlxSprite;
+import flixel.system.FlxAssets.FlxShader;
+
 class WiggleEffect extends ErrorHandledShader
 {
 	@:glFragmentSource('
