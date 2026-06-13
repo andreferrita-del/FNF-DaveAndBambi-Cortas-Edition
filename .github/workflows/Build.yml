@@ -6,7 +6,48 @@ on:
   workflow_dispatch:
 
 jobs:
-  Android:
+  build_cpp:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1.5.1
+        with:
+          haxe-version: 4.3.6
+
+      - name: Setup Haxelib
+        run: |
+          mkdir -p ~/haxelib
+          haxelib setup ~/haxelib
+
+      - name: Install Dependencies (HXCPP)
+        run: |
+          haxelib install hxcpp --quiet
+          haxelib install flixel --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install hscript --quiet
+
+      - name: Build C++ (HXCPP)
+        run: |
+          haxe -cp source -main Main -cpp export/cpp
+
+      - name: Zip C++ Output
+        run: |
+          zip -r cpp_build.zip export/cpp
+
+      - name: Upload C++ Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: CppBuild
+          path: cpp_build.zip
+          retention-days: 1
+
+
+  build_android:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,28 +65,25 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Setup Haxelib
         run: |
           mkdir -p ~/haxelib
           haxelib setup ~/haxelib
 
-      - name: Cache Android Build
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/haxelib
-            ~/.lime
-            ~/.gradle/caches
-            ~/.android/build-cache
-            export
-          key: android-${{ runner.os }}-${{ hashFiles('**/Project.xml') }}
-          restore-keys: |
-            android-${{ runner.os }}-
+      - name: Install Lime/OpenFL
+        run: |
+          haxelib install lime --quiet
+          haxelib install openfl --quiet
+          haxelib install flixel --quiet
+          haxelib install flixel-addons --quiet
+          haxelib install flixel-ui --quiet
+          haxelib install hxcpp --quiet
+          haxelib install hscript --quiet
 
-      - name: Install Android Dependencies
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android Tools
         run: |
           yes | sdkmanager --licenses
           sdkmanager --update
@@ -53,41 +91,22 @@ jobs:
             "platform-tools" \
             "platforms;android-30" \
             "build-tools;30.0.3" \
-            "ndk;21.4.7075529" \
-            "cmake;3.18.1"
+            "ndk;21.4.7075529"
 
-      - name: Install Libraries
-        run: |
-          haxelib install lime --quiet
-          haxelib install openfl --quiet
-          haxelib install flixel --quiet
-          haxelib install flixel-addons --quiet
-          haxelib install flixel-tools --quiet
-          haxelib install hxcpp --quiet
-          haxelib install flixel-ui --quiet
-          haxelib install newgrounds --quiet
-          haxelib install hscript --quiet
-
-      - name: Run Lime Setup
-        shell: bash
-        run: |
-          haxelib run lime setup
-
-      - name: Configure Android
+      - name: Configure Lime Android
         run: |
           haxelib run lime config ANDROID_SDK $ANDROID_SDK_ROOT
           haxelib run lime config ANDROID_NDK_ROOT "$ANDROID_SDK_ROOT/ndk/21.4.7075529"
           haxelib run lime config JAVA_HOME $JAVA_HOME
           haxelib run lime config ANDROID_SETUP true
 
-      - name: Build Android
+      - name: Build Android APK
         run: |
-          haxelib run lime build android -D GIT_COMMIT=$(git rev-parse --short HEAD)
+          haxelib run lime build android -D release
 
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: AndroidBuild
           path: export/release/android/bin/app/build/outputs/apk/debug/*.apk
-          if-no-files-found: error
           retention-days: 1
