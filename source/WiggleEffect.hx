@@ -9,7 +9,7 @@ class WiggleEffect extends ErrorHandledShader
     @:glFragmentSource('
     #pragma header
 
-    uniform floati uTime;
+    uniform float uTime;
     uniform float uSpeed;
     uniform float uFrequency;
     uniform float uWaveAmplitude;
