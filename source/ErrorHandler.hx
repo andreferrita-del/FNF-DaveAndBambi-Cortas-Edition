@@ -10,7 +10,7 @@ import openfl.errors.Error;
 import haxe.CallStack;
 import haxe.CallStack.StackItem;
 
-class ErrorHandler
+class ErrorHandler implements IErrorHandler
 {
     public static var crashed:Bool = false;
 
