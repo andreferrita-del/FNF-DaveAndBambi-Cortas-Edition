@@ -46,7 +46,7 @@ class WaveShader extends ErrorHandledShader
 	@:glFragmentSource('
 	#pragma header
 
-	uniform float iTime = 0.0;
+	uniform float iTime;
 
 	void main()
 	{
