@@ -4,7 +4,7 @@ import flixel.system.FlxAssets.FlxShader;
 
 class WiggleEffect extends ErrorHandledShader
 {
-    public var shaderName:String = "WiggleEffect";
+    public var shadeName:String = "WiggleEffect";
 
     @:glFragmentSource('
     #pragma header
@@ -43,7 +43,7 @@ class WiggleEffect extends ErrorHandledShader
         }
         catch (e:Dynamic)
         {
-            ErrorHandler.onShaderError(shaderName, e);
+            ErrorHandler.onShaderError(shadeName, e);
         }
     }
 }
