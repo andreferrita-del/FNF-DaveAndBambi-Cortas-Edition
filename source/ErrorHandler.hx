@@ -16,6 +16,7 @@ class ErrorHandler
 
     public static function init():Void
     {
+        throw "TEST ERROR";
         Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
             UncaughtErrorEvent.UNCAUGHT_ERROR,
             onError
