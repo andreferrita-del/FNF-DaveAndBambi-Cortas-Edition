@@ -16,7 +16,7 @@ class ErrorHandler
 
     public static function init():Void
     {
-        Application.current.window.alert("This is a test alert!","TEST");
+      //  Application.current.window.alert("This is a test alert!","TEST");
         Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(
             UncaughtErrorEvent.UNCAUGHT_ERROR,
             onError
