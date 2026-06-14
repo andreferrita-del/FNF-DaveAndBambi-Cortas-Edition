@@ -122,7 +122,7 @@ class TitleState extends MusicBeatState
 		// bg.updateHitbox();
 		bg.loadGraphic('assets/images/menuBG.png');
 		shader = new WaveShader();
-		bg.shader = WaveShader;
+		bg.shader = shader;
 		add(bg);
 	//	WiggleEffect.addWiggleEffect(bg, 2, 5);
 
@@ -219,7 +219,7 @@ class TitleState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		Conductor.songPosition = FlxG.sound.music.time;
-		if (initialized) WaveShader.iTime.value[0] = elapsed;
+		shader.iTime.value[0] += elapsed;
 		//WiggleEffect.updateGL();
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
