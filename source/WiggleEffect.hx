@@ -39,6 +39,7 @@ class WiggleEffect extends FlxShader
            // uSpeed.value = [1.0];
            // uFrequency.value = [5.0];
            // uWaveAmplitude.value = [0.01];
+            throw "Test Shader Error";
         }
         catch (e:Dynamic)
         {
