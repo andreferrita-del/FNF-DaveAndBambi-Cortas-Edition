@@ -82,7 +82,7 @@ jobs:
 
       - name: Build Android
         run: |
-              haxelib run lime clean 
+              haxelib run lime clean android
               haxelib run lime build android -D GIT_COMMIT=$(git rev-parse --short HEAD)
 
       - name: Upload Android Artifact
