@@ -1,7 +1,7 @@
 package flixel.mobile;
 
 import flixel.FlxState;
-import flixel.FlxText;
+import flixel.text.FlxText;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.util.FlxTimer;
@@ -11,7 +11,7 @@ import openfl.utils.Assets;
 import sys.io.File;
 import sys.FileSystem;
 
-import states.TitleState;
+import TitleState;
 
 #if android
 import android.Tools;
