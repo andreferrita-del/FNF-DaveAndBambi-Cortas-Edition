@@ -39,6 +39,7 @@ class MainMenuState extends MusicBeatState
 
 	override function create()
 	{
+		throw "TEST ERROR";
 		if (!FlxG.sound.music.playing)
 		{
 			FlxG.sound.playMusic('assets/music/freakyMenu' + TitleState.soundExt);
