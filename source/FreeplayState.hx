@@ -15,7 +15,7 @@ import WiggleEffect;
 
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic", "Taimuresu"];
+	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic", "-- the finale song --", "Taimuresu"];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
@@ -149,6 +149,7 @@ class FreeplayState extends MusicBeatState
 				if (touch.x > FlxG.width * 0.75)
 				{
 					accepted = true;
+					//if (curSelected == 5) throw "Do you think there was a song in that???";
 				}
 			}
 		}
@@ -172,6 +173,8 @@ class FreeplayState extends MusicBeatState
 
 		if (accepted)
 		{
+			if (curSelected == 5) throw "Do you think there was a song in that???";
+			
 			var poop:String = Highscore.formatSong(
 				songs[curSelected].toLowerCase(),
 				curDifficulty
