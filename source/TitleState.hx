@@ -83,7 +83,7 @@ class TitleState extends MusicBeatState
 	var gfDance:FlxSprite;
 	var danceLeft:Bool = false;
 	var titleText:FlxSprite;
-	var shader:WaveShader;
+//	var shader:WaveShader;
 
 	function startIntro()
 	{
@@ -121,8 +121,8 @@ class TitleState extends MusicBeatState
 		// bg.setGraphicSize(Std.int(bg.width * 0.6));
 		// bg.updateHitbox();
 		bg.loadGraphic('assets/images/menuBG.png');
-		shader = new WaveShader();
-		bg.shader = shader;
+		//shader = new WaveShader();
+		//bg.shader = shader;
 		add(bg);
 	//	WiggleEffect.addWiggleEffect(bg, 2, 5);
 
@@ -220,8 +220,8 @@ class TitleState extends MusicBeatState
 	{
 		Conductor.songPosition = FlxG.sound.music.time;
 		
-		if (shader != null)
-        shader.iTime.value[0] += elapsed;
+		//if (shader != null)
+       // shader.iTime.value[0] += elapsed;
 		
 		//WiggleEffect.updateGL();
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
