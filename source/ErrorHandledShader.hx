@@ -17,7 +17,12 @@ class ErrorHandledShader extends FlxShader
 	{
 		try
 		{
-			return super.__createGLProgram(vertexSource, fragmentSource);
+			var program = super.__createGLProgram(vertexSource, fragmentSource);
+
+			if (program == null)
+				ErrorHandler.onShaderError(shaderName, "GLProgram returned NULL.");
+
+			return program;
 		}
 		catch (error:Dynamic)
 		{
