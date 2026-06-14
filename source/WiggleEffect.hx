@@ -41,30 +41,3 @@ class WiggleEffect extends ErrorHandledShader
 	}
 }
 
-class WaveShader extends ErrorHandledShader
-{
-	@:glFragmentSource('
-	#pragma header
-
-	uniform float iTime;
-
-	void main()
-	{
-		vec2 uv = openfl_TextureCoordv;
-
-		float speed = 1.0;
-		float frequency = 5.0;
-		float amplitude = 0.2;
-
-		uv.x += sin(uv.y * frequency + iTime * speed) * amplitude;
-		uv.y += sin(uv.x * frequency - iTime * speed) * amplitude;
-
-		gl_FragColor = texture2D(bitmap, uv);
-	}
-	')
-
-	public function new()
-	{
-		super("WaveShader");
-	}
-}
