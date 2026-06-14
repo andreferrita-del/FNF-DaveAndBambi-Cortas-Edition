@@ -2,7 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import WiggleEffect.WaveShader;
+//import WiggleEffect.WaveShader;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
@@ -219,7 +219,10 @@ class TitleState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		Conductor.songPosition = FlxG.sound.music.time;
-		shader.iTime.value[0] += elapsed;
+		
+		if (shader != null)
+        shader.iTime.value[0] += elapsed;
+		
 		//WiggleEffect.updateGL();
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);
 
