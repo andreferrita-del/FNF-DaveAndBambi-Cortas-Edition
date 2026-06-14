@@ -35,9 +35,9 @@ class WiggleEffect extends ErrorHandledShader
 	{
 		super("WiggleEffect");
 
-		uSpeed.value = [1.0];
-		uFrequency.value = [5.0];
-		uWaveAmplitude.value = [0.01];
+		//uSpeed.value = [1.0];
+		//uFrequency.value = [5.0];
+		//uWaveAmplitude.value = [0.01];
 	}
 }
 
