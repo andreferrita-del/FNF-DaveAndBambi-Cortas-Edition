@@ -82,9 +82,7 @@ jobs:
 
       - name: Build Android
         run: |
-              haxelib run lime clean android
-              haxelib run lime build android -D GIT_COMMIT=$(git rev-parse --short HEAD)
-
+              haxelib run lime build android
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
