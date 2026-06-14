@@ -2,7 +2,7 @@ package;
 
 import flixel.system.FlxAssets.FlxShader;
 
-class WiggleEffect extends FlxShader
+class WiggleEffect extends ErrorHandledShader
 {
     public var shaderName:String = "WiggleEffect";
 
