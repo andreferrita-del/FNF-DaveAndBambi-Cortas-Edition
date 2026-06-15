@@ -2,17 +2,15 @@ package flixel.mobile;
 
 import flixel.FlxG;
 import flixel.FlxState;
+import flixel.StorageUtil;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxBar.FlxBarFillDirection;
-
 import openfl.utils.Assets;
 import lime.app.Application;
-
 import sys.FileSystem;
 import sys.io.File;
-
 import haxe.io.Path;
 
 class CopyState extends FlxState
