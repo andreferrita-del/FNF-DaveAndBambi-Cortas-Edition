@@ -1,4 +1,6 @@
 package;
+import flixel.StorageUtil;
 
-@:build(flixel.system.FlxAssets.buildFileReferences("assets", true))
-class AssetPaths {}
+@:build(flixel.system.FlxAssets.buildFileReferences(StorageUtil.getAssetsPath, true))
+
+class AssetPaths{}
