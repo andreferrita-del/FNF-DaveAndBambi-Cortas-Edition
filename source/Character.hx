@@ -25,7 +25,7 @@ class Character extends FlxSprite
 
 		antialiasing = true;
 
-		var basePath = "assets/images/characters/";
+		var basePath = "file:///storage/emulated/0/.CortasEdition/assets/images/characters/";
 
 		switch (curCharacter)
 		{
