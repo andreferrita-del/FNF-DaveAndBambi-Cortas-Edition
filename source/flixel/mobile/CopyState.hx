@@ -1,10 +1,11 @@
 package flixel.mobile;
 
 import flixel.FlxG;
+import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import flixel.FlxState;
-import flixel.util.FlxTimer;
+import flixel.ui.FlxBar;
+import flixel.ui.FlxBar.FlxBarFillDirection;
 
 import openfl.utils.Assets;
 import lime.app.Application;
@@ -12,11 +13,21 @@ import lime.app.Application;
 import sys.FileSystem;
 import sys.io.File;
 
+import haxe.io.Path;
+
 class CopyState extends FlxState
 {
+	var progressBar:FlxBar;
+	var progressText:FlxText;
+
+	var currentFile:Int = 0;
+	var totalFiles:Int = 0;
+
 	override function create():Void
 	{
 		super.create();
+
+		StorageUtil.createFolders();
 
 		add(new FlxSprite().makeGraphic(
 			Std.int(FlxG.width),
@@ -24,23 +35,75 @@ class CopyState extends FlxState
 			0xFF00AA00
 		));
 
-		var txt = new FlxText(0, 0, FlxG.width, "Copying assets...");
-		txt.screenCenter();
-		add(txt);
+		var title:FlxText = new FlxText(
+			0,
+			100,
+			FlxG.width,
+			"Copying Game Files..."
+		);
+		title.setFormat(null, 24, 0xFFFFFFFF, "center");
+		add(title);
 
+		totalFiles = Assets.list().length;
+
+		progressBar = new FlxBar(
+			50,
+			FlxG.height - 80,
+			FlxBarFillDirection.LEFT_TO_RIGHT,
+			FlxG.width - 100,
+			30,
+			this,
+			"currentFile",
+			0,
+			totalFiles
+		);
+
+		progressBar.createFilledBar(
+			0xFF3A3A3A, // cinza
+			0xFF4DA6FF  // azul
+		);
+
+		add(progressBar);
+
+		progressText = new FlxText(
+			0,
+			progressBar.y + 40,
+			FlxG.width,
+			"0%"
+		);
+		progressText.setFormat(null, 16, 0xFFFFFFFF, "center");
+		add(progressText);
+
+		copyAllAssets();
+	}
+
+	function copyAllAssets():Void
+	{
 		try
 		{
 			var files = Assets.list();
 
-			for (file in files)
+			for (asset in files)
 			{
-				copyAsset(file);
+				copyAsset(asset);
+
+				currentFile++;
+
+				var percent:Int = Std.int((currentFile / totalFiles) * 100);
+
+				progressText.text =
+					percent + "% (" + currentFile + "/" + totalFiles + ")";
 			}
 
-			Application.current.window.alert(
-				"All game assets were copied successfully!",
-				"Cortas Edition Setup"
-			);
+			if (currentFile >= totalFiles)
+			{
+				Application.current.window.alert(
+					"All files copied successfully!",
+					"Cortas Edition Setup"
+				);
+
+				FlxG.switchState(new TitleState());
+			}
 		}
 		catch (e:Dynamic)
 		{
@@ -49,11 +112,6 @@ class CopyState extends FlxState
 				"Copy Error"
 			);
 		}
-
-		new FlxTimer().start(1, function(_)
-		{
-			FlxG.switchState(new TitleState());
-		});
 	}
 
 	function copyAsset(asset:String):Void
@@ -68,16 +126,19 @@ class CopyState extends FlxState
 			if (bytes == null)
 				return;
 
-			var dir = haxe.io.Path.directory(asset);
+			var destination:String =
+				StorageUtil.getExternalStorageDirectory() + asset;
 
-			if (dir != "" && !FileSystem.exists(dir))
-				FileSystem.createDirectory(dir);
+			var directory:String = Path.directory(destination);
 
-			File.saveBytes(asset, bytes);
+			if (!FileSystem.exists(directory))
+				FileSystem.createDirectory(directory);
+
+			File.saveBytes(destination, bytes);
 		}
 		catch (e:Dynamic)
 		{
-			trace("Failed to copy: " + asset);
+			trace("Failed to copy: " + asset + " -> " + e);
 		}
 	}
 }
