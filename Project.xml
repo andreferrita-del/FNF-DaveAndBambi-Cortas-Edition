@@ -54,6 +54,9 @@
 	<assets path="assets/sounds" include="*.mp3" if="web" />
 	<assets path="assets/sounds" include="*.ogg" unless="web" />
 
+	<android min-sdk-version="23" target-sdk-version="31" />
+    <architecture name="armv7"/>
+
 	<!-- Fonts -->
 	<assets path="assets/fonts/vcr.ttf" embed="true" />
 
@@ -61,11 +64,12 @@
 	<icon path="art/icon.png" />
 	
     <assets path="assets/songs" include="*.ogg" />
+	 
 	<android permission="android.permission.INTERNET" />
-<android permission="android.permission.ACCESS_NETWORK_STATE" />
-<android permission="android.permission.READ_EXTERNAL_STORAGE" />
-<android permission="android.permission.WRITE_EXTERNAL_STORAGE" />
-<android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <android permission="android.permission.ACCESS_NETWORK_STATE" />
+    <android permission="android.permission.READ_EXTERNAL_STORAGE" />
+    <android permission="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="lime" />
