@@ -31,6 +31,9 @@
 	<!-- Switch -->
 	<window if="switch" orientation="landscape" fullscreen="true" width="0" height="0" resizable="true" />
 
+	<android min-sdk-version="23" target-sdk-version="31" />
+    <architecture name="armv7"/>
+
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export/debug" if="debug" />
@@ -62,10 +65,10 @@
 	
     <assets path="assets/songs" include="*.ogg" />
 	<android permission="android.permission.INTERNET" />
-<android permission="android.permission.ACCESS_NETWORK_STATE" />
-<android permission="android.permission.READ_EXTERNAL_STORAGE" />
-<android permission="android.permission.WRITE_EXTERNAL_STORAGE" />
-<android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <android permission="android.permission.ACCESS_NETWORK_STATE" />
+    <android permission="android.permission.READ_EXTERNAL_STORAGE" />
+    <android permission="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <android permission="android.permission.MANAGE_EXTERNAL_STORAGE" />
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="lime" />
