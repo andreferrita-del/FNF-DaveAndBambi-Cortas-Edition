@@ -15,7 +15,7 @@ import WiggleEffect;
 
 class FreeplayState extends MusicBeatState
 {
-	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic", "Taimuresu"];
+	var songs:Array<String> = ["Tutorial", "Delirium", "Photosynthesis", "Pessimistic", "Taimuresu", "Defraud"];
 
 	var selector:FlxText;
 	var curSelected:Int = 0;
